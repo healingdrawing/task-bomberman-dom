@@ -1,0 +1,24 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "grit:lab Åland 2023",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx tsc && live-server --port=3000 --entry-file=index.html",
+    "build": "npx tsc && webpack --mode=production --config webpack.config.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "^3.26.3",
+    "rollup-plugin-typescript2": "^0.35.0",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "live-server": "^1.1.0"
+  }
+}

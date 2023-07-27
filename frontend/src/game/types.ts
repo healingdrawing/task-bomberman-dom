@@ -1,0 +1,1 @@
+console.log('Path: frontend/src/types.ts gap for rollup in case of empty file, or error')
