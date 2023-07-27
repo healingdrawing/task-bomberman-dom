@@ -91,8 +91,8 @@ func reader(uuid string, conn *websocket.Conn) {
 			log.Println("data after unmarshalling: ", data) //todo: delete debug
 
 			switch data.Type {
-			case string(WS_GROUP_CHAT_MESSAGE):
-				wsGroupChatMessageHandler(conn, data.Data)
+			case string(WS_CHAT_MESSAGE):
+				wsChatMessageHandler(conn, data.Data)
 
 				// todo: looks like this is not used(managed by http)), check and delete if so
 			case "login":

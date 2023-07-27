@@ -12,13 +12,12 @@ import (
 type WSMT string
 
 const (
-	WS_ERROR_RESPONSE     WSMT = "error_response"
-	WS_GROUP_CHAT_MESSAGE WSMT = "group_chat_message"
+	WS_ERROR_RESPONSE WSMT = "error_response"
+	WS_CHAT_MESSAGE   WSMT = "chat_message"
 
 	WS_CONNECT_TO_SERVER          WSMT = "connect_to_server"
 	WS_KEEP_CONNECTION            WSMT = "keep_connection"
 	WS_KILL_CONNECTION            WSMT = "kill_connection"
-	WS_CHAT_MESSAGE               WSMT = "chat_message"
 	WS_CLIENT_CONNECTED_TO_SERVER WSMT = "client_connected_to_server"
 	WS_STILL_CONNECTED            WSMT = "still_connected"
 	WS_BROADCAST_MESSAGE          WSMT = "broadcast_message"

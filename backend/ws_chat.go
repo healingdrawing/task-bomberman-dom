@@ -19,7 +19,7 @@ type WS_GROUP_CHAT_MESSAGE_DTO struct {
 	Group_id   int    `json:"group_id"`
 }
 
-func wsGroupChatMessageHandler(conn *websocket.Conn, messageData map[string]interface{}) {
+func wsChatMessageHandler(conn *websocket.Conn, messageData map[string]interface{}) {
 	defer wsRecover(messageData)
 
 	uuid, ok := messageData["user_uuid"].(string)
@@ -88,6 +88,6 @@ func wsGroupChatMessageHandler(conn *websocket.Conn, messageData map[string]inte
 		return true
 	})
 
-	wsSend(WS_GROUP_CHAT_MESSAGE, message, user_uuids)
+	wsSend(WS_CHAT_MESSAGE, message, user_uuids)
 
 }
