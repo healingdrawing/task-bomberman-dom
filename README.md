@@ -21,7 +21,7 @@ to show containers in terminal:
 
 - `cd frontend`
 - `npm i`
-- `npm run serve`
+- `npm run start`
 
 ## task description and audit questions, on github  
 
