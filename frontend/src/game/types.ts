@@ -1,4 +1,4 @@
-/**web socket message types. The same values as server side */
+/**web socket message types. The same values as server(backend) side */
 export enum WSMT {
   WS_ERROR_RESPONSE = "error_response",
   WS_CHAT_MESSAGE = "chat_message",

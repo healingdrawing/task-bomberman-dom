@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-/*websocket message type*/
+/*web socket message types. The same as on client(frontend) side*/
 type WSMT string
 
 const (
