@@ -1,0 +1,1 @@
+# temporary/wip/side files (pictures, sounds, notes) should be placed here, or in discussions, inside github repo invironment.
