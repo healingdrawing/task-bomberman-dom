@@ -4,8 +4,8 @@
   "description": "grit:lab Åland 2023",
   "main": "index.js",
   "scripts": {
-    "start": "npx tsc && live-server --port=3000 --entry-file=index.html",
-    "build": "npx tsc && webpack --mode=production --config webpack.config.js"
+    "start": "npx rollup -c rollup.config.mjs && live-server --port=3000 --entry-file=index.html",
+    "build": "webpack --mode=production --config webpack.config.js"
   },
   "keywords": [],
   "author": "",
