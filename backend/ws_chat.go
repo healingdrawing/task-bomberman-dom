@@ -10,31 +10,21 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type WS_GROUP_CHAT_MESSAGE_DTO struct {
-	Content    string `json:"content"`
-	Email      string `json:"email"`
-	First_name string `json:"first_name"`
-	Last_name  string `json:"last_name"`
-	Created_at string `json:"created_at"`
-	Group_id   int    `json:"group_id"`
+type WS_CHAT_MESSAGE_DTO struct {
+	Content       string `json:"content"`
+	Nickname      string `json:"nickname"`
+	Client_number int    `json:"client_number"`
+	Created_at    string `json:"created_at"`
 }
 
 func wsChatMessageHandler(conn *websocket.Conn, messageData map[string]interface{}) {
 	defer wsRecover(messageData)
 
-	uuid, ok := messageData["user_uuid"].(string)
+	uuid, ok := messageData["client_uuid"].(string)
 	if !ok {
-		log.Println("failed to get user_uuid from messageData")
+		log.Println("failed to get client_uuid from messageData")
 		return
 	}
-
-	_group_id, ok := messageData["group_id"].(float64)
-	if !ok {
-		log.Println("failed to get group_id from messageData")
-		wsSend(WS_ERROR_RESPONSE, WS_ERROR_RESPONSE_DTO{fmt.Sprint(http.StatusUnprocessableEntity, " failed to get group_id from messageData")}, []string{uuid})
-		return
-	}
-	group_id := int(_group_id)
 
 	content, ok := messageData["content"].(string)
 	if !ok {
@@ -51,43 +41,16 @@ func wsChatMessageHandler(conn *websocket.Conn, messageData map[string]interface
 
 	created_at := time.Now().Format("2006-01-02 15:04:05")
 
-	var message WS_GROUP_CHAT_MESSAGE_DTO
+	var message WS_CHAT_MESSAGE_DTO
 
+	client := get_client_by_uuid(clients, uuid)
 	message.Content = content
+	message.Nickname = client.NICKNAME
+	message.Client_number = client.NUMBER
 	message.Created_at = created_at
-	message.Group_id = group_id
 
-	//get all id's of users who is the member of the group of this group chat
-	var group_member_ids []int
-	log.Println("REFACTOR TO GET ALL UUID'S, BECAUSE THIS IS THE GAME CHAT MESSAGE")
-	// get connected user ids
+	clients_uuids := get_all_clients_uuids(clients)
 
-	// get ids of users who is member and connected
-	connected_group_member_ids := map[int]int{}
-	clients.Range(func(key, value interface{}) bool {
-		client := value.(*Client)
-		for _, member_id := range group_member_ids {
-			if client.USER_ID == member_id {
-				connected_group_member_ids[member_id] = member_id
-				break
-			}
-		}
-		return true
-	})
-
-	//get all uuids of users who is connected/logged in and member of the group
-	var user_uuids []string
-	clients.Range(func(key, value interface{}) bool {
-		client := value.(*Client)
-		_, ok := connected_group_member_ids[client.USER_ID]
-		if ok {
-			user_uuids = append(user_uuids, key.(string))
-		} else {
-			log.Println("user is not connected/logged in anymore")
-		}
-		return true
-	})
-
-	wsSend(WS_CHAT_MESSAGE, message, user_uuids)
+	wsSend(WS_CHAT_MESSAGE, message, clients_uuids)
 
 }

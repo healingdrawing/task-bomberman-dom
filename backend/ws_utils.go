@@ -15,10 +15,10 @@ const (
 	WS_ERROR_RESPONSE WSMT = "error_response"
 	WS_CHAT_MESSAGE   WSMT = "chat_message"
 
+	WS_CLIENT_CONNECTED_TO_SERVER WSMT = "client_connected_to_server"
 	WS_CONNECT_TO_SERVER          WSMT = "connect_to_server"
 	WS_KEEP_CONNECTION            WSMT = "keep_connection"
 	WS_KILL_CONNECTION            WSMT = "kill_connection"
-	WS_CLIENT_CONNECTED_TO_SERVER WSMT = "client_connected_to_server"
 	WS_STILL_CONNECTED            WSMT = "still_connected"
 	WS_BROADCAST_MESSAGE          WSMT = "broadcast_message"
 	WS_START_GAME                 WSMT = "start_game"
@@ -34,6 +34,54 @@ const (
 	WS_HIDE_POWER_UP              WSMT = "hide_power_up"
 )
 
+type WS_CLIENT_CONNECTED_TO_SERVER_DTO struct {
+	Client_number int    `json:"client_number"`
+	Client_uuid   string `json:"client_uuid"`
+}
+
+// send to client his number and uuid when he connected to server
+func ws_client_connected_to_server_handler(client *Client) {
+	message := WS_CLIENT_CONNECTED_TO_SERVER_DTO{
+		Client_number: client.NUMBER,
+		Client_uuid:   client.UUID,
+	}
+	wsSend(WS_CLIENT_CONNECTED_TO_SERVER, message, []string{client.UUID})
+}
+
+type WS_BROADCAST_MESSAGE_DTO struct {
+	Content       string `json:"content"`
+	Client_number int    `json:"client_number"` // 1..4 or 0 if server or no need coloring
+}
+
+func ws_connect_to_server_handler(client *Client, messageData map[string]interface{}) {
+	log.Println("=== ws_connect_to_server_handler ===")
+	defer wsRecover(messageData)
+
+	uuid, ok := messageData["client_uuid"].(string)
+	if !ok {
+		log.Println("failed to get client_uuid from messageData")
+		return
+	}
+
+	nickname, ok := messageData["nickname"].(string)
+	if !ok {
+		log.Println("failed to get nickname from messageData")
+		wsSend(WS_ERROR_RESPONSE, WS_ERROR_RESPONSE_DTO{"failed to get nickname from messageData"}, []string{uuid})
+		return
+	}
+
+	client.NICKNAME = nickname
+
+	message := WS_BROADCAST_MESSAGE_DTO{
+		Content:       fmt.Sprintf("new star [%s] connected to server", nickname),
+		Client_number: client.NUMBER,
+	}
+
+	uuids := get_all_clients_uuids(clients)
+
+	wsSend(WS_BROADCAST_MESSAGE, message, uuids)
+}
+
 /*
 messageType must be from "ws_utils.go" constants of WSMT type. But go doesn't support enum.
 */
@@ -43,7 +91,9 @@ func wsCreateResponseMessage(messageType WSMT, data interface{}) ([]byte, error)
 		Data: data,
 	}
 
-	log.Println("= wsCreateResponseMessage: ", messageType)
+	log.Println("= wsCreateResponseMessage messageType: ", messageType)
+	log.Println("= wsCreateResponseMessage data: ", data)
+	log.Println("= wsCreateResponseMessage response: ", response)
 
 	jsonData, err := json.Marshal(response)
 	if err != nil {
@@ -54,7 +104,7 @@ func wsCreateResponseMessage(messageType WSMT, data interface{}) ([]byte, error)
 	}
 
 	// todo: debug giant print in time of picture sending, so commented
-	// log.Println("CREATED ================ \nwsCreateResponseMessage: ", string(jsonData))
+	log.Println("CREATED ================ \nwsCreateResponseMessage: ", string(jsonData))
 
 	return jsonData, nil
 }

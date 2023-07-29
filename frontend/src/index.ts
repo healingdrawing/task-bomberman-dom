@@ -1,6 +1,11 @@
 import { router, store, events } from './framework/framework';
+import { WebSocketClient } from './game/ws';
 
-function connect_to_game(event: Event) {
+const websockets: (WebSocket | null)[] = [];
+const serverUrl = `ws://localhost:8080/ws`;
+var client: WebSocketClient; //todo: later maybe hide this from global scope
+
+async function connect_to_game(event: Event) {
   event.preventDefault(); // Prevent the default form submission
 
   const inputField = document.getElementById("nickname") as HTMLInputElement;
@@ -11,6 +16,9 @@ function connect_to_game(event: Event) {
     Please leave this place, it can be too danger for your virgin brain,
     which is not able to choose nickname correctly.`);
     return;
+  } else {
+    client = new WebSocketClient(serverUrl, inputField.value);
+    await client.initialize();
   }
 
   const inputValue = inputField.value;

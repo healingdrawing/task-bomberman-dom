@@ -32,7 +32,7 @@ func main() {
 	}
 
 	CustomRouter = http.NewServeMux()
-
+	registerHandlers()
 	log.Println("starting forum at http://localhost:" + portHTTP + "/")
 	log.Println("starting websocket at ws://localhost:" + portHTTP + "/ws")
 	log.Fatal(http.ListenAndServe(":"+portHTTP, corsMiddleware(CustomRouter)))

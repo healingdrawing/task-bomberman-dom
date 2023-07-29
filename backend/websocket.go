@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"strings"
 	"sync"
 
 	"github.com/gorilla/websocket"
@@ -27,6 +26,31 @@ type wsStatus struct {
 }
 
 func wsConnection(w http.ResponseWriter, r *http.Request) {
+	log.Println("=== inside wsConnection ===")
+
+	if count_sync_map_elements(clients) > 3 {
+		log.Println("=== too many clients ===")
+		jsonResponse(w, http.StatusOK, "Too many clients")
+		return
+	}
+
+	number := choose_first_free_number(clients)
+	if number == 0 {
+		log.Println("=== no free numbers ===")
+		jsonResponse(w, http.StatusOK, "No free slots")
+		return
+	}
+
+	uuid, err := generate_UUID()
+	log.Println("wsConnection uuid: ", uuid) //todo: delete debug
+	if err != nil {
+		log.Println("====================================")
+		log.Println("uuid creation error: ", err)
+		log.Println("====================================")
+		jsonResponse(w, http.StatusOK, "uuid creation error. status 200 , because otherwise no message in browser console, facepalm")
+		return
+	}
+
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 
 	ws, err := upgrader.Upgrade(w, r, nil)
@@ -34,35 +58,27 @@ func wsConnection(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	uuid := strings.TrimSpace(r.URL.Query().Get("uuid"))
-	log.Println("wsConnection uuid: ", uuid) //todo: delete debug
-	if uuid == "" {
-		log.Println("====================================")
-		log.Println("uuid is empty")
-		log.Println("====================================")
-		return
-	}
-	reader(uuid, ws)
+
+	reader(ws, number, uuid)
 }
 
 type Client struct {
-	CONN    *websocket.Conn
-	USER_ID int
+	CONN     *websocket.Conn
+	NUMBER   int
+	UUID     string
+	NICKNAME string
 }
 
-func reader(uuid string, conn *websocket.Conn) {
-	user_id := 0
-	// user_id, err := get_user_id_by_uuid(uuid)
-	log.Println("REFACTOR THIS. WE DO NOT NEED USER ID FOR GAME")
-	// if err != nil {
-	// 	log.Println("=== inside reader ===", err.Error())
-	// 	return
-	// }
+func reader(conn *websocket.Conn, client_number int, uuid string) {
+	log.Println("=== inside reader ===")
 
-	client := &Client{CONN: conn, USER_ID: user_id}
+	client := &Client{CONN: conn, NUMBER: client_number, UUID: uuid}
 	clients.Store(uuid, client)
-	// defer clients.Delete(uuid)
+	// defer clients.Delete(uuid) //todo: looks like this needed, forgot when i commented this and why
 	// defer conn.Close()
+
+	ws_client_connected_to_server_handler(client)
+
 	for {
 		messageType, incoming, err := conn.ReadMessage()
 		log.Println("=== inside reader ===")
@@ -91,6 +107,11 @@ func reader(uuid string, conn *websocket.Conn) {
 			log.Println("data after unmarshalling: ", data) //todo: delete debug
 
 			switch data.Type {
+			case string(WS_CONNECT_TO_SERVER):
+				log.Println("==================WS_CONNECT_TO_SERVER FIRED==================")
+				log.Println("data.Data: ", data.Data)
+				ws_connect_to_server_handler(client, data.Data)
+
 			case string(WS_CHAT_MESSAGE):
 				wsChatMessageHandler(conn, data.Data)
 
@@ -124,9 +145,10 @@ func wsSend(message_type WSMT, message interface{}, uuids []string) {
 	}
 
 	for _, uuid := range uuids {
-		if conn, ok := clients.Load(uuid); ok {
-			if c, ok := conn.(*Client); ok {
-				err = c.CONN.WriteMessage(websocket.TextMessage, outputMessage)
+		if raw_client, ok := clients.Load(uuid); ok {
+			if client, ok := raw_client.(*Client); ok {
+				err = client.CONN.WriteMessage(websocket.TextMessage, outputMessage)
+				log.Println("wsSend: message sent to client: ", uuid)
 				if err != nil {
 					log.Println(err)
 				}
