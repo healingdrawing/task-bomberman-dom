@@ -14,9 +14,20 @@
     <input id="nickname" type="text" minlength="1" maxlength="15" placeholder="nickname 1-15 symbols ..." required />
     <button id="connect_to_game" type="submit">Connect to game</button>
   </div>
-  <!-- appears when player connected to websocket -->
+  <!-- appears when player connected to websocket. Includes game view and chat view -->
   <div id="second_screen">
-
+    <div id="game_view">
+      <div id="game_field">
+        <div id="game_field__player"></div>
+        <div id="game_field__enemy"></div>
+      </div>
+    </div>
+    <div id="chat_view">
+      <button id="chat_view__input__send" type="submit">Drop the bomb</button>
+      <input id="chat_view__input__message" type="text" minlength="1" maxlength="100" placeholder="message 1-100 symbols ..." required />
+      <div id="chat_view__messages"></div>
+      <button id="rip">R.I.P</button>
+    </div>
   </div>
 
   <script src="./dist/bundle.js"></script>
