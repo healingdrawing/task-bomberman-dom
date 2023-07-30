@@ -10,9 +10,10 @@
   <!-- appears when application starts, before connection to websocket -->
   <div id="first_screen">
     <h1>STAR WARS CONFLICT</h1>
-    <form></form>
-    <input id="nickname" type="text" minlength="1" maxlength="15" placeholder="nickname 1-15 symbols ..." required />
-    <button id="connect_to_game" type="submit">Connect to game</button>
+    <form>
+      <input id="nickname" type="text" minlength="1" maxlength="15" placeholder="nickname 1-15 symbols ..." required />
+      <button id="connect_to_game" type="submit">Connect to game</button>
+    </form>
   </div>
   <!-- appears when player connected to websocket. Includes game view and chat view -->
   <div id="second_screen">
@@ -26,7 +27,7 @@
       <button id="chat_view__input__send" type="submit">Drop the bomb</button>
       <input id="chat_view__input__message" type="text" minlength="1" maxlength="100" placeholder="message 1-100 symbols ..." required />
       <div id="chat_view__messages"></div>
-      <button id="rip">R.I.P</button>
+      <button id="rip" onclick="location.reload()">R.I.P</button>
     </div>
   </div>
 

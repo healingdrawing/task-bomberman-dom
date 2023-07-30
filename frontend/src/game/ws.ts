@@ -72,6 +72,10 @@ export class WebSocketClient {
         // Handle broadcast message logic here
         console.log('Broadcast message received:', message.data);
         break;
+      case WSMT.WS_CHAT_MESSAGE:
+        // Handle chat message logic here
+        console.log('Chat message received:', message.data);
+        break;
       default:
         console.warn('Unknown message type:', message.type);
     }
@@ -122,15 +126,19 @@ export class WebSocketClient {
       await this.waitForConnection();
     } catch (error) {
       console.error('Error initializing WebSocket client:', error);
+      alert('No free slots!\nPage will be reloaded.\nTry again later..');
+      location.reload();
     }
   }
 
-
+  // uuid will be added automatically to the message.data
   public sendMessage(type: WSMT, data: object): void {
+    const extended_data = { ...data, client_uuid: this.uuid };
     const message: Message = {
       type: type,
-      data: data,
+      data: extended_data,
     };
+    console.log('Sending message:', message);
     this.ws!.send(JSON.stringify(message));
   }
 }

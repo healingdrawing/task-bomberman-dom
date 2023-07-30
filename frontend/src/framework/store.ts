@@ -1,4 +1,4 @@
-type State = Record<string, any>;
+export type State = Record<string, any>;
 
 export class Store {
   private state: State;

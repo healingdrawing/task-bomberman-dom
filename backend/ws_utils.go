@@ -112,9 +112,9 @@ func wsCreateResponseMessage(messageType WSMT, data interface{}) ([]byte, error)
 // wsRecover recover from panic and send a json err response over websocket
 func wsRecover(messageData map[string]interface{}) {
 
-	uuid, ok := messageData["user_uuid"].(string)
+	uuid, ok := messageData["client_uuid"].(string)
 	if !ok {
-		log.Println("=== wsRecover: === \n=== failed to get user_uuid from message data")
+		log.Println("=== wsRecover: === \n=== failed to get client_uuid from message data")
 		return
 	}
 

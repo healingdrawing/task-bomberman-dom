@@ -22,7 +22,12 @@ export enum WSMT {
   WS_HIDE_POWER_UP = "hide_power_up"
 }
 
+// here uuid added manually, because this is straight message to server, without use "sendMessage" function. Otherwise uuid will be added in sendMessage function automatically
 export interface SendNickname {
   nickname: string
   client_uuid: string
+}
+
+export interface ChatMessage {
+  content: string
 }

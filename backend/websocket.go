@@ -74,8 +74,8 @@ func reader(conn *websocket.Conn, client_number int, uuid string) {
 
 	client := &Client{CONN: conn, NUMBER: client_number, UUID: uuid}
 	clients.Store(uuid, client)
-	// defer clients.Delete(uuid) //todo: looks like this needed, forgot when i commented this and why
-	// defer conn.Close()
+	defer clients.Delete(uuid) //todo: looks like this needed, forgot when i commented this and why
+	defer conn.Close()
 
 	ws_client_connected_to_server_handler(client)
 

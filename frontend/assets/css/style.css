@@ -14,10 +14,12 @@ body{
 
 #first_screen{
   background-color: darkgreen;
+  display: block;
 }
 
 #second_screen{
   background-color: darkolivegreen;
+  display: none;
 }
 
 #game_view{
