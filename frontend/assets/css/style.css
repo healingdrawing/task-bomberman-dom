@@ -2,7 +2,25 @@
   --game_size: 672px;
   --chat_size: 200px;
   --full_size: 880px;/* 672(96*7) game + 200 chat + 8 extra */
+  --color0: firebrick; /* server messages color */
+  --color1: rgb(255, 255, 0); /* player1 color */
+  --color2: rgb(0, 255, 0); /* player2 color */
+  --color3: rgb(0, 255, 255); /* player3 color */
+  --color4: rgb(255, 0, 255); /* player4 color */
 }
+
+.message_div{
+  border-top : 1px solid var(--color0); /* to separate*/
+  outline: 0px;
+  padding: 0px;
+  margin: 0px;
+  word-wrap: break-word;
+}
+.color0{color:var(--color0)} /*for server message coloring*/
+.color1{color:var(--color1)} /*for player message coloring*/
+.color2{color:var(--color2)}
+.color3{color:var(--color3)}
+.color4{color:var(--color4)}
 
 html{
   min-width: var(--full_size); 
@@ -44,7 +62,8 @@ body{
 }
 
 #chat_view__messages{
-  background-color: darkgreen;
+  background-color: black;
+  color : gainsboro;
   width: 100%;
   height: 600px; /* 672 - 24*x3 buttons */
   padding: 0px;
@@ -54,3 +73,4 @@ body{
   overflow-y: scroll;
   float: left;
 }
+

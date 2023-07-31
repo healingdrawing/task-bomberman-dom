@@ -1,6 +1,6 @@
 import { router, store, events } from './framework/framework';
 import { State } from './framework/store';
-import { ChatMessage, WSMT } from './game/types';
+import { SendChatMessage, WSMT } from './game/types';
 import { WebSocketClient } from './game/ws';
 
 // switch views on screen, when connected to server
@@ -61,7 +61,8 @@ function chat_message() {
   const inputValue = inputField.value;
   const message = {
     content: inputValue
-  } as ChatMessage
+  } as SendChatMessage
+  inputField.value = ""
   client.sendMessage(WSMT.WS_CHAT_MESSAGE, message)
 }
 

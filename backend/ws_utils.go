@@ -71,9 +71,32 @@ func ws_connect_to_server_handler(client *Client, messageData map[string]interfa
 	}
 
 	client.NICKNAME = nickname
-
+	html_content := fmt.Sprintf(`
+		<div class="color0">
+			new star <div class="color%d">[ %s ]</div> raised
+		</div>
+	`, client.NUMBER, nickname)
 	message := WS_BROADCAST_MESSAGE_DTO{
-		Content:       fmt.Sprintf("new star [%s] connected to server", nickname),
+		Content:       html_content,
+		Client_number: client.NUMBER,
+	}
+
+	uuids := get_all_clients_uuids(clients)
+
+	wsSend(WS_BROADCAST_MESSAGE, message, uuids)
+}
+
+func ws_leave_server_handler(client *Client, err error) {
+	log.Println("=== ws_leave_server_handler ===")
+	defer wsRecover(nil)
+
+	html_content := fmt.Sprintf(`
+		<div class="color0">
+			old star <div class="color%d">[ %s ]</div> faded
+		</div>
+	`, client.NUMBER, client.NICKNAME)
+	message := WS_BROADCAST_MESSAGE_DTO{
+		Content:       html_content,
 		Client_number: client.NUMBER,
 	}
 
@@ -111,6 +134,12 @@ func wsCreateResponseMessage(messageType WSMT, data interface{}) ([]byte, error)
 
 // wsRecover recover from panic and send a json err response over websocket
 func wsRecover(messageData map[string]interface{}) {
+
+	if messageData == nil {
+		log.Println("=== wsRecover: === \n=== messageData is nil")
+		log.Println("=== emergency close connection ===")
+		return
+	}
 
 	uuid, ok := messageData["client_uuid"].(string)
 	if !ok {

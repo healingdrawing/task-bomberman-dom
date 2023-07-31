@@ -28,6 +28,18 @@ export interface SendNickname {
   client_uuid: string
 }
 
+export interface BroadcastMessage {
+  content: string
+  client_number: number
+}
+
+export interface SendChatMessage {
+  content: string
+}
+
 export interface ChatMessage {
   content: string
+  nickname: string
+  client_number: number
+  created_at: string
 }

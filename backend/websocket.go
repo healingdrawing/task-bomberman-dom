@@ -89,6 +89,7 @@ func reader(conn *websocket.Conn, client_number int, uuid string) {
 			log.Println("incoming", incoming)
 			log.Println("err", err)
 			log.Println("=== error in reader , before delete and close ws ===")
+			ws_leave_server_handler(client, err)
 			return
 		}
 
