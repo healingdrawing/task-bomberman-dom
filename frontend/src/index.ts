@@ -1,5 +1,6 @@
 import { router, store, events } from './framework/framework';
 import { State } from './framework/store';
+import { prebuild_game_field } from './game/screen';
 import { SendChatMessage, WSMT } from './game/types';
 import { WebSocketClient } from './game/ws';
 
@@ -16,11 +17,8 @@ store.subscribe((state: State) => {
   secondScreenDiv.style.display = state.second_screen_visible ? "block" : "none";
 });
 
-
-const websockets: (WebSocket | null)[] = []
 const serverUrl = `ws://localhost:8080/ws`
 var client: WebSocketClient //todo: later maybe hide this from global scope
-var client_uuid: string
 
 async function connect_to_game(event: Event) {
   event.preventDefault(); // Prevent the default form submission
@@ -39,21 +37,13 @@ async function connect_to_game(event: Event) {
 
     client = new WebSocketClient(serverUrl, inputField.value);
     await client.initialize();
-    client_uuid = sessionStorage.getItem("uuid") as string
-
 
     store.setState({
       first_screen_visible: !store.getState().first_screen_visible,
       second_screen_visible: !store.getState().second_screen_visible,
     });
 
-
   }
-
-  // const inputValue = inputField.value;
-
-  // // Process the input value
-  // alert("Input value: " + inputValue);
 }
 
 function chat_message() {
@@ -67,7 +57,9 @@ function chat_message() {
 }
 
 /**initialization */
-(() => {
+(async () => {
+  console.log("prepare environment")
+  await prebuild_game_field();
   const connect_to_game_button = document.getElementById("connect_to_game") as HTMLButtonElement;
   events.on("click", connect_to_game_button, connect_to_game); // usage of mini-framework 🙂 mission complete
   const chat_message_button = document.getElementById("chat_view__input__send") as HTMLButtonElement;

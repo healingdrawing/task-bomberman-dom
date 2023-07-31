@@ -22,6 +22,12 @@
 .color3{color:var(--color3)}
 .color4{color:var(--color4)}
 
+.layer{
+  position: absolute;
+  width:100%;
+  height:100%;
+}
+
 html{
   min-width: var(--full_size); 
 }
@@ -41,6 +47,7 @@ body{
 }
 
 #game_view{
+  position: relative;
   background-color: darkslategrey;
   width: var(--game_size);
   height: var(--game_size);
@@ -74,3 +81,24 @@ body{
   float: left;
 }
 
+/*game layers*/
+
+#game_background{
+  background-image: url("back.png");
+}
+
+/*game cells*/
+
+.cell {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+}
+
+.empty_cell{
+  background-image: none;
+}
+
+.strong_obstacle{
+  background-image: url("strong.png");
+}
