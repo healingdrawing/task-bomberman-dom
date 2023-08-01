@@ -105,6 +105,20 @@ func ws_leave_server_handler(client *Client, err error) {
 	wsSend(WS_BROADCAST_MESSAGE, message, uuids)
 }
 
+func ws_server_broadcast_handler(text string) {
+	log.Println("=== ws_server_broadcast_handler ===")
+
+	html_content := fmt.Sprintf(`<div class="color0"> %s </div>`, text)
+	message := WS_BROADCAST_MESSAGE_DTO{
+		Content:       html_content,
+		Client_number: 0,
+	}
+
+	uuids := get_all_clients_uuids(clients)
+
+	wsSend(WS_BROADCAST_MESSAGE, message, uuids)
+}
+
 /*
 messageType must be from "ws_utils.go" constants of WSMT type. But go doesn't support enum.
 */
@@ -135,18 +149,6 @@ func wsCreateResponseMessage(messageType WSMT, data interface{}) ([]byte, error)
 // wsRecover recover from panic and send a json err response over websocket
 func wsRecover(messageData map[string]interface{}) {
 
-	if messageData == nil {
-		log.Println("=== wsRecover: === \n=== messageData is nil")
-		log.Println("=== emergency close connection ===")
-		return
-	}
-
-	uuid, ok := messageData["client_uuid"].(string)
-	if !ok {
-		log.Println("=== wsRecover: === \n=== failed to get client_uuid from message data")
-		return
-	}
-
 	if r := recover(); r != nil {
 		fmt.Println("=====================================")
 		stackTrace := debug.Stack()
@@ -167,9 +169,23 @@ func wsRecover(messageData map[string]interface{}) {
 		relevantPanicLine := strings.Join(relevantPanicLines, "\n")
 		log.Println(relevantPanicLines)
 
-		wsSend(WS_ERROR_RESPONSE, WS_ERROR_RESPONSE_DTO{Content: relevantPanicLine}, []string{uuid})
 		fmt.Println("=====================================")
 		// to print the full stack trace
 		log.Println(string(stackTrace))
+
+		if messageData == nil {
+			log.Println("=== wsRecover:\n=== messageData is nil")
+			log.Println("=== emergency close connection")
+			return
+		}
+
+		uuid, ok := messageData["client_uuid"].(string)
+		if !ok {
+			log.Println("=== wsRecover: === \n=== failed to get client_uuid from message data")
+			return
+		}
+
+		wsSend(WS_ERROR_RESPONSE, WS_ERROR_RESPONSE_DTO{Content: relevantPanicLine}, []string{uuid})
+
 	}
 }

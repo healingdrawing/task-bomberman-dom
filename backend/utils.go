@@ -111,8 +111,8 @@ func generate_UUID() (UUID string, err error) {
 	return UUID, nil
 }
 
-// count_sync_map_elements counts the clients number in a sync.Map
-func count_sync_map_elements(clients *sync.Map) int {
+// connected_clients_number counts the clients number in a sync.Map
+func connected_clients_number(clients *sync.Map) int {
 	count := 0
 	clients.Range(func(key, value interface{}) bool {
 		count++

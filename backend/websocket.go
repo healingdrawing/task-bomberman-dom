@@ -28,7 +28,7 @@ type wsStatus struct {
 func wsConnection(w http.ResponseWriter, r *http.Request) {
 	log.Println("=== inside wsConnection ===")
 
-	if count_sync_map_elements(clients) > 3 {
+	if connected_clients_number(clients) > 3 {
 		log.Println("=== too many clients ===")
 		jsonResponse(w, http.StatusOK, "Too many clients")
 		return
@@ -78,6 +78,7 @@ func reader(conn *websocket.Conn, client_number int, uuid string) {
 	defer conn.Close()
 
 	ws_client_connected_to_server_handler(client)
+	go game_waiting_state_handle_client_connected()
 
 	for {
 		messageType, incoming, err := conn.ReadMessage()
@@ -90,6 +91,7 @@ func reader(conn *websocket.Conn, client_number int, uuid string) {
 			log.Println("err", err)
 			log.Println("=== error in reader , before delete and close ws ===")
 			ws_leave_server_handler(client, err)
+			game_waiting_state_handle_client_disconnected()
 			return
 		}
 
