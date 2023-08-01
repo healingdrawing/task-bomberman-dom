@@ -51,6 +51,13 @@ func game_waiting_state_handle_client_connected() {
 					if connected_players_number >= max_players {
 						break
 					}
+					if connected_players_number < min_players {
+						game_waiting_state = WAITING_FOR_PLAYERS
+						fmt.Println("Countdown canceled, waiting for players.")
+						ws_server_broadcast_handler("Countdown canceled, waiting for players.")
+						break
+					}
+
 					fmt.Printf("%d seconds left\n", players_countdown)
 					// Here, you can add the logic to notify clients about the remaining seconds.
 					ws_server_broadcast_handler(fmt.Sprintf("%d seconds left", players_countdown))
@@ -74,6 +81,7 @@ func game_waiting_state_handle_client_connected() {
 						// Here, you can add the logic to notify clients that the game has started.
 						ws_server_broadcast_handler("!!!GO GO GO!!!")
 					} else if connected_players_number < min_players {
+						// todo: not sure it can fires , after injection/duplication above
 						game_waiting_state = WAITING_FOR_PLAYERS
 						fmt.Println("Countdown canceled, waiting for players.")
 						// Here, you can add the logic to notify clients that the countdown has been canceled.
