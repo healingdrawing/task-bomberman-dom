@@ -1,0 +1,16 @@
+:root{
+  --explosion_animation_duration: 0.4s;
+}
+
+.explosion {
+  width: 96px;
+  height: 96px;
+  background-image: url('explosion.png');
+  background-size: 600% 100%; /* Total width x height of the sprite (6 frames x 100%) */
+  animation: explosion_animation var(--explosion_animation_duration) steps(6) infinite;
+}
+
+@keyframes explosion_animation {
+  0% { background-position-x: 0%; } /* Display first frame (leftmost) */
+  100% { background-position-x: -600%; } /* Display third frame (rightmost) */
+}

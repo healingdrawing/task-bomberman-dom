@@ -81,6 +81,35 @@ body{
   float: left;
 }
 
+/*description*/
+
+#game_objects{
+  background-image: url("back.png");
+  width: var(--game_size);
+  color: gainsboro;
+  border: 2px solid black;
+  border-radius: 8px;
+}
+
+.game_object{
+  border: 1px solid black;
+  border-radius: 8px;
+  text-align: center;
+  padding: 2px;
+}
+
+.cell_demo{width: 96px; height: 96px;}
+
+.description{
+  border: 1px black solid;
+  border-bottom: none;
+  border-radius: 0px 0px 8px 8px ;
+  background-color: black;
+  margin: 4px -2px -2px -2px;
+  padding: 2px;
+  
+}
+
 /*game layers*/
 
 #game_background{
@@ -100,5 +129,9 @@ body{
 }
 
 .strong_obstacle{
-  background-image: url("strong.png");
+  background-image: url("strong_obstacle.png");
+}
+
+.weak_obstacle{
+  background-image: url("weak_obstacle.png");
 }

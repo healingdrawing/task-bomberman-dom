@@ -1,0 +1,40 @@
+:root{
+  --player_move_animation_duration: 0.1s;
+}
+
+.player1_move {
+  width: 96px;
+  height: 96px;
+  background-image: url('player1_move.png');
+  background-size: 300% 100%; /* Total width x height of the sprite (3 frames x 100%) */
+  animation: player_move_animation var(--player_move_animation_duration) steps(3) infinite;
+}
+
+.player2_move {
+  width: 96px;
+  height: 96px;
+  background-image: url('player2_move.png');
+  background-size: 300% 100%; /* Total width x height of the sprite (3 frames x 100%) */
+  animation: player_move_animation var(--player_move_animation_duration) steps(3) infinite;
+}
+
+.player3_move {
+  width: 96px;
+  height: 96px;
+  background-image: url('player3_move.png');
+  background-size: 300% 100%; /* Total width x height of the sprite (3 frames x 100%) */
+  animation: player_move_animation var(--player_move_animation_duration) steps(3) infinite;
+}
+
+.player4_move {
+  width: 96px;
+  height: 96px;
+  background-image: url('player4_move.png');
+  background-size: 300% 100%; /* Total width x height of the sprite (3 frames x 100%) */
+  animation: player_move_animation var(--player_move_animation_duration) steps(3) infinite;
+}
+
+@keyframes player_move_animation {
+  0% { background-position-x: 0%; } /* Display first frame (leftmost) */
+  100% { background-position-x: -300%; } /* Display third frame (rightmost) */
+}

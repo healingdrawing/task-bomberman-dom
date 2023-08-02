@@ -1,0 +1,40 @@
+:root{
+  --player_stand_animation_duration: 0.4s;
+}
+
+.player1_stand {
+  width: 96px;
+  height: 96px;
+  background-image: url('player1_stand.png');
+  background-size: 600% 100%; /* Total width x height of the sprite (6 frames x 100%) */
+  animation: player_stand_animation var(--player_stand_animation_duration) steps(6) infinite;
+}
+
+.player2_stand {
+  width: 96px;
+  height: 96px;
+  background-image: url('player2_stand.png');
+  background-size: 600% 100%; /* Total width x height of the sprite (6 frames x 100%) */
+  animation: player_stand_animation var(--player_stand_animation_duration) steps(6) infinite;
+}
+
+.player3_stand {
+  width: 96px;
+  height: 96px;
+  background-image: url('player3_stand.png');
+  background-size: 600% 100%; /* Total width x height of the sprite (6 frames x 100%) */
+  animation: player_stand_animation var(--player_stand_animation_duration) steps(6) infinite;
+}
+
+.player4_stand {
+  width: 96px;
+  height: 96px;
+  background-image: url('player4_stand.png');
+  background-size: 600% 100%; /* Total width x height of the sprite (6 frames x 100%) */
+  animation: player_stand_animation var(--player_stand_animation_duration) steps(6) infinite;
+}
+
+@keyframes player_stand_animation {
+  0% { background-position-x: 0%; } /* Display first frame (leftmost) */
+  100% { background-position-x: -600%; } /* Display third frame (rightmost) */
+}
