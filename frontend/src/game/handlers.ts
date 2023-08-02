@@ -7,19 +7,35 @@ class Handlers {
   }
 
   broadcast_message(data: BroadcastMessage) {
-    const message_div = document.createElement("div");
-    message_div.classList.add("message_div"); // to style border
+    //TODO: should countdown message be its on message type instead of broadcast_message type?
+    if (data.content.includes("seconds left")) {
+      const centered_message = document.querySelector(".centered_message");
+      if (centered_message !== null) {
+        centered_message.innerHTML = data.content;
+      } else {
+        const counter_div = document.createElement("div");
+        counter_div.classList.add("centered_message");
+        counter_div.innerHTML = data.content;
+        document.body.appendChild(counter_div);
+      } 
+    } else {
+      const message_div = document.createElement("div");
+      message_div.classList.add("message_div");
 
-    const content_div = document.createElement("div");
-    content_div.innerHTML = data.content;
-    message_div.appendChild(content_div);
+      const content_div = document.createElement("div");
+      content_div.innerHTML = data.content;
+      message_div.appendChild(content_div);
 
-    this.chat_messages_div.insertBefore(message_div, this.chat_messages_div.firstChild);
+      this.chat_messages_div.insertBefore(
+        message_div,
+        this.chat_messages_div.firstChild
+      );
+    }
   }
 
   chat_message(data: ChatMessage) {
     const message_div = document.createElement("div");
-    message_div.classList.add("message_div"); // to style border
+    message_div.classList.add("message_div");
 
     const nickname_div = document.createElement("div");
     nickname_div.innerText = `[${data.nickname}]`;
@@ -33,9 +49,10 @@ class Handlers {
     const content_div = document.createElement("div");
     content_div.innerText = data.content;
     message_div.appendChild(content_div);
+
     this.chat_messages_div.insertBefore(message_div, this.chat_messages_div.firstChild);
   }
 }
 
-export const handlers = new Handlers();
 
+export const handlers = new Handlers();
