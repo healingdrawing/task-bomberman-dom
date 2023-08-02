@@ -15,15 +15,26 @@
 <body>
   <!-- appears when application starts, before connection to websocket -->
   <div id="first_screen">
-    <h1>STAR WARS CONFLICT</h1>
-    <form>
-      <input id="nickname" type="text" minlength="1" maxlength="15" placeholder="nickname 1-15 symbols ..." required />
-      <button id="connect_to_game" type="submit">Connect to game</button>
-    </form>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <h1 class="game-title">STAR WARS CONFLICT</h1>
+    <div class="game-updates-container"> 
     <h2>How to play:</h2>
-    <p>Use arrows to move, space to drop the bomb</p>
+    <div class ="game-container-text"><p>Use arrows to move, space to drop the bomb</p>
     <p>Collect power ups to increase your lifes, speed and bomb range</p>
     <p>Destroy weak obstacles to get power ups</p>
+    </div>
+  </div>
+  <div class="game-updates-container"> 
+    <div class ="form-input">
+      <h2>Join Here</h2>
+    <input id="nickname" type="text" minlength="1" maxlength="15" placeholder="Username 1-15 symbols ..." required />
+    <br><button id="connect_to_game" type="submit">Connect to game</button>
+      </div>
+    </div>
+  <div class="game-updates-container ">
     <h2>Game Objects:</h2>
     <div id="game_objects">
       <table>
@@ -140,11 +151,12 @@
               <div class="player4_move"></div>
               <div class="description">Player4 Move</div>
             </div>
+          </div>
           </td>
         </tr>
       </tbody>
       </table>
-      
+    </div>
     </div>
   </div>
   <!-- appears when player connected to websocket. Includes game view and chat view -->
