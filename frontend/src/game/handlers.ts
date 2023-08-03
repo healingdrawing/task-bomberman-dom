@@ -1,4 +1,4 @@
-import { BroadcastMessage, ChatMessage } from "./types";
+import { BroadcastMessage, ChatMessage, ConnectedPlayers } from "./types";
 
 class Handlers {
   chat_messages_div: HTMLDivElement;
@@ -51,6 +51,11 @@ class Handlers {
     message_div.appendChild(content_div);
 
     this.chat_messages_div.insertBefore(message_div, this.chat_messages_div.firstChild);
+  }
+
+  connected_players(data: ConnectedPlayers) {
+    const connected_players_div = document.getElementById("connected_players") as HTMLDivElement;
+    connected_players_div.innerText = `Players: ${data.connected_players}`;
   }
 }
 

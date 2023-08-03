@@ -32,6 +32,9 @@ const (
 	WS_BOMB                       WSMT = "bomb"
 	WS_EXPLODE                    WSMT = "explode"
 	WS_HIDE_POWER_UP              WSMT = "hide_power_up"
+
+	WS_PLAYER_LIFES      WSMT = "player_lifes"
+	WS_CONNECTED_PLAYERS WSMT = "connected_players"
 )
 
 type WS_CLIENT_CONNECTED_TO_SERVER_DTO struct {
@@ -83,7 +86,10 @@ func ws_connect_to_server_handler(client *Client, messageData map[string]interfa
 
 	uuids := get_all_clients_uuids(clients)
 
+	ws_send_connected_players_number(len(uuids), uuids) // to update players counter on client side
+
 	wsSend(WS_BROADCAST_MESSAGE, message, uuids)
+
 }
 
 func ws_leave_server_handler(client *Client, err error) {
@@ -102,6 +108,9 @@ func ws_leave_server_handler(client *Client, err error) {
 
 	uuids := get_all_clients_uuids(clients)
 
+	ws_send_connected_players_number(len(uuids)-1, uuids) // to update players counter on client side
+	//minus 1 because rejection will happen automatically, but message sent before that. when this handler is called, error already happened in read incoming messages loop
+
 	wsSend(WS_BROADCAST_MESSAGE, message, uuids)
 }
 
@@ -117,6 +126,21 @@ func ws_server_broadcast_handler(text string) {
 	uuids := get_all_clients_uuids(clients)
 
 	wsSend(WS_BROADCAST_MESSAGE, message, uuids)
+}
+
+type WS_CONNECTED_PLAYERS_DTO struct {
+	Connected_players string `json:"connected_players"`
+}
+
+// send to all clients the number of connected clients/players
+func ws_send_connected_players_number(n int, uuids []string) {
+	log.Println("=== ws_send_connected_players_number ===")
+
+	message := WS_CONNECTED_PLAYERS_DTO{
+		Connected_players: fmt.Sprint(n),
+	}
+
+	wsSend(WS_CONNECTED_PLAYERS, message, uuids)
 }
 
 /*

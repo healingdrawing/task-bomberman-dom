@@ -5,9 +5,9 @@ export enum WSMT {
 
   WS_CLIENT_CONNECTED_TO_SERVER = "client_connected_to_server", // first response with uuid
   WS_CONNECT_TO_SERVER = "connect_to_server", // first message to server with nickname
-  WS_KEEP_CONNECTION = "keep_connection",
-  WS_KILL_CONNECTION = "kill_connection",
-  WS_STILL_CONNECTED = "still_connected",
+  WS_KEEP_CONNECTION = "keep_connection", // keep connection alive
+  WS_KILL_CONNECTION = "kill_connection", // todo: not sure it needed
+  WS_STILL_CONNECTED = "still_connected", // response from server, that client is still connected
   WS_BROADCAST_MESSAGE = "broadcast_message",
   WS_START_GAME = "start_game",
   WS_END_GAME = "end_game",
@@ -19,7 +19,10 @@ export enum WSMT {
   WS_STAND = "stand",
   WS_BOMB = "bomb",
   WS_EXPLODE = "explode",
-  WS_HIDE_POWER_UP = "hide_power_up"
+  WS_HIDE_POWER_UP = "hide_power_up",
+
+  WS_PLAYER_LIFES = "player_lifes",
+  WS_CONNECTED_PLAYERS = "connected_players", // number of connected players
 }
 
 // here uuid added manually, because this is straight message to server, without use "sendMessage" function. Otherwise uuid will be added in sendMessage function automatically
@@ -42,4 +45,8 @@ export interface ChatMessage {
   nickname: string
   client_number: number
   created_at: string
+}
+
+export interface ConnectedPlayers {
+  connected_players: string
 }

@@ -1,4 +1,4 @@
-import { BroadcastMessage, ChatMessage, WSMT } from "./types";
+import { BroadcastMessage, ChatMessage, ConnectedPlayers, WSMT } from "./types";
 import { SendNickname } from "./types";
 import { handlers } from "./handlers";
 
@@ -78,6 +78,11 @@ export class WebSocketClient {
         // Handle chat message logic here
         console.log('Chat message received:', message.data);
         handlers.chat_message(message.data as ChatMessage);
+        break;
+      case WSMT.WS_CONNECTED_PLAYERS:
+        // Handle connected players logic here
+        console.log('Connected players received:', message.data);
+        handlers.connected_players(message.data as ConnectedPlayers);
         break;
       default:
         console.warn('Unknown message type:', message.type);
