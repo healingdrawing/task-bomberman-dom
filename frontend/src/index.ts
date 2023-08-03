@@ -1,6 +1,6 @@
 import { router, store, events } from './framework/framework';
 import { State } from './framework/store';
-import { prebuild_game_field } from './game/screen';
+import { screen } from './game/screen';
 import { SendChatMessage, WSMT } from './game/types';
 import { WebSocketClient } from './game/ws';
 
@@ -59,7 +59,7 @@ function chat_message() {
 /**initialization */
 (async () => {
   console.log("prepare environment")
-  await prebuild_game_field();
+  await screen.prepare()
   const connect_to_game_button = document.getElementById("connect_to_game") as HTMLButtonElement;
   events.on("click", connect_to_game_button, connect_to_game); // usage of mini-framework 🙂 mission complete
   const chat_message_button = document.getElementById("chat_view__input__send") as HTMLButtonElement;
