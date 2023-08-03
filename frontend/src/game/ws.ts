@@ -7,16 +7,10 @@ export interface Message {
   data: object;
 }
 
-export class WebSocketClient {
+class WebSocketClient {
   private ws: WebSocket | null = null;
   private uuid: string | null = null;
   private readonly serverUrl: string = `ws://localhost:8080/ws`
-  private readonly nickname: string;
-
-  constructor(nickname: string) {
-    this.nickname = nickname;
-    this.ws = new WebSocket(this.serverUrl);
-  }
 
   private connect(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -90,6 +84,9 @@ export class WebSocketClient {
 
   public async initialize(): Promise<void> {
     try {
+      this.ws = new WebSocket(this.serverUrl);
+
+      const nickname = document.getElementById("nickname") as HTMLInputElement;
 
       console.log('1 before this.ws!.onmessage');
       // Server will return uuid after connection is established
@@ -112,7 +109,7 @@ export class WebSocketClient {
               // Send client nickname and uuid to the server
               const initialMessage: Message = {
                 type: WSMT.WS_CONNECT_TO_SERVER,
-                data: { nickname: this.nickname, client_uuid: this.uuid } as SendNickname,
+                data: { nickname: nickname.value, client_uuid: this.uuid } as SendNickname,
               };
               this.ws!.send(JSON.stringify(initialMessage));
 
@@ -149,3 +146,6 @@ export class WebSocketClient {
     this.ws!.send(JSON.stringify(message));
   }
 }
+
+/** web socket client to interact with server */
+export const ws = new WebSocketClient();

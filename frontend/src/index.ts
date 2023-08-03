@@ -2,7 +2,7 @@ import { router, store, events } from './framework/framework';
 import { State } from './framework/store';
 import { screen } from './game/screen';
 import { SendChatMessage, WSMT } from './game/types';
-import { WebSocketClient } from './game/ws';
+import { ws } from './game/ws';
 
 // switch views on screen, when connected to server
 store.setState({
@@ -16,9 +16,6 @@ store.subscribe((state: State) => {
   firstScreenDiv.style.display = state.first_screen_visible ? "block" : "none";
   secondScreenDiv.style.display = state.second_screen_visible ? "block" : "none";
 });
-
-
-var client: WebSocketClient //todo: later maybe hide this from global scope
 
 async function connect_to_game(event: Event) {
   event.preventDefault(); // Prevent the default form submission
@@ -35,8 +32,7 @@ async function connect_to_game(event: Event) {
     const connect_to_game_button = document.getElementById("connect_to_game") as HTMLButtonElement;
     events.off("click", connect_to_game_button, connect_to_game, "connect_to_game_button");
 
-    client = new WebSocketClient(inputField.value);
-    await client.initialize();
+    await ws.initialize();
 
     store.setState({
       first_screen_visible: !store.getState().first_screen_visible,
@@ -53,7 +49,7 @@ function chat_message() {
     content: inputValue
   } as SendChatMessage
   inputField.value = ""
-  client.sendMessage(WSMT.WS_CHAT_MESSAGE, message)
+  ws.sendMessage(WSMT.WS_CHAT_MESSAGE, message)
 }
 
 /**initialization */
