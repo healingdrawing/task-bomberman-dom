@@ -117,6 +117,9 @@ body{
 }
 
 /*game cells*/
+.absolute{
+  position: absolute;
+}
 
 .cell {
   position: absolute;
