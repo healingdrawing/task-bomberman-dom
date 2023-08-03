@@ -328,13 +328,14 @@ h2 {
 
 #game_objects{
   background-image: url("back.png");
+  background-size: cover;
   font-family: 'SF Alien Encounters Solid', sans-serif;
-  width: var(--game_size);
+  /* width: var(--game_size); */
   color: gainsboro;
   border: 2px solid black;
   border-radius: 8px;
+  background-position: center;
 }
-
 .game_object{
   border: 1px solid black;
   border-radius: 8px;
