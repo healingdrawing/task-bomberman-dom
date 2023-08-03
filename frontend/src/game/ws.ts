@@ -10,11 +10,10 @@ export interface Message {
 export class WebSocketClient {
   private ws: WebSocket | null = null;
   private uuid: string | null = null;
-  private readonly serverUrl: string;
+  private readonly serverUrl: string = `ws://localhost:8080/ws`
   private readonly nickname: string;
 
-  constructor(serverUrl: string, nickname: string) {
-    this.serverUrl = serverUrl;
+  constructor(nickname: string) {
     this.nickname = nickname;
     this.ws = new WebSocket(this.serverUrl);
   }

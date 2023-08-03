@@ -17,7 +17,7 @@ store.subscribe((state: State) => {
   secondScreenDiv.style.display = state.second_screen_visible ? "block" : "none";
 });
 
-const serverUrl = `ws://localhost:8080/ws`
+
 var client: WebSocketClient //todo: later maybe hide this from global scope
 
 async function connect_to_game(event: Event) {
@@ -35,7 +35,7 @@ async function connect_to_game(event: Event) {
     const connect_to_game_button = document.getElementById("connect_to_game") as HTMLButtonElement;
     events.off("click", connect_to_game_button, connect_to_game, "connect_to_game_button");
 
-    client = new WebSocketClient(serverUrl, inputField.value);
+    client = new WebSocketClient(inputField.value);
     await client.initialize();
 
     store.setState({
