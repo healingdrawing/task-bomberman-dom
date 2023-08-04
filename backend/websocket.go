@@ -118,17 +118,6 @@ func reader(conn *websocket.Conn, client_number int, uuid string) {
 			case string(WS_CHAT_MESSAGE):
 				wsChatMessageHandler(conn, data.Data)
 
-				// todo: looks like this is not used(managed by http)), check and delete if so
-			case "login":
-				log.Println("==================LOGIN FIRED==================")
-				clients.Store(conn, data.Data["username"])
-				sendStatus(data.Data["username"].(string), true)
-				defer sendStatus(data.Data["username"].(string), false)
-			case "logout":
-				log.Println("==================LOGOUT FIRED==================")
-				conn.Close()
-				clients.Delete(conn)
-				sendStatus(data.Data["username"].(string), false)
 			default:
 				log.Println("Unknown type: ", data.Type)
 			}
@@ -162,25 +151,4 @@ func wsSend(message_type WSMT, message interface{}, uuids []string) {
 			log.Println("wsSend: client not found . clients.Load(uuid) failed")
 		}
 	}
-}
-
-// //////////////////////////
-// fragments of old code. remove later if full cleaning will be executed
-// //////////////////////////
-
-func sendStatus(username string, online bool) {
-	data := wsStatus{"status", username, online}
-	output, err := json.Marshal(data)
-	if err != nil {
-		log.Println(err)
-	}
-	clients.Range(func(key, value interface{}) bool {
-		if value.(string) != "" {
-			err = key.(*websocket.Conn).WriteMessage(websocket.TextMessage, output)
-			if err != nil {
-				log.Println(err)
-			}
-		}
-		return true
-	})
 }
