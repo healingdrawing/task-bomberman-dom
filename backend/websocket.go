@@ -19,12 +19,6 @@ type wsInput struct {
 	Data map[string]interface{} `json:"data"`
 }
 
-type wsStatus struct {
-	Type     string `json:"type"`
-	Username string `json:"username"`
-	Online   bool   `json:"online"`
-}
-
 func wsConnection(w http.ResponseWriter, r *http.Request) {
 	log.Println("=== inside wsConnection ===")
 
