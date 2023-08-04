@@ -3,11 +3,9 @@ package main
 import (
 	"crypto/rand"
 	"encoding/json"
-	"fmt"
 	"log"
 	"math/big"
 	"net/http"
-	"runtime/debug"
 	"strings"
 	"sync"
 
@@ -41,38 +39,6 @@ func jsonResponse(w http.ResponseWriter, statusCode int, data any) {
 		return
 	}
 
-}
-
-// # recovery is a utility function to recover from panic and send a json err response over http
-//
-// @sideEffect {log, debug}
-//
-// - for further debugging uncomment {print stack trace}
-func recovery(w http.ResponseWriter) {
-	if r := recover(); r != nil {
-		fmt.Println("=====================================")
-		stackTrace := debug.Stack()
-		lines := strings.Split(string(stackTrace), "\n")
-		relevantPanicLines := []string{}
-		for _, line := range lines {
-			if strings.Contains(line, "backend/") {
-				relevantPanicLines = append(relevantPanicLines, line)
-			}
-		}
-		if len(relevantPanicLines) > 1 {
-			for i, line := range relevantPanicLines {
-				if strings.Contains(line, "utils.go") {
-					relevantPanicLines = append(relevantPanicLines[:i], relevantPanicLines[i+1:]...)
-				}
-			}
-		}
-		relevantPanicLine := strings.Join(relevantPanicLines, "\n")
-		log.Println(relevantPanicLines)
-		jsonResponse(w, http.StatusInternalServerError, relevantPanicLine)
-		fmt.Println("=====================================")
-		// to print the full stack trace
-		log.Println(string(stackTrace))
-	}
 }
 
 // randomNum returns a random number between min and max, both inclusive.
@@ -154,10 +120,7 @@ func get_client_by_uuid(clients *sync.Map, uuid string) *Client {
 	var client *Client
 	clients.Range(func(key, value interface{}) bool {
 		client = value.(*Client)
-		if client.UUID == uuid {
-			return false
-		}
-		return true
+		return client.UUID != uuid
 	})
 	return client
 }
