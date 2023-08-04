@@ -58,15 +58,30 @@ body{
   background-color: black;
 }
 
+td>div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+td>div >div {
+  align-self: center ;
+}
+
+td>div >div.description {
+  width: 100%;
+}
+
+
 /* #first_screen{
   background-color: darkgreen;
   display: block;
 } */
 
-#second_screen{
+/* #second_screen{
   background-color: darkolivegreen;
   display: none;
-}
+} */
 
 /* Parallex Pixel Stars*/
 #first_screen {
@@ -213,7 +228,7 @@ body {
   font-family: 'SF Alien Encounters Solid', sans-serif;
 }
 
-#connect_to_game {
+#connect_to_game , #rip {
   font-family: 'SF Alien Encounters Solid', sans-serif;
   padding: 10px 20px;
   border-radius: 5px;
@@ -260,6 +275,13 @@ h2 {
 /* End of Landing Page */
 
 /* Waiting Room */ 
+
+#second_screen{
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
 .waiting-rooms {
   grid-area: players;
   font-family: "Common Pixel", sans-serif;
