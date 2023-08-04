@@ -88,6 +88,7 @@ func game_waiting_state_handle_client_connected() {
 						fmt.Println("Game started!")
 						// Here, you can add the logic to notify clients that the game has started.
 						ws_server_broadcast_handler("!!!GO GO GO!!!")
+						ws_send_start_game_handler()
 					} else if connected_players_number < min_players {
 						// todo: not sure it can fires , after injection/duplication above
 						game_waiting_state = WAITING_FOR_PLAYERS

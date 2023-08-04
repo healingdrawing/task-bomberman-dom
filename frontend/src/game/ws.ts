@@ -1,6 +1,7 @@
 import { BroadcastMessage, ChatMessage, ConnectedPlayers, WSMT } from "./types";
 import { SendNickname } from "./types";
 import { handlers } from "./handlers";
+import { screen } from "./screen";
 
 export interface Message {
   type: WSMT;
@@ -76,6 +77,12 @@ class WebSocketClient {
         // Handle connected players logic here
         console.log('Connected players received:', message.data);
         handlers.connected_players(message.data as ConnectedPlayers);
+        break;
+      case WSMT.WS_START_GAME:
+        // Handle start game logic here
+        console.log('Start game received:', message.data);
+        screen.game_state_start_game(); // todo: remove, after implement internally
+        // handlers.start_game(message.data as ....); //TODO: incoming message must include initial game state
         break;
       default:
         console.warn('Unknown message type:', message.type);

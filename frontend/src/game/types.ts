@@ -12,6 +12,8 @@ export enum WSMT {
   WS_START_GAME = "start_game",
   WS_END_GAME = "end_game",
   WS_PLAYER_GAME_OVER = "player_game_over",
+
+  // incoming from server to control items on screen
   WS_UP = "up",
   WS_DOWN = "down",
   WS_LEFT = "left",
@@ -20,6 +22,18 @@ export enum WSMT {
   WS_BOMB = "bomb",
   WS_EXPLODE = "explode",
   WS_HIDE_POWER_UP = "hide_power_up",
+
+  // outgoing from client to server to send pressed/released keys
+  WS_UP_ON = "up_on", // arrow up pressed
+  WS_UP_OFF = "up_off", // arrow up released
+  WS_DOWN_ON = "down_on",
+  WS_DOWN_OFF = "down_off",
+  WS_LEFT_ON = "left_on",
+  WS_LEFT_OFF = "left_off",
+  WS_RIGHT_ON = "right_on",
+  WS_RIGHT_OFF = "right_off",
+  WS_BOMB_ON = "bomb_on", // Enter
+  WS_BOMB_OFF = "bomb_off",
 
   WS_PLAYER_LIFES = "player_lifes",
   WS_CONNECTED_PLAYERS = "connected_players", // number of connected players

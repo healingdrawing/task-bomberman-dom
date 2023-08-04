@@ -1,7 +1,8 @@
 import { router, store, events } from './framework/framework';
 import { State } from './framework/store';
-import { screen } from './game/screen';
 import { SendChatMessage, WSMT } from './game/types';
+import { controller } from './game/controller';
+import { screen } from './game/screen';
 import { ws } from './game/ws';
 
 // switch views on screen, when connected to server
@@ -60,4 +61,9 @@ function chat_message() {
   events.on("click", connect_to_game_button, connect_to_game); // usage of mini-framework 🙂 mission complete
   const chat_message_button = document.getElementById("chat_view__input__send") as HTMLButtonElement;
   events.on("click", chat_message_button, chat_message);
+
+  // Add event listeners to the document for key press and unpress events
+  events.on("keydown", document, controller.handleKeyDown);
+  events.on("keyup", document, controller.handleKeyUp);
+
 })()
