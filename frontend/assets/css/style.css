@@ -20,6 +20,7 @@
   padding: 0px;
   margin: 0px;
   word-wrap: break-word;
+  font-family: inherit;
 }
 
 .centered_message {
@@ -46,8 +47,10 @@
 
 .layer{
   position: absolute;
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
+  margin-left: 30%;
+  margin-top: 1%;
 }
 
 html{
@@ -161,6 +164,14 @@ body {
 
 /* Parallex Pixel Stars End */
 
+h2 {
+  margin-bottom: 20px;
+  font-size: 30px;
+  color: yellow;
+  border-bottom: 4px solid #555;
+  padding: 5px 0px;
+  display: inline-block;
+}
 /* Landing Page */
 .game-title {
   font-family: 'Project-9', sans-serif;
@@ -263,14 +274,6 @@ body {
   text-align: center;
 }
 
-h2 {
-  margin-bottom: 20px;
-  font-size: 30px;
-  color: yellow;
-  border-bottom: 4px solid #555;
-  padding: 5px 0px;
-  display: inline-block;
-}
 
 /* End of Landing Page */
 
@@ -280,6 +283,7 @@ h2 {
   display: none;
   width: 100%;
   height: 100%;
+  justify-content: center;
 }
 
 .waiting-rooms {
@@ -310,21 +314,112 @@ h2 {
   font-size: xx-large;
   border: 3px rgb(187, 0, 255) solid;
 }
+
+.countdown-container{
+  grid-area: info;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: End;
+  font-size: xx-large;
+}
+
 /* End of Waiting Room*/
 
+/* Game Page */
+.lives-container {
+  margin: 0;
+  height: 10%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  font-family: "Common Pixel", sans-serif;
+  color: lightgray;
+  font-size: x-large;
+  border: 3px pink solid;
+}
+
+.lives-heart-container {
+  display: flex;
+  margin: 0;
+  height: 100%;
+}
+
+.lives-hearts {
+  margin: 0;
+}
+
+.power-up-container{
+  grid-area: info;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: End;
+  font-size: xx-large;
+}
+
+.other-lives-container {
+  grid-area: other-lives;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-content: space-between;
+  font-family: "Common Pixel", sans-serif;
+  color: lightgray;
+  font-size: larger;
+  border: 3px blue solid;
+}
+
+.other-lives {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.other-lives>.lives-heart-container>img {
+  width: 40px;
+  height: 40px;
+  margin: 0;
+}
+
+/*End of Game Page*/
+
 #game_view{
-  position: relative;
+  /* position: relative;
   background-color: darkslategrey;
   width: var(--game_size);
   height: var(--game_size);
-  float: left;
+  float: left; */
+  width: 100%;
+  height: 100%;
+  border: 3px aqua solid;
 }
 
 #chat_view{
-  background-color: green;
+  /* background-color: green;
   width: var(--chat_size);
   height: var(--game_size);
-  float: left;
+  float: left; */
+    font-family: "Common Pixel", sans-serif;
+    color: lightgray;
+    font-size: larger;
+    margin: 0;
+    height: 100%;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    border: 3px yellow solid;
 }
 
 #chat_view__input__message, #chat_view__input__send,
