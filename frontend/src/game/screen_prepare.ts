@@ -23,7 +23,7 @@ class ScreenPrepare {
    * and browser do not need even rebuild the DOM tree,
    * just change some css properties, generally styles of the divs
    */
-  async prebuild_game_field(): Promise<void> {
+  prebuild_game_field() {
     console.log("prebuild_game_field")
     // build strong obstacles, can not be destroyed
     const game_strong_obstacles = document.getElementById("game_strong_obstacles") as HTMLDivElement;
@@ -131,6 +131,67 @@ class ScreenPrepare {
       game_players.appendChild(div);
       this.players.set(`${dx[i]}${dy[i]}`, div) // always less then 10, so no need space between x and y
     }
+  }
+
+  reset_game_field_div_classes(div: HTMLDivElement) {
+    div.className = ""
+    div.classList.add("absolute")
+    div.classList.add("none")
+  }
+
+  /** hide all elements, before it will be shown according to server data */
+  clear_game_field() {
+    console.log("========== clear_game_field")
+    // hide all weak obstacles
+    for (const div of this.weak_obstacles.values()) {
+      if (div) {
+        div.classList.add("none")
+      } else {
+        console.log("========== clear_game_field: weak obstacle div is null")
+      }
+    }
+
+    // hide all power ups
+    for (const div of this.power_ups.values()) {
+      if (div) {
+        this.reset_game_field_div_classes(div)
+      } else {
+        console.log("========== clear_game_field: power up div is null")
+      }
+    }
+
+    // hide all bombs
+    for (const div of this.bombs.values()) {
+      if (div) {
+        this.reset_game_field_div_classes(div)
+      } else {
+        console.log("========== clear_game_field: bomb div is null")
+      }
+    }
+
+    // hide all explosions
+    for (const div of this.explosions.values()) {
+      if (div) {
+        this.reset_game_field_div_classes(div)
+      } else {
+        console.log("========== clear_game_field: explosion div is null")
+      }
+    }
+
+    // hide all players
+    for (const div of this.players.values()) {
+      if (div) {
+        this.reset_game_field_div_classes(div)
+      } else {
+        console.log("========== clear_game_field: player div is null")
+      }
+    }
+  }
+
+  /** configure game field, according to server data */
+  build_game_field() {
+    console.log("========== build_game_field")
+    //todo: continue here
   }
 
 }

@@ -27,10 +27,13 @@ class GameScreen {
 
   /**generates all required objects to display the game and place them on screen*/
   async prepare() {
-    await screen_prepare.prebuild_game_field()
+    screen_prepare.prebuild_game_field()
   }
 
   game_state_start_game() {
+    console.log("=========== game_state_start_game")
+    screen_prepare.clear_game_field()
+    screen_prepare.build_game_field()
     this.game_state = GameState.START_GAME
   }
 
