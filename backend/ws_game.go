@@ -27,6 +27,7 @@ type GAME_STATE struct {
 	Players        map[string]PLAYER   `json:"players"`
 	Weak_obstacles map[string]bool     `json:"weak_obstacles"` // key is xy, without space, like "01", value is show(true) or destroyed(false)
 	Power_ups      map[string]POWER_UP `json:"power_ups"`      // key is xy, without space, like "01"
+	locked_cells   map[string]bool     // weak and strong obstacles cellxy. cant move there. key is xy, without space, like "01"
 }
 
 func game_init() {
@@ -34,6 +35,8 @@ func game_init() {
 	prepare_players()
 
 	prepare_weak_obstacles_and_power_ups()
+
+	prepare_locked_cells() // strong and weak obstacles to restrict movement
 
 }
 

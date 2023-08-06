@@ -17,6 +17,7 @@ type WS_CHAT_MESSAGE_DTO struct {
 	Created_at    string `json:"created_at"`
 }
 
+// todo: can be refactored to use client instead of conn. with comparing of uuids to verify that it is the same client
 func wsChatMessageHandler(conn *websocket.Conn, messageData map[string]interface{}) {
 	defer wsRecover(messageData)
 

@@ -112,6 +112,19 @@ func reader(conn *websocket.Conn, client_number int, uuid string) {
 			case string(WS_CHAT_MESSAGE):
 				wsChatMessageHandler(conn, data.Data)
 
+			case //todo: maybe later refactor to each handler call, which is faster, -1 step
+				string(WS_UP_ON),
+				string(WS_UP_OFF),
+				string(WS_DOWN_ON),
+				string(WS_DOWN_OFF),
+				string(WS_LEFT_ON),
+				string(WS_LEFT_OFF),
+				string(WS_RIGHT_ON),
+				string(WS_RIGHT_OFF),
+				string(WS_BOMB_ON),
+				string(WS_BOMB_OFF):
+				ws_character_control_handler(client, data.Type)
+
 			default:
 				log.Println("Unknown type: ", data.Type)
 			}

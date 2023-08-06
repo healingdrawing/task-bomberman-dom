@@ -86,3 +86,20 @@ func prepare_weak_obstacles_and_power_ups() {
 		}
 	}
 }
+
+// fill the locked for moving cells xy, it is strong obstacles and weak obstacles(not destroyed yet)
+func prepare_locked_cells() {
+	game.locked_cells = make(map[string]bool)
+
+	// fill the strong obstacles x9, every second from left top corner
+	strong_x := []int{1, 3, 5, 1, 3, 5, 1, 3, 5}
+	strong_y := []int{1, 1, 1, 3, 3, 3, 5, 5, 5}
+	for i := 0; i < 9; i++ {
+		game.locked_cells[strconv.Itoa(strong_x[i])+strconv.Itoa(strong_y[i])] = true
+	}
+
+	// fill the weak obstacles
+	for k := range game.Weak_obstacles {
+		game.locked_cells[k] = true
+	}
+}
