@@ -64,3 +64,43 @@ export interface ChatMessage {
 export interface ConnectedPlayers {
   connected_players: string
 }
+
+export interface PlayerLifes {
+  lifes: number
+}
+
+/* game state */
+
+export interface Player {
+  number: number
+  x: number
+  y: number
+  target_x: number
+  target_y: number
+  turbo: boolean
+  dead: boolean
+}
+
+export interface Bomb {
+  player_number: number
+  show: boolean
+}
+
+export interface PowerUp {
+  effect: string
+  show: boolean
+}
+
+/**  do not convert to maps etc structures, because no short way to do this, only manuall convertion, which is awful. Also iteration through the object can be used*/
+export interface GameState {
+  // players: object
+  players: { [key: string]: Player };
+  bombs: object
+  explosions: object
+  power_ups: object
+  weak_obstacles: object
+}
+
+export interface StartGame {
+  state: GameState
+}

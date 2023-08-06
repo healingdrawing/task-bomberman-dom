@@ -1,4 +1,4 @@
-import { BroadcastMessage, ChatMessage, ConnectedPlayers, WSMT } from "./types";
+import { BroadcastMessage, ChatMessage, ConnectedPlayers, GameState, WSMT } from "./types";
 import { SendNickname } from "./types";
 import { handlers } from "./handlers";
 import { screen } from "./screen";
@@ -81,8 +81,7 @@ class WebSocketClient {
       case WSMT.WS_START_GAME:
         // Handle start game logic here
         console.log('Start game received:', message.data);
-        screen.game_state_start_game(); // todo: remove, after implement internally
-        // handlers.start_game(message.data as ....); //TODO: incoming message must include initial game state
+        screen.game_state_start_game(message.data as GameState);
         break;
       default:
         console.warn('Unknown message type:', message.type);

@@ -1,3 +1,5 @@
+import { GameState } from "./types"
+
 class ScreenPrepare {
 
   cspx = 96 // cell size in px
@@ -129,7 +131,7 @@ class ScreenPrepare {
       div.style.left = `${dx[i] * this.cspx}px`;
       div.style.top = `${dy[i] * this.cspx}px`;
       game_players.appendChild(div);
-      this.players.set(`${dx[i]}${dy[i]}`, div) // always less then 10, so no need space between x and y
+      this.players.set(`${i + 1}`, div) // always less then 10, so no need space between x and y
     }
   }
 
@@ -189,9 +191,23 @@ class ScreenPrepare {
   }
 
   /** configure game field, according to server data */
-  build_game_field() {
+  build_game_field(state: GameState) {
     console.log("========== build_game_field")
-    //todo: continue here
+    // show weak obstacles
+    for (const key in state.weak_obstacles) {
+      this.weak_obstacles.get(key)?.classList.remove("none")
+    }
+
+    // show players
+    for (const key in state.players) {
+      // const state_player = (state.players as { [key: string]: Player })[key];//facepalm, refactored in GameState, to use short way here
+      const state_player = state.players[key];
+      const player = this.players.get(key)
+      if (player && !state_player.dead) {
+        this.players.get(key)?.classList.remove("none")
+        this.players.get(key)?.classList.add(`player${key}_stand`) //todo: remove this later because render will do it , depends on target position and current position
+      }
+    }
   }
 
 }

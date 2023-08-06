@@ -1,7 +1,9 @@
+import { handlers } from "./handlers"
 import { screen_prepare } from "./screen_prepare"
+import { GameState } from "./types"
 
 /** server controllable */
-export enum GameState {
+export enum GameStateValue {
   PLAYER_GAME_OVER = 1,
   START_GAME,
   END_GAME,
@@ -9,7 +11,7 @@ export enum GameState {
 
 class GameScreen {
 
-  game_state = GameState.PLAYER_GAME_OVER
+  game_state_value = GameStateValue.PLAYER_GAME_OVER
 
   weak_obstacles: Map<string, HTMLDivElement>
   power_ups: Map<string, HTMLDivElement>
@@ -30,19 +32,20 @@ class GameScreen {
     screen_prepare.prebuild_game_field()
   }
 
-  game_state_start_game() {
+  game_state_start_game(state: GameState) {
     console.log("=========== game_state_start_game")
     screen_prepare.clear_game_field()
-    screen_prepare.build_game_field()
-    this.game_state = GameState.START_GAME
+    screen_prepare.build_game_field(state)
+    handlers.player_lifes({ lifes: 3 })
+    this.game_state_value = GameStateValue.START_GAME
   }
 
   game_state_end_game() {
-    this.game_state = GameState.END_GAME
+    this.game_state_value = GameStateValue.END_GAME
   }
 
   game_state_player_game_over() {
-    this.game_state = GameState.PLAYER_GAME_OVER
+    this.game_state_value = GameStateValue.PLAYER_GAME_OVER
   }
 }
 

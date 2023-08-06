@@ -14,8 +14,8 @@ type PLAYER struct {
 	bombs_max       int  // default 1, can be increased by powerup. how many bombs can be placed at the same time
 	bombs_left      int  // how many bombs can be placed at the moment
 	explosion_range int  // default 1, can be increased by powerup
-	turbo           bool // default 1, can be increased by powerup. speedup of player
-	Dead            bool `json:"dead"` // true - player is dead, false - player is alive
+	Turbo           bool `json:"turbo"` // default 1, can be increased by powerup. speedup of player
+	Dead            bool `json:"dead"`  // true - player is dead, false - player is alive
 }
 
 type POWER_UP struct {
@@ -37,13 +37,9 @@ func game_init() {
 
 }
 
-type WS_START_GAME_DTO struct {
-	Content GAME_STATE `json:"content"`
-}
-
 func ws_send_start_game_handler() {
 	game_init()
 
 	uuids := get_all_clients_uuids(clients)
-	wsSend(WS_START_GAME, WS_START_GAME_DTO{game}, uuids)
+	wsSend(WS_START_GAME, game, uuids)
 }

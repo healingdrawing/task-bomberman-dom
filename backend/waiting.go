@@ -137,5 +137,14 @@ func game_waiting_state_handle_client_disconnected() {
 	case GAME_STARTED:
 		log.Println("DOES NOT RESET TO WAITING FOR PLAYERS, BECAUSE GAME IS ALREADY STARTED")
 		// Implement logic for handling a client disconnect during the game, if needed.
+		if connected_players_number < min_players {
+			waitingTimerMutex.Lock()
+			waitingTimerStarted = false
+			waitingTimerMutex.Unlock()
+
+			game_waiting_state = WAITING_FOR_PLAYERS
+			// Here, you can add the logic to notify clients that the countdown has been canceled.
+			fmt.Println("DISCONNECTED prepare for game...") // TODO: remove
+		}
 	}
 }

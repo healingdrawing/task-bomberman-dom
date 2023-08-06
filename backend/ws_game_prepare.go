@@ -20,7 +20,7 @@ func prepare_players() {
 			bombs_max:       1,
 			bombs_left:      1,
 			explosion_range: 1,
-			turbo:           false,
+			Turbo:           false,
 			Dead:            true,
 		}
 	}
@@ -44,7 +44,7 @@ func prepare_players() {
 		player.Y = py[number-1]
 		player.Target_x = px[number-1]
 		player.Target_y = py[number-1]
-		game.Players[pn[number]] = player //todo: without this line the player is not updated in game.Players
+		game.Players[pn[number]] = player //todo: without this line, the player is not updated in game.Players
 		return true
 	})
 }

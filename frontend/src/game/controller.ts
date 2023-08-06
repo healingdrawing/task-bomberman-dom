@@ -1,5 +1,5 @@
 import { WSMT } from "./types";
-import { GameState, screen } from "./screen";
+import { GameStateValue, screen } from "./screen";
 import { ws } from "./ws";
 
 export class Controller {
@@ -20,7 +20,7 @@ export class Controller {
   handleKeyDown = (event: KeyboardEvent) => {
     const key = event.key;
     // Check if the key is not pressed, and the key is one of the listened keys
-    if (screen.game_state == GameState.START_GAME && !this.pressedKeys.has(key) && this.listenedKeys.has(key)) {
+    if (screen.game_state_value == GameStateValue.START_GAME && !this.pressedKeys.has(key) && this.listenedKeys.has(key)) {
       ws.sendMessage(this.listenedKeys.get(key)![1], {})
       // Add the key to the Set
       this.pressedKeys.add(key);
@@ -33,7 +33,7 @@ export class Controller {
     const key = event.key;
 
     // Check if the key is already pressed, and the key is one of the listened keys
-    if (screen.game_state == GameState.START_GAME && this.listenedKeys.has(key)) {
+    if (screen.game_state_value == GameStateValue.START_GAME && this.listenedKeys.has(key)) {
       ws.sendMessage(this.listenedKeys.get(key)![0], {})
       // Remove the key from the Set
       this.pressedKeys.delete(key);
