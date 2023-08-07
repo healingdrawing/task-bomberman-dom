@@ -6,14 +6,11 @@ import (
 	"time"
 )
 
-// player numbers as string short hand
-var pn = []string{"0", "1", "2", "3", "4"}
-
 func ws_character_control_handler(client *Client, control string) {
 
 	switch control {
 	case string(WS_UP_ON):
-		ws_up_handler(pn[client.NUMBER], control)
+		ws_up_handler(string_number[client.NUMBER], control)
 	case string(WS_UP_OFF):
 		log.Println("WS_UP_OFF", client.NUMBER)
 	case string(WS_DOWN_ON):
@@ -77,14 +74,14 @@ func unpress_other_arrows(player *PLAYER, control string) {
 // executed as goroutine. listen for player press arrows
 func ws_arrows_loop_listener() {
 	for game_waiting_state == GAME_STARTED {
-		for number, player := range game.Players {
-			if !player.Dead {
-				switch {
-				case player.up_pressed:
-					ws_up_handler(number, string(WS_UP_ON))
-				}
+		game.Players.Range(func(key, value interface{}) bool {
+			number := key.(string)
+			player := value.(PLAYER)
+			if !player.Dead && player.up_pressed {
+				ws_up_handler(number, string(WS_UP_ON))
 			}
-		}
+			return true
+		})
 	}
 }
 
@@ -94,62 +91,64 @@ func ws_up_handler(number string, control string) {
 
 	log.Println("step 0")
 
-	player, ok := game.Players[number]
+	playerValue, ok := game.Players.Load(number)
 	if !ok {
 		return
 	}
 
+	player := playerValue.(PLAYER)
 	log.Println("step 1")
 
 	unpress_other_arrows(&player, control)
-	game.Players[number] = player
+	game.Players.Store(number, player)
 
 	log.Println("step 2")
 	log.Println("player.moving ", player.moving)
-	//unix time stamp in milliseconds
+
+	// Unix timestamp in nanoseconds
 	unix_ts := time.Now().UnixNano()
 
 	if !player.moving {
 		log.Println("step 2.1")
-		// check if player can move up
+		// Check if player can move up
 		target_position_cell := fmt.Sprintf("%d%d", player.X, player.Y-1)
 		log.Println("step 3")
-		if _, ok := game.free_cells[target_position_cell]; !ok {
+		if _, ok := game.free_cells.Load(target_position_cell); !ok {
 			player.up_pressed = false
 			return
 		}
 		log.Println("step 4")
 		seconds := 1
 		oneSecond := time.Duration(seconds) * time.Second
-		// time in nanoseconds
+		// Time in nanoseconds
 		one_cell_move_duration := oneSecond.Nanoseconds() / move_cps[player.Turbo]
 		player.one_cell_move_duration = one_cell_move_duration
 		player.moving_start_time_stamp = unix_ts
 		player.Target_y = player.Y - 1
 		player.moving = true
 		log.Println("step 5")
-		game.Players[number] = player
+		game.Players.Store(number, player)
 		log.Println("step 6")
 		ws_send_move_up_command(&player)
 		log.Println("step 7")
 	} else if player.one_cell_move_duration/10*5 < unix_ts-player.moving_start_time_stamp {
-		// check if 50% of timer is done, switch to next cell
+		// Check if 50% of the timer is done, switch to the next cell
 		player.Y = player.Target_y
+		game.Players.Store(number, player)
 	} else if player.one_cell_move_duration/10*8 < unix_ts-player.moving_start_time_stamp {
-		// check if 80% of timer is done, and player still wants to move up
-		// if yes, then move/aim player up one cell more if possible
+		// Check if 80% of the timer is done, and the player still wants to move up
+		// If yes, then move/aim the player up one cell more if possible
 		// 100000 is 100 microseconds gap to wait while after timesleep is over, recursive call is done
 		target_position_cell := fmt.Sprintf("%d%d", player.X, player.Y-1)
-		if _, ok := game.free_cells[target_position_cell]; !ok {
+		if _, ok := game.free_cells.Load(target_position_cell); !ok {
 			player.up_pressed = false
 			return
 		}
 		player.Target_y = player.Y - 1
 		player.moving_start_time_stamp += player.one_cell_move_duration
-		game.Players[number] = player
+		game.Players.Store(number, player)
 		ws_send_move_up_command(&player)
 	}
-
 }
 
 func ws_send_move_up_command(player *PLAYER) {

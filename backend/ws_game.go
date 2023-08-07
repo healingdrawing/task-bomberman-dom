@@ -1,10 +1,14 @@
 package main
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 var (
-	game       = GAME_STATE{}
-	game_mutex = sync.Mutex{}
+	game = GAME_STATE{}
+	// player numbers as string short hand
+	string_number = []string{"0", "1", "2", "3", "4"}
 )
 
 type PLAYER struct {
@@ -34,10 +38,10 @@ type POWER_UP struct {
 }
 
 type GAME_STATE struct {
-	Players        map[string]PLAYER   `json:"players"`
-	Weak_obstacles map[string]bool     `json:"weak_obstacles"` // key is xy, without space, like "01", value is show(true) or destroyed(false)
-	Power_ups      map[string]POWER_UP `json:"power_ups"`      // key is xy, without space, like "01"
-	free_cells     map[string]bool     // game field , except weak and strong obstacles cellxy. can move there. key is xy, without space, like "01"
+	Players        sync.Map `json:"players"`
+	Weak_obstacles sync.Map `json:"weak_obstacles"` // key is xy, without space, like "01", value is show(true) or destroyed(false)
+	Power_ups      sync.Map `json:"power_ups"`      // key is xy, without space, like "01"
+	free_cells     sync.Map // game field , except weak and strong obstacles cellxy. can move there. key is xy, without space, like "01"
 }
 
 func game_init() {
@@ -56,5 +60,5 @@ func ws_send_start_game_handler() {
 	game_init()
 
 	uuids := get_all_clients_uuids(clients)
-	wsSend(WS_START_GAME, game, uuids)
+	wsSend(WS_START_GAME, fmt.Sprint(game), uuids)
 }
