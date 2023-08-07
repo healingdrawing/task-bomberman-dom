@@ -5,7 +5,6 @@ var (
 )
 
 type PLAYER struct {
-	//idiot, do not write comments until i type //
 	Number                  int   `json:"number"` // the Client.NUMBER
 	X                       int   `json:"x"`      // the number of the game field cell, where the player is
 	Y                       int   `json:"y"`

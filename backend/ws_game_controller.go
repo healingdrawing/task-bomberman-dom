@@ -101,7 +101,7 @@ func ws_up_handler(number int, control string) {
 
 	//unix time stamp in milliseconds
 	unix_ts := time.Now().UnixNano()
-
+	// todo: refactor to simple version, from this place. because fail with complex, no time to make it the best way
 	if !player.moving {
 		// check if player can move up
 		target_position_cell := fmt.Sprintf("%d%d", player.X, player.Y-1)
@@ -119,6 +119,7 @@ func ws_up_handler(number int, control string) {
 		player.moving = true
 		game.Players[pn[number]] = player
 		//todo: send to all clients the command to move player. from present position to target position
+		ws_send_move_up_command(&player)
 		time.Sleep(time.Duration(one_cell_move_duration) / 10 * 8 * time.Nanosecond)
 		ws_up_handler(number, control)
 		return
@@ -129,7 +130,7 @@ func ws_up_handler(number int, control string) {
 		player.Y = player.Target_y
 		unpress_all_arrows(&player)
 		game.Players[pn[number]] = player
-		//todo: send to all clients the command to stand player on target position
+		//todo: send to all clients the command to stand player on target position. not sure this needed
 		return
 	} else if player.moving &&
 		player.up_pressed &&
@@ -148,6 +149,7 @@ func ws_up_handler(number int, control string) {
 		player.moving_start_time_stamp += player.one_cell_move_duration
 		game.Players[pn[number]] = player
 		//todo: send to all clients the command to move player. from present position to target position
+		ws_send_move_up_command(&player)
 		time.Sleep(time.Duration(player.one_cell_move_duration) * 120 / 100 * time.Nanosecond)
 		ws_up_handler(number, control)
 	} else {
@@ -156,4 +158,23 @@ func ws_up_handler(number int, control string) {
 		return
 	}
 
+}
+
+func ws_send_move_up_command(player *PLAYER) {
+	log.Println("ws_send_move_up_command. player", player.Number)
+	message := WS_MOVE_UP_DTO{
+		Number:   player.Number,
+		Target_y: player.Target_y,
+		Turbo:    player.Turbo,
+	}
+
+	uuids := get_all_clients_uuids(clients)
+	wsSend(WS_UP, message, uuids)
+
+}
+
+type WS_MOVE_UP_DTO struct {
+	Number   int  `json:"number"`
+	Target_y int  `json:"target_y"`
+	Turbo    bool `json:"turbo"`
 }
