@@ -43,14 +43,15 @@ var move_cps = map[bool]int64{
 	false: 1,
 }
 
-func unpress_all_arrows(player PLAYER) {
+func unpress_all_arrows(player *PLAYER) {
 	player.up_pressed = false
 	player.down_pressed = false
 	player.left_pressed = false
 	player.right_pressed = false
 }
 
-func unpress_other_arrows(player PLAYER, control string) {
+// todo: check this . pointers or without.
+func unpress_other_arrows(player *PLAYER, control string) {
 	switch control {
 	case string(WS_UP_ON):
 		player.down_pressed = false
@@ -82,8 +83,9 @@ func ws_up_on_handler(number int, control string) {
 		return
 	}
 
-	unpress_other_arrows(player, control)
+	unpress_other_arrows(&player, control)
 	player.up_pressed = true
+	game.Players[pn[number]] = player
 
 	go ws_up_handler(number, control)
 }
@@ -125,6 +127,7 @@ func ws_up_handler(number int, control string) {
 		// check if moving completed
 		player.moving = false
 		player.Y = player.Target_y
+		unpress_all_arrows(&player)
 		game.Players[pn[number]] = player
 		//todo: send to all clients the command to stand player on target position
 		return
