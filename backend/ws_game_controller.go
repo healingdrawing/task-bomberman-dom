@@ -6,11 +6,14 @@ import (
 	"time"
 )
 
+// player numbers as string short hand
+var pn = []string{"0", "1", "2", "3", "4"}
+
 func ws_character_control_handler(client *Client, control string) {
 
 	switch control {
 	case string(WS_UP_ON):
-		ws_up_on_handler(client.NUMBER, control)
+		ws_up_handler(pn[client.NUMBER], control)
 	case string(WS_UP_OFF):
 		log.Println("WS_UP_OFF", client.NUMBER)
 	case string(WS_DOWN_ON):
@@ -33,9 +36,6 @@ func ws_character_control_handler(client *Client, control string) {
 		log.Println("Unknown control: ", control)
 	}
 }
-
-// player numbers short hand
-var pn = []string{"0", "1", "2", "3", "4"}
 
 // move_cells_per_second, depends on turbo
 var move_cps = map[bool]int64{
@@ -74,41 +74,51 @@ func unpress_other_arrows(player *PLAYER, control string) {
 	}
 }
 
-// player press up arrow
-func ws_up_on_handler(number int, control string) {
-	log.Println("ws_up_on_handler. player", number)
-
-	player, ok := game.Players[pn[number]]
-	if !ok {
-		return
+// executed as goroutine. listen for player press arrows
+func ws_arrows_loop_listener() {
+	for game_waiting_state == GAME_STARTED {
+		for number, player := range game.Players {
+			if !player.Dead {
+				switch {
+				case player.up_pressed:
+					ws_up_handler(number, string(WS_UP_ON))
+				}
+			}
+		}
 	}
-
-	unpress_other_arrows(&player, control)
-	player.up_pressed = true
-	game.Players[pn[number]] = player
-
-	go ws_up_handler(number, control)
 }
 
-func ws_up_handler(number int, control string) {
+// player press up arrow
+func ws_up_handler(number string, control string) {
 	log.Println("ws_up_handler. player", number)
 
-	// not beautiful, call it again but player can be disconnected etc, until timer is done
-	player, ok := game.Players[pn[number]]
+	log.Println("step 0")
+
+	player, ok := game.Players[number]
 	if !ok {
 		return
 	}
 
+	log.Println("step 1")
+
+	unpress_other_arrows(&player, control)
+	game.Players[number] = player
+
+	log.Println("step 2")
+	log.Println("player.moving ", player.moving)
 	//unix time stamp in milliseconds
 	unix_ts := time.Now().UnixNano()
-	// todo: refactor to simple version, from this place. because fail with complex, no time to make it the best way
+
 	if !player.moving {
+		log.Println("step 2.1")
 		// check if player can move up
 		target_position_cell := fmt.Sprintf("%d%d", player.X, player.Y-1)
+		log.Println("step 3")
 		if _, ok := game.free_cells[target_position_cell]; !ok {
+			player.up_pressed = false
 			return
 		}
-
+		log.Println("step 4")
 		seconds := 1
 		oneSecond := time.Duration(seconds) * time.Second
 		// time in nanoseconds
@@ -117,45 +127,27 @@ func ws_up_handler(number int, control string) {
 		player.moving_start_time_stamp = unix_ts
 		player.Target_y = player.Y - 1
 		player.moving = true
-		game.Players[pn[number]] = player
-		//todo: send to all clients the command to move player. from present position to target position
+		log.Println("step 5")
+		game.Players[number] = player
+		log.Println("step 6")
 		ws_send_move_up_command(&player)
-		time.Sleep(time.Duration(one_cell_move_duration) / 10 * 8 * time.Nanosecond)
-		ws_up_handler(number, control)
-		return
-	} else if player.moving &&
-		player.one_cell_move_duration < unix_ts-player.moving_start_time_stamp {
-		// check if moving completed
-		player.moving = false
+		log.Println("step 7")
+	} else if player.one_cell_move_duration/10*5 < unix_ts-player.moving_start_time_stamp {
+		// check if 50% of timer is done, switch to next cell
 		player.Y = player.Target_y
-		unpress_all_arrows(&player)
-		game.Players[pn[number]] = player
-		//todo: send to all clients the command to stand player on target position. not sure this needed
-		return
-	} else if player.moving &&
-		player.up_pressed &&
-		player.Target_y == player.Y-1 &&
-		player.one_cell_move_duration/10*8-100000 < unix_ts-player.moving_start_time_stamp {
+	} else if player.one_cell_move_duration/10*8 < unix_ts-player.moving_start_time_stamp {
 		// check if 80% of timer is done, and player still wants to move up
 		// if yes, then move/aim player up one cell more if possible
 		// 100000 is 100 microseconds gap to wait while after timesleep is over, recursive call is done
-		target_position_cell := fmt.Sprintf("%d%d", player.X, player.Y-2)
+		target_position_cell := fmt.Sprintf("%d%d", player.X, player.Y-1)
 		if _, ok := game.free_cells[target_position_cell]; !ok {
-			time.Sleep(time.Duration(player.one_cell_move_duration) / 100 * time.Nanosecond)
-			ws_up_handler(number, control)
+			player.up_pressed = false
 			return
 		}
-		player.Target_y = player.Y - 2
+		player.Target_y = player.Y - 1
 		player.moving_start_time_stamp += player.one_cell_move_duration
-		game.Players[pn[number]] = player
-		//todo: send to all clients the command to move player. from present position to target position
+		game.Players[number] = player
 		ws_send_move_up_command(&player)
-		time.Sleep(time.Duration(player.one_cell_move_duration) * 120 / 100 * time.Nanosecond)
-		ws_up_handler(number, control)
-	} else {
-		time.Sleep(time.Duration(player.one_cell_move_duration) / 100 * time.Nanosecond)
-		ws_up_handler(number, control)
-		return
 	}
 
 }
@@ -167,9 +159,11 @@ func ws_send_move_up_command(player *PLAYER) {
 		Target_y: player.Target_y,
 		Turbo:    player.Turbo,
 	}
-
+	log.Println("ws_send_move_up_command. message", message)
 	uuids := get_all_clients_uuids(clients)
+	log.Println("ws_send_move_up_command. uuids", uuids)
 	wsSend(WS_UP, message, uuids)
+	log.Println("ws_send_move_up_command. sent")
 
 }
 

@@ -1,7 +1,10 @@
 package main
 
+import "sync"
+
 var (
-	game = GAME_STATE{}
+	game       = GAME_STATE{}
+	game_mutex = sync.Mutex{}
 )
 
 type PLAYER struct {
@@ -44,6 +47,8 @@ func game_init() {
 	prepare_weak_obstacles_and_power_ups()
 
 	prepare_free_cells() // strong and weak obstacles to restrict movement
+
+	go ws_arrows_loop_listener()
 
 }
 
