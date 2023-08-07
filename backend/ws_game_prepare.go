@@ -29,6 +29,9 @@ func prepare_players() {
 			left_pressed:    false,
 			right_pressed:   false,
 			bomb_pressed:    false,
+
+			can_change_present_cell: true,
+			can_change_target_cell:  false,
 		}
 		game.Players.Store(number, player)
 	}
@@ -122,4 +125,43 @@ func prepare_free_cells() {
 			}
 		}
 	}
+}
+
+// Convert GAME_STATE to a JSON-friendly struct
+func convert_game_state_to_json(gameState GAME_STATE) map[string]interface{} {
+	jsonGameState := make(map[string]interface{})
+
+	// Convert Players sync.Map to a map of PLAYERs
+	playersMap := make(map[string]PLAYER)
+	gameState.Players.Range(func(key, value interface{}) bool {
+		playersMap[key.(string)] = value.(PLAYER)
+		return true
+	})
+	jsonGameState["players"] = playersMap
+
+	// Convert Weak_obstacles sync.Map to a map of bool
+	weakObstaclesMap := make(map[string]bool)
+	gameState.Weak_obstacles.Range(func(key, value interface{}) bool {
+		weakObstaclesMap[key.(string)] = value.(bool)
+		return true
+	})
+	jsonGameState["weak_obstacles"] = weakObstaclesMap
+
+	// Convert Power_ups sync.Map to a map of POWER_UPs
+	powerUpsMap := make(map[string]POWER_UP)
+	gameState.Power_ups.Range(func(key, value interface{}) bool {
+		powerUpsMap[key.(string)] = value.(POWER_UP)
+		return true
+	})
+	jsonGameState["power_ups"] = powerUpsMap
+
+	// Convert free_cells sync.Map to a map of interface{}
+	freeCellsMap := make(map[string]interface{})
+	gameState.free_cells.Range(func(key, value interface{}) bool {
+		freeCellsMap[key.(string)] = value
+		return true
+	})
+	jsonGameState["free_cells"] = freeCellsMap
+
+	return jsonGameState
 }

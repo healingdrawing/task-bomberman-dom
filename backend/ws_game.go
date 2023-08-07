@@ -1,12 +1,13 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"sync"
 )
 
 var (
-	game = GAME_STATE{}
+	game_debug = true
+	game       = GAME_STATE{}
 	// player numbers as string short hand
 	string_number = []string{"0", "1", "2", "3", "4"}
 )
@@ -30,6 +31,9 @@ type PLAYER struct {
 	left_pressed            bool
 	right_pressed           bool
 	bomb_pressed            bool
+
+	can_change_present_cell bool // true - player present position was not changed
+	can_change_target_cell  bool // true - player target position was not changed
 }
 
 type POWER_UP struct {
@@ -60,5 +64,11 @@ func ws_send_start_game_handler() {
 	game_init()
 
 	uuids := get_all_clients_uuids(clients)
-	wsSend(WS_START_GAME, fmt.Sprint(game), uuids)
+	wsSend(WS_START_GAME, convert_game_state_to_json(game), uuids)
+}
+
+func dprint(msg ...any) {
+	if game_debug {
+		log.Println(msg...)
+	}
 }

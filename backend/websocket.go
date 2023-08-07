@@ -10,8 +10,9 @@ import (
 )
 
 var (
-	upgrader = websocket.Upgrader{}
-	clients  = &sync.Map{}
+	upgrader        = websocket.Upgrader{}
+	clients         = &sync.Map{}
+	websocket_mutex = &sync.Mutex{}
 )
 
 type wsInput struct {
@@ -146,7 +147,11 @@ func wsSend(message_type WSMT, message interface{}, uuids []string) {
 	for _, uuid := range uuids {
 		if raw_client, ok := clients.Load(uuid); ok {
 			if client, ok := raw_client.(*Client); ok {
+
+				websocket_mutex.Lock()
 				err = client.CONN.WriteMessage(websocket.TextMessage, outputMessage)
+				websocket_mutex.Unlock()
+
 				log.Println("wsSend: message sent to client: ", uuid)
 				if err != nil {
 					log.Println(err)
