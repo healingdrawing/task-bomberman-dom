@@ -5,6 +5,16 @@ import (
 	"sync"
 )
 
+type DIRECTION int
+
+const (
+	STAND DIRECTION = 1 + iota
+	UP
+	DOWN
+	LEFT
+	RIGHT
+)
+
 var (
 	game_debug = true
 	game       = GAME_STATE{}
@@ -13,19 +23,20 @@ var (
 )
 
 type PLAYER struct {
-	Number                  int   `json:"number"` // the Client.NUMBER
-	X                       int   `json:"x"`      // the number of the game field cell, where the player is
-	Y                       int   `json:"y"`
-	Target_x                int   `json:"target_x"` // the number of the game field cell, where the player moves to
-	Target_y                int   `json:"target_y"`
-	bombs_max               int   // default 1, can be increased by powerup. how many bombs can be placed at the same time
-	bombs_left              int   // how many bombs can be placed at the moment
-	explosion_range         int   // default 1, can be increased by powerup
-	Turbo                   bool  `json:"turbo"` // default false, can be switched by powerup. speedup of player
-	Dead                    bool  `json:"dead"`  // true - player is dead, false - player is alive
-	moving                  bool  // true - player is moving, false - player is not moving
-	moving_start_time_stamp int64 // unix timestamp in nanoseconds, when the player started moving
-	one_cell_move_duration  int64 // how many nanoseconds does it take to move one cell
+	Number                  int       `json:"number"` // the Client.NUMBER
+	X                       int       `json:"x"`      // the number of the game field cell, where the player is
+	Y                       int       `json:"y"`
+	Target_x                int       `json:"target_x"` // the number of the game field cell, where the player moves to
+	Target_y                int       `json:"target_y"`
+	bombs_max               int       // default 1, can be increased by powerup. how many bombs can be placed at the same time
+	bombs_left              int       // how many bombs can be placed at the moment
+	explosion_range         int       // default 1, can be increased by powerup
+	Turbo                   bool      `json:"turbo"` // default false, can be switched by powerup. speedup of player
+	Dead                    bool      `json:"dead"`  // true - player is dead, false - player is alive
+	direction               DIRECTION // the direction of the player movement
+	moving                  bool      // true - player is moving, false - player is not moving
+	moving_start_time_stamp int64     // unix timestamp in nanoseconds, when the player started moving
+	one_cell_move_duration  int64     // how many nanoseconds does it take to move one cell
 	up_pressed              bool
 	down_pressed            bool
 	left_pressed            bool

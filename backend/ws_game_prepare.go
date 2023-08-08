@@ -10,28 +10,18 @@ import (
 func prepare_players() {
 	game.Players = sync.Map{} // Initialize Players as a sync.Map
 
-	// Fill x4 players, because it is the same data for all players
+	// Fill x4 players, because it is the same data for all players. zeros and false skipped because it is default values
 	for i := 1; i < 5; i++ {
 		number := string_number[i]
 		player := PLAYER{
 			Number:          i,
 			X:               6,
-			Y:               0,
 			Target_x:        6,
-			Target_y:        0,
 			bombs_max:       1,
 			bombs_left:      1,
 			explosion_range: 1,
-			Turbo:           false,
 			Dead:            true,
-			up_pressed:      false,
-			down_pressed:    false,
-			left_pressed:    false,
-			right_pressed:   false,
-			bomb_pressed:    false,
-
-			can_change_present_cell: true,
-			can_change_target_cell:  false,
+			direction:       STAND,
 		}
 		game.Players.Store(number, player)
 	}

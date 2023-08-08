@@ -27,6 +27,10 @@ func ws_down_handler(number string, control string, press bool) {
 
 	player := player_value.(PLAYER)
 
+	if player.direction != DOWN && player.direction != STAND {
+		return
+	}
+
 	if press {
 		press_arrow_unpress_other_arrows(&player, control)
 		game.Players.Store(number, player)
@@ -55,6 +59,7 @@ func ws_down_handler(number string, control string, press bool) {
 		player.can_change_present_cell = true
 		player.can_change_target_cell = false
 		player.moving = true
+		player.direction = DOWN
 		game.Players.Store(number, player)
 		ws_send_move_down_command(&player)
 	} else if player.moving && player.can_change_target_cell &&
@@ -91,9 +96,10 @@ func ws_down_handler(number string, control string, press bool) {
 	} else if player.moving &&
 		player.one_cell_move_duration < unix_ts-player.moving_start_time_stamp {
 		dprint("inside if time 100")
-		player.moving = false
 		player.can_change_present_cell = false
 		player.can_change_target_cell = false
+		player.moving = false
+		player.direction = STAND
 		game.Players.Store(number, player)
 	}
 }
