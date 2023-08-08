@@ -1,8 +1,8 @@
 import { GameState } from "./types"
 
 class ScreenPrepare {
-
-  cspx = 96 // cell size in px
+  /** cell size in px*/
+  cspx = 96
   //todo: potential way to improve performance
   /*
   hope this will be not needed, because the field includes only 49 cells maximum 7x7. it is not 1280x720 elements, when you recalculate every pixel on screen separately.

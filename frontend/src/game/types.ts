@@ -104,3 +104,9 @@ export interface GameState {
 export interface StartGame {
   state: GameState
 }
+
+export interface MoveVertical {
+  number: number
+  target_y: number
+  turbo: boolean
+}

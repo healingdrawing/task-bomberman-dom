@@ -1,4 +1,4 @@
-import { BroadcastMessage, ChatMessage, ConnectedPlayers, GameState, WSMT } from "./types";
+import { BroadcastMessage, ChatMessage, ConnectedPlayers, GameState, MoveVertical, WSMT } from "./types";
 import { SendNickname } from "./types";
 import { handlers } from "./handlers";
 import { screen } from "./screen";
@@ -52,6 +52,9 @@ class WebSocketClient {
   private handleMessage(message: Message): void {
     switch (message.type) {
       case WSMT.WS_UP:
+        console.log('Move up received:', message.data);
+        screen.player_move_up(WSMT.WS_UP, message.data as MoveVertical);
+        break;
       case WSMT.WS_DOWN:
       case WSMT.WS_LEFT:
       case WSMT.WS_RIGHT:

@@ -1,5 +1,11 @@
 :root{
   --player_move_animation_duration: 0.1s;
+
+  --fromX: 0px;
+  --toX: 0px;
+  --fromY: 0px;
+  --toY: 0px;
+  --duration: 1s;
 }
 
 .player1_move {
@@ -40,3 +46,16 @@
 }
 
 /* player offset animation section */
+
+.player_offset_animation {
+  animation: offset_animation var(--duration, 1s) linear forwards;
+}
+
+@keyframes offset_animation {
+  from {
+    transform: translate(var(--fromX, 0px), var(--fromY, 0px));
+  }
+  to {
+    transform: translate(var(--toX, 0px), var(--toY, 0px));
+  }
+}
