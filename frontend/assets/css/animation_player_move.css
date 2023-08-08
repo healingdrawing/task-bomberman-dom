@@ -38,3 +38,5 @@
   0% { background-position-x: 0%; } /* Display first frame (leftmost) */
   100% { background-position-x: -300%; } /* Display third frame (rightmost) */
 }
+
+/* player offset animation section */
