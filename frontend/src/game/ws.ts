@@ -52,6 +52,7 @@ class WebSocketClient {
   private handleMessage(message: Message): void {
     switch (message.type) {
       case WSMT.WS_UP:
+      case WSMT.WS_DOWN:
         // Handle move logic here
         console.log('Move received:', message.data);
         break;
