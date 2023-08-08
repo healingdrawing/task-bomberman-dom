@@ -53,6 +53,8 @@ class WebSocketClient {
     switch (message.type) {
       case WSMT.WS_UP:
       case WSMT.WS_DOWN:
+      case WSMT.WS_LEFT:
+      case WSMT.WS_RIGHT:
         // Handle move logic here
         console.log('Move received:', message.data);
         break;

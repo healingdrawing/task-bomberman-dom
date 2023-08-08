@@ -17,9 +17,9 @@ func ws_character_control_handler(client *Client, control string) {
 	case string(WS_DOWN_OFF):
 		ws_down_off_handler(string_number[client.NUMBER], control)
 	case string(WS_LEFT_ON):
-		log.Println("WS_LEFT_ON", client.NUMBER)
+		ws_left_handler(string_number[client.NUMBER], control, true)
 	case string(WS_LEFT_OFF):
-		log.Println("WS_LEFT_OFF", client.NUMBER)
+		ws_left_off_handler(string_number[client.NUMBER], control)
 	case string(WS_RIGHT_ON):
 		log.Println("WS_RIGHT_ON", client.NUMBER)
 	case string(WS_RIGHT_OFF):
@@ -100,6 +100,7 @@ func ws_arrows_loop_listener() {
 			if !player.Dead {
 				ws_up_handler(number, string(WS_UP_ON), false)
 				ws_down_handler(number, string(WS_DOWN_ON), false)
+				ws_left_handler(number, string(WS_LEFT_ON), false)
 			}
 			return true
 		})
