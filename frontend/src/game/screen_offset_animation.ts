@@ -35,16 +35,14 @@ export function offset_div_animation({
 
   const ani_time_ms = sum_offset / (cells_per_second * cspx) * 1000;
 
-  const intervalDuration = 16;
-  const startTime = Date.now()
+  const startTime = Date.now();
 
-  const animationInterval = setInterval(() => {
-
-    const progress = (Date.now() - startTime) / ani_time_ms;
+  function animate() {
+    const currentTime = Date.now();
+    const progress = (currentTime - startTime) / ani_time_ms;
 
     if (progress >= 1) {
-      clearInterval(animationInterval);
-      div.classList.remove(`player${player_number}_move`)
+      div.classList.remove(`player${player_number}_move`);
       div.style.left = `${toX * cspx}px`;
       div.style.top = `${toY * cspx}px`;
       return;
@@ -55,8 +53,12 @@ export function offset_div_animation({
 
     div.style.left = `${currentX}px`;
     div.style.top = `${currentY}px`;
-    div.classList.add(`player${player_number}_move`)
-  }, intervalDuration);
+    div.classList.add(`player${player_number}_move`);
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
 }
 
 /** returns cell_x of div, but not integer */
