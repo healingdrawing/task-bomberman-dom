@@ -491,8 +491,11 @@ h2 {
   height: 96px;
 }
 
-.empty_cell{
-  background-image: none;
+/* works, need !important to force ignore other classes, later remove it to show*/
+.none{
+  background-image: none !important;
+  background: none !important;
+  animation: none !important;
 }
 
 .strong_obstacle{

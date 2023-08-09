@@ -10,19 +10,14 @@ import (
 )
 
 var (
-	upgrader = websocket.Upgrader{}
-	clients  = &sync.Map{}
+	upgrader        = websocket.Upgrader{}
+	clients         = &sync.Map{}
+	websocket_mutex = &sync.Mutex{}
 )
 
 type wsInput struct {
 	Type string                 `json:"type"`
 	Data map[string]interface{} `json:"data"`
-}
-
-type wsStatus struct {
-	Type     string `json:"type"`
-	Username string `json:"username"`
-	Online   bool   `json:"online"`
 }
 
 func wsConnection(w http.ResponseWriter, r *http.Request) {
@@ -118,17 +113,19 @@ func reader(conn *websocket.Conn, client_number int, uuid string) {
 			case string(WS_CHAT_MESSAGE):
 				wsChatMessageHandler(conn, data.Data)
 
-				// todo: looks like this is not used(managed by http)), check and delete if so
-			case "login":
-				log.Println("==================LOGIN FIRED==================")
-				clients.Store(conn, data.Data["username"])
-				sendStatus(data.Data["username"].(string), true)
-				defer sendStatus(data.Data["username"].(string), false)
-			case "logout":
-				log.Println("==================LOGOUT FIRED==================")
-				conn.Close()
-				clients.Delete(conn)
-				sendStatus(data.Data["username"].(string), false)
+			case //todo: maybe later refactor to each handler call, which is faster, -1 step
+				string(WS_UP_ON),
+				string(WS_UP_OFF),
+				string(WS_DOWN_ON),
+				string(WS_DOWN_OFF),
+				string(WS_LEFT_ON),
+				string(WS_LEFT_OFF),
+				string(WS_RIGHT_ON),
+				string(WS_RIGHT_OFF),
+				string(WS_BOMB_ON),
+				string(WS_BOMB_OFF):
+				ws_character_control_handler(client, data.Type)
+
 			default:
 				log.Println("Unknown type: ", data.Type)
 			}
@@ -150,7 +147,11 @@ func wsSend(message_type WSMT, message interface{}, uuids []string) {
 	for _, uuid := range uuids {
 		if raw_client, ok := clients.Load(uuid); ok {
 			if client, ok := raw_client.(*Client); ok {
+
+				websocket_mutex.Lock()
 				err = client.CONN.WriteMessage(websocket.TextMessage, outputMessage)
+				websocket_mutex.Unlock()
+
 				log.Println("wsSend: message sent to client: ", uuid)
 				if err != nil {
 					log.Println(err)
@@ -162,25 +163,4 @@ func wsSend(message_type WSMT, message interface{}, uuids []string) {
 			log.Println("wsSend: client not found . clients.Load(uuid) failed")
 		}
 	}
-}
-
-// //////////////////////////
-// fragments of old code. remove later if full cleaning will be executed
-// //////////////////////////
-
-func sendStatus(username string, online bool) {
-	data := wsStatus{"status", username, online}
-	output, err := json.Marshal(data)
-	if err != nil {
-		log.Println(err)
-	}
-	clients.Range(func(key, value interface{}) bool {
-		if value.(string) != "" {
-			err = key.(*websocket.Conn).WriteMessage(websocket.TextMessage, output)
-			if err != nil {
-				log.Println(err)
-			}
-		}
-		return true
-	})
 }

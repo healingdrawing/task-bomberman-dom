@@ -1,4 +1,4 @@
-import { BroadcastMessage, ChatMessage, ConnectedPlayers } from "./types";
+import { BroadcastMessage, ChatMessage, ConnectedPlayers, PlayerLifes } from "./types";
 
 class Handlers {
   chat_messages_div: HTMLDivElement;
@@ -56,6 +56,11 @@ class Handlers {
   connected_players(data: ConnectedPlayers) {
     const connected_players_div = document.getElementById("connected_players") as HTMLDivElement;
     connected_players_div.innerText = `Players: ${data.connected_players}`;
+  }
+
+  player_lifes(data: PlayerLifes) {
+    const player_lifes_div = document.getElementById("player_lifes") as HTMLDivElement;
+    player_lifes_div.innerText = `Lifes: ${data.lifes}`;
   }
 }
 

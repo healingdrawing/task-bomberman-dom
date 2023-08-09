@@ -12,6 +12,8 @@ export enum WSMT {
   WS_START_GAME = "start_game",
   WS_END_GAME = "end_game",
   WS_PLAYER_GAME_OVER = "player_game_over",
+
+  // incoming from server to control items on screen
   WS_UP = "up",
   WS_DOWN = "down",
   WS_LEFT = "left",
@@ -20,6 +22,18 @@ export enum WSMT {
   WS_BOMB = "bomb",
   WS_EXPLODE = "explode",
   WS_HIDE_POWER_UP = "hide_power_up",
+
+  // outgoing from client to server to send pressed/released keys
+  WS_UP_ON = "up_on", // arrow up pressed
+  WS_UP_OFF = "up_off", // arrow up released
+  WS_DOWN_ON = "down_on",
+  WS_DOWN_OFF = "down_off",
+  WS_LEFT_ON = "left_on",
+  WS_LEFT_OFF = "left_off",
+  WS_RIGHT_ON = "right_on",
+  WS_RIGHT_OFF = "right_off",
+  WS_BOMB_ON = "bomb_on", // Enter
+  WS_BOMB_OFF = "bomb_off",
 
   WS_PLAYER_LIFES = "player_lifes",
   WS_CONNECTED_PLAYERS = "connected_players", // number of connected players
@@ -49,4 +63,56 @@ export interface ChatMessage {
 
 export interface ConnectedPlayers {
   connected_players: string
+}
+
+export interface PlayerLifes {
+  lifes: number
+}
+
+/* game state */
+
+export interface Player {
+  number: number
+  x: number
+  y: number
+  target_x: number
+  target_y: number
+  turbo: boolean
+  dead: boolean
+}
+
+export interface Bomb {
+  player_number: number
+  show: boolean
+}
+
+export interface PowerUp {
+  effect: string
+  show: boolean
+}
+
+/**  do not convert to maps etc structures, because no short way to do this, only manuall convertion, which is awful. Also iteration through the object can be used*/
+export interface GameState {
+  // players: object
+  players: { [key: string]: Player };
+  bombs: object
+  explosions: object
+  power_ups: object
+  weak_obstacles: object
+}
+
+export interface StartGame {
+  state: GameState
+}
+
+export interface MoveDy {
+  number: number
+  target_y: number
+  turbo: boolean
+}
+
+export interface MoveDx {
+  number: number
+  target_x: number
+  turbo: boolean
 }

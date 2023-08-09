@@ -1,5 +1,11 @@
 :root{
   --player_move_animation_duration: 0.1s;
+
+  --fromX: 0px;
+  --toX: 0px;
+  --fromY: 0px;
+  --toY: 0px;
+  --duration: 1s;
 }
 
 .player1_move {

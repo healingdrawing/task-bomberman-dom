@@ -1,8 +1,9 @@
 import { router, store, events } from './framework/framework';
 import { State } from './framework/store';
-import { prebuild_game_field } from './game/screen';
 import { SendChatMessage, WSMT } from './game/types';
-import { WebSocketClient } from './game/ws';
+import { controller } from './game/controller';
+import { screen } from './game/screen';
+import { ws } from './game/ws';
 
 // switch views on screen, when connected to server
 store.setState({
@@ -16,9 +17,6 @@ store.subscribe((state: State) => {
   firstScreenDiv.style.display = state.first_screen_visible ? "block" : "none";
   secondScreenDiv.style.display = state.second_screen_visible ? "block" : "none";
 });
-
-const serverUrl = `ws://localhost:8080/ws`
-var client: WebSocketClient //todo: later maybe hide this from global scope
 
 async function connect_to_game(event: Event) {
   event.preventDefault(); // Prevent the default form submission
@@ -35,8 +33,7 @@ async function connect_to_game(event: Event) {
     const connect_to_game_button = document.getElementById("connect_to_game") as HTMLButtonElement;
     events.off("click", connect_to_game_button, connect_to_game, "connect_to_game_button");
 
-    client = new WebSocketClient(serverUrl, inputField.value);
-    await client.initialize();
+    await ws.initialize();
 
     store.setState({
       first_screen_visible: !store.getState().first_screen_visible,
@@ -53,15 +50,20 @@ function chat_message() {
     content: inputValue
   } as SendChatMessage
   inputField.value = ""
-  client.sendMessage(WSMT.WS_CHAT_MESSAGE, message)
+  ws.sendMessage(WSMT.WS_CHAT_MESSAGE, message)
 }
 
 /**initialization */
-(async () => {
+(() => {
   console.log("prepare environment")
-  await prebuild_game_field();
+  screen.prepare()
   const connect_to_game_button = document.getElementById("connect_to_game") as HTMLButtonElement;
   events.on("click", connect_to_game_button, connect_to_game); // usage of mini-framework 🙂 mission complete
   const chat_message_button = document.getElementById("chat_view__input__send") as HTMLButtonElement;
   events.on("click", chat_message_button, chat_message);
+
+  // Add event listeners to the document for key press and unpress events
+  events.on("keydown", document, controller.handleKeyDown);
+  events.on("keyup", document, controller.handleKeyUp);
+
 })()

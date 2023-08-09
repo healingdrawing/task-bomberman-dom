@@ -24,14 +24,26 @@ const (
 	WS_START_GAME                 WSMT = "start_game"
 	WS_END_GAME                   WSMT = "end_game"
 	WS_PLAYER_GAME_OVER           WSMT = "player_game_over"
-	WS_UP                         WSMT = "up"
-	WS_DOWN                       WSMT = "down"
-	WS_LEFT                       WSMT = "left"
-	WS_RIGHT                      WSMT = "right"
-	WS_STAND                      WSMT = "stand"
-	WS_BOMB                       WSMT = "bomb"
-	WS_EXPLODE                    WSMT = "explode"
-	WS_HIDE_POWER_UP              WSMT = "hide_power_up"
+
+	WS_UP            WSMT = "up" // for send to control items on screen
+	WS_DOWN          WSMT = "down"
+	WS_LEFT          WSMT = "left"
+	WS_RIGHT         WSMT = "right"
+	WS_STAND         WSMT = "stand"
+	WS_BOMB          WSMT = "bomb"
+	WS_EXPLODE       WSMT = "explode"
+	WS_HIDE_POWER_UP WSMT = "hide_power_up"
+
+	WS_UP_ON     WSMT = "up_on" // for receive from client key press/release events
+	WS_UP_OFF    WSMT = "up_off"
+	WS_DOWN_ON   WSMT = "down_on"
+	WS_DOWN_OFF  WSMT = "down_off"
+	WS_LEFT_ON   WSMT = "left_on"
+	WS_LEFT_OFF  WSMT = "left_off"
+	WS_RIGHT_ON  WSMT = "right_on"
+	WS_RIGHT_OFF WSMT = "right_off"
+	WS_BOMB_ON   WSMT = "bomb_on"
+	WS_BOMB_OFF  WSMT = "bomb_off"
 
 	WS_PLAYER_LIFES      WSMT = "player_lifes"
 	WS_CONNECTED_PLAYERS WSMT = "connected_players"
@@ -142,6 +154,8 @@ func ws_send_connected_players_number(n int, uuids []string) {
 
 	wsSend(WS_CONNECTED_PLAYERS, message, uuids)
 }
+
+// todo: add send player lifes later
 
 /*
 messageType must be from "ws_utils.go" constants of WSMT type. But go doesn't support enum.
