@@ -44,18 +44,3 @@
   0% { background-position-x: 0%; } /* Display first frame (leftmost) */
   100% { background-position-x: -300%; } /* Display third frame (rightmost) */
 }
-
-/* player offset animation section */
-
-.player_offset_animation {
-  animation: offset_animation var(--duration, 1s) linear forwards;
-}
-
-@keyframes offset_animation {
-  from {
-    transform: translate(var(--fromX, 0px), var(--fromY, 0px));
-  }
-  to {
-    transform: translate(var(--toX, 0px), var(--toY, 0px));
-  }
-}

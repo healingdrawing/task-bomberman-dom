@@ -1,6 +1,7 @@
 import { handlers } from "./handlers"
+import { OffsetAnimationParameters, get_from_x, get_from_y, offset_div_animation } from "./screen_offset_animation"
 import { screen_prepare } from "./screen_prepare"
-import { GameState, MoveVertical, WSMT } from "./types"
+import { GameState, MoveDx, MoveDy, WSMT } from "./types"
 
 /** server controllable */
 export enum GameStateValue {
@@ -54,69 +55,48 @@ class GameScreen {
 
 
 
-  /* player animation section */
-  player_move_up(move_type: WSMT, move_data: MoveVertical) {
+  /* player animation/offset section */
+  /** move player along vertical screen direction */
+  player_move_dy(move_type: WSMT, move_data: MoveDy) {
     console.log("inside player_move", move_type)
     const player = this.players.get(move_data.number.toString())
     if (player) {
+      const from_x = get_from_x(player, screen.cspx)
+      const from_y = get_from_y(player, screen.cspx)
       const params = {
-        // fromX: 0,
-        // toX: 0,
-        // fromY: 5 * this.cspx,
-        // toY: (move_data.target_y - 1) * this.cspx,
-        // speed: screen.cspx * (move_data.turbo ? 2 : 1),
-        fromX: 0,
-        toX: 0,
-        fromY: 500,
-        toY: 0,
-        speed: 100,
+        div: player,
+        player_number: move_data.number,
+        fromX: from_x,
+        toX: from_x,
+        fromY: from_y,
+        toY: move_data.target_y,
+        cells_per_second: move_data.turbo ? 2 : 1,
+        cspx: screen.cspx,
       } as OffsetAnimationParameters
-      offset_div_animation(player, params.fromX, params.toX, params.fromY, params.toY, 1000)
+      offset_div_animation(params)
     }
-
   }
-}
 
-function offset_div_animation(
-  div: HTMLElement,
-  fromX: number,
-  toX: number,
-  fromY: number,
-  toY: number,
-  duration: number
-) {
-  const intervalDuration = 16; // Approximate interval duration for 60 FPS
-  const frames = Math.ceil(duration / intervalDuration);
-
-  const xStep = (toX - fromX) / frames;
-  const yStep = (toY - fromY) / frames;
-
-  let frameCount = 0;
-
-  const animationInterval = setInterval(() => {
-    frameCount++;
-    if (frameCount >= frames) {
-      clearInterval(animationInterval);
+  player_move_dx(move_type: WSMT, move_data: MoveDx) {
+    console.log("inside player_move", move_type)
+    const player = this.players.get(move_data.number.toString())
+    if (player) {
+      const from_x = get_from_x(player, screen.cspx)
+      const from_y = get_from_y(player, screen.cspx)
+      const params = {
+        div: player,
+        player_number: move_data.number,
+        fromX: from_x,
+        toX: move_data.target_x,
+        fromY: from_y,
+        toY: from_y,
+        cells_per_second: move_data.turbo ? 2 : 1,
+        cspx: screen.cspx,
+      } as OffsetAnimationParameters
+      offset_div_animation(params)
     }
+  }
 
-    const currentX = fromX + xStep * frameCount;
-    const currentY = fromY + yStep * frameCount;
-
-    div.style.left = `${currentX}px`;
-    div.style.top = `${currentY}px`;
-  }, intervalDuration);
-
-  setTimeout(() => {
-    clearInterval(animationInterval);
-  }, duration);
-}
-
-interface OffsetAnimationParameters {
-  fromX: number;
-  toX: number;
-  fromY: number;
-  toY: number;
-  speed: number;
 }
 
 export const screen = new GameScreen()

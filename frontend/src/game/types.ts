@@ -105,8 +105,14 @@ export interface StartGame {
   state: GameState
 }
 
-export interface MoveVertical {
+export interface MoveDy {
   number: number
   target_y: number
+  turbo: boolean
+}
+
+export interface MoveDx {
+  number: number
+  target_x: number
   turbo: boolean
 }
