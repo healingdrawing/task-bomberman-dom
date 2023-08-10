@@ -5,32 +5,36 @@
 .player1_bomb {
   width: 96px;
   height: 96px;
-  background-image: url('player1_bomb.png');
+  background-image: url('player_bomb.png');
   background-size: 300% 100%; /* Total width x height of the sprite (3 frames x 100%) */
+  filter: sepia(1) hue-rotate(10deg) saturate(2.5); /* Make yellow */
   animation: player_bomb_animation var(--player_bomb_animation_duration) steps(3) infinite;
 }
 
 .player2_bomb {
   width: 96px;
   height: 96px;
-  background-image: url('player2_bomb.png');
+  background-image: url('player_bomb.png');
   background-size: 300% 100%; /* Total width x height of the sprite (3 frames x 100%) */
+  filter: sepia(1) hue-rotate(75deg) saturate(3); /* Make green */
   animation: player_bomb_animation var(--player_bomb_animation_duration) steps(3) infinite;
 }
 
 .player3_bomb {
   width: 96px;
   height: 96px;
-  background-image: url('player3_bomb.png');
+  background-image: url('player_bomb.png');
   background-size: 300% 100%; /* Total width x height of the sprite (3 frames x 100%) */
+  filter: sepia(1) hue-rotate(140deg) saturate(3); /* Make cyan */
   animation: player_bomb_animation var(--player_bomb_animation_duration) steps(3) infinite;
 }
 
 .player4_bomb {
   width: 96px;
   height: 96px;
-  background-image: url('player4_bomb.png');
+  background-image: url('player_bomb.png');
   background-size: 300% 100%; /* Total width x height of the sprite (3 frames x 100%) */
+  filter: sepia(1) hue-rotate(-110deg) saturate(3.5); /* Make magenta */
   animation: player_bomb_animation var(--player_bomb_animation_duration) steps(3) infinite;
 }
 

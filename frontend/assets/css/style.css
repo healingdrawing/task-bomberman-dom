@@ -107,7 +107,14 @@ td>div >div.description {
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: auto;
+  -ms-overflow-style: none; /* IE and legacy Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+  display: none;
 }
 
 .space {
