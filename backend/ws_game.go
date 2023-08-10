@@ -36,7 +36,7 @@ type PLAYER struct {
 	bombs_used              int       // how many bombs placed at the moment on the game field
 	explosion_range         int       // default 1, can be increased by powerup
 	Turbo                   bool      `json:"turbo"` // default false, can be switched by powerup. speedup of player
-	Dead                    bool      `json:"dead"`  // true - player is dead, false - player is alive
+	Lifes                   int       `json:"lifes"` // 0 - player is dead
 	direction               DIRECTION // the direction of the player movement
 	moving                  bool      // true - player is moving, false - player is not moving
 	moving_start_time_stamp int64     // unix timestamp in nanoseconds, when the player started moving
@@ -83,6 +83,7 @@ func ws_send_start_game_handler() {
 	wsSend(WS_START_GAME, convert_game_state_to_json(game), uuids)
 }
 
+// debug pring, controlled by game_debug
 func dprint(msg ...any) {
 	if game_debug {
 		log.Println(msg...)

@@ -97,7 +97,7 @@ func ws_arrows_loop_listener() {
 		game.Players.Range(func(key, value interface{}) bool {
 			number := key.(string)
 			player := value.(PLAYER)
-			if !player.Dead {
+			if player.Lifes > 0 {
 				ws_up_handler(number, string(WS_UP_ON), false)
 				ws_down_handler(number, string(WS_DOWN_ON), false)
 				ws_left_handler(number, string(WS_LEFT_ON), false)

@@ -20,7 +20,7 @@ func prepare_players() {
 			bombs_max:       1,
 			bombs_used:      0,
 			explosion_range: 1,
-			Dead:            true,
+			Lifes:           0,
 			direction:       STAND,
 		}
 		game.Players.Store(number, player)
@@ -38,7 +38,7 @@ func prepare_players() {
 		number_str := string_number[number]
 		if player, ok := game.Players.Load(number_str); ok {
 			player_data := player.(PLAYER)
-			player_data.Dead = false
+			player_data.Lifes = 3 // x3 lifes for each player, task requirement
 			player_data.X = px[number-1]
 			player_data.Y = py[number-1]
 			player_data.Target_x = px[number-1]

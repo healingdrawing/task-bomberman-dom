@@ -203,9 +203,9 @@ class ScreenPrepare {
       // const state_player = (state.players as { [key: string]: Player })[key];//facepalm, refactored in GameState, to use short way here
       const state_player = state.players[key];
       const player = this.players.get(key)
-      if (player && !state_player.dead) {
+      if (player && state_player.lifes > 0) {
         this.players.get(key)?.classList.remove("none")
-        this.players.get(key)?.classList.add(`player${key}_stand`) //todo: remove this later because render will do it , depends on target position and current position
+        this.players.get(key)?.classList.add(`player${key}_stand`) //todo: refactor/remove this later ONLY IF render will do it , depends on target position and current position
       }
     }
   }

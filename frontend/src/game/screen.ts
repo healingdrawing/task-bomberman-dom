@@ -41,7 +41,7 @@ class GameScreen {
     console.log("=========== game_state_start_game")
     screen_prepare.clear_game_field()
     screen_prepare.build_game_field(state)
-    handlers.player_lifes({ lifes: 3 })
+    handlers.player_lifes({ lifes: 3 }) //todo: hardcoded, to improve performance
     this.game_state_value = GameStateValue.START_GAME
   }
 

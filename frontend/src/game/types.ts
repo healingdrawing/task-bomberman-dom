@@ -79,7 +79,7 @@ export interface Player {
   target_x: number
   target_y: number
   turbo: boolean
-  dead: boolean
+  lifes: number
 }
 
 export interface Bomb {
