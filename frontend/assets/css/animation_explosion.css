@@ -7,10 +7,10 @@
   height: 96px;
   background-image: url('explosion.png');
   background-size: 600% 100%; /* Total width x height of the sprite (6 frames x 100%) */
-  animation: explosion_animation var(--explosion_animation_duration) steps(6) infinite;
+  animation: explosion_animation var(--explosion_animation_duration) steps(5); /*it was x6 frames, and 0% start point, but this crap(css) ignores its own "forwards" keyword on both firefox/chrome, and always shows the first frame after animation ends. To fix this crap, sprites were moved one step forward and animation was shorten from 6 to 5 steps, and after completed, the empty first frame, which was the last frame before, displayed on screen */
 }
 
 @keyframes explosion_animation {
-  0% { background-position-x: 0%; } /* Display first frame (leftmost) */
+  0% { background-position-x: -100%; } /* Display first frame (leftmost) */
   100% { background-position-x: -600%; } /* Display third frame (rightmost) */
 }

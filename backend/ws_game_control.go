@@ -25,9 +25,9 @@ func ws_character_control_handler(client *Client, control string) {
 	case string(WS_RIGHT_OFF):
 		ws_right_off_handler(string_number[client.NUMBER], control)
 	case string(WS_BOMB_ON):
-		log.Println("WS_BOMB_ON", client.NUMBER)
+		go ws_bomb_handler(string_number[client.NUMBER]) // goroutine because plan to use time.Sleep, before bomb will be exploded
 	case string(WS_BOMB_OFF):
-		log.Println("WS_BOMB_OFF", client.NUMBER)
+		ws_bomb_off_handler(string_number[client.NUMBER])
 	default:
 		log.Println("Unknown control: ", control)
 	}

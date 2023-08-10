@@ -1,7 +1,7 @@
 import { handlers } from "./handlers"
 import { OffsetAnimationParameters, get_from_x, get_from_y, offset_div_animation } from "./screen_offset_animation"
 import { screen_prepare } from "./screen_prepare"
-import { GameState, MoveDx, MoveDy, WSMT } from "./types"
+import { BombXY, ExplodeBomb, GameState, MoveDx, MoveDy, WSMT } from "./types"
 
 /** server controllable */
 export enum GameStateValue {
@@ -95,6 +95,42 @@ class GameScreen {
       } as OffsetAnimationParameters
       offset_div_animation(params)
     }
+  }
+
+  player_bomb_xy(bomb_data: BombXY) {
+    console.log("inside player bomb xy")
+    const bomb = this.bombs.get(bomb_data.target_xy)
+    if (bomb) {
+      bomb.classList.remove(`none`)
+      bomb.classList.add(`player${bomb_data.number}_bomb`)
+    }
+  }
+
+  explode_bomb(explode_data: ExplodeBomb) {
+    console.log("inside explode bomb")
+
+    // remove bomb
+
+    const bomb = this.bombs.get(explode_data.cells_xy[0])
+    if (bomb) {
+      bomb.classList.remove(`player${explode_data.number}_bomb`)
+      bomb.classList.add(`none`)
+    }
+
+    // execute explosion
+    const last = explode_data.cells_xy.length - 1
+    explode_data.cells_xy.forEach((cell, index) => {
+      const explosion = this.explosions.get(cell)
+      if (explosion) {
+        explosion.classList.remove(`none`)
+        explosion.classList.remove(`explosion`)
+
+        //todo: very hungry for performance
+        void explosion.offsetWidth; // must be on every item to overwrite animation. Affect performance
+
+        explosion.classList.add(`explosion`)
+      }
+    })
   }
 
 }

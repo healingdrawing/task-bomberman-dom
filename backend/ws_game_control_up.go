@@ -112,12 +112,8 @@ func ws_send_move_up_command(player *PLAYER) {
 		Target_y: player.Target_y,
 		Turbo:    player.Turbo,
 	}
-	dprint("ws_send_move_up_command. message", message)
 	uuids := get_all_clients_uuids(clients)
-	dprint("ws_send_move_up_command. uuids", uuids)
 	wsSend(WS_UP, message, uuids)
-	dprint("ws_send_move_up_command. sent")
-
 }
 
 type WS_MOVE_UP_DTO struct {

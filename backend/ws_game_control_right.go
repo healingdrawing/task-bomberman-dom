@@ -111,12 +111,8 @@ func ws_send_move_right_command(player *PLAYER) {
 		Target_x: player.Target_x,
 		Turbo:    player.Turbo,
 	}
-	dprint("ws_send_move_right_command. message", message)
 	uuids := get_all_clients_uuids(clients)
-	dprint("ws_send_move_right_command. uuids", uuids)
 	wsSend(WS_RIGHT, message, uuids)
-	dprint("ws_send_move_right_command. sent")
-
 }
 
 type WS_MOVE_RIGHT_DTO struct {

@@ -21,6 +21,7 @@ export enum WSMT {
   WS_STAND = "stand",
   WS_BOMB = "bomb",
   WS_EXPLODE = "explode",
+  WS_HIDE_WEAK_OBSTACLES = "hide_weak_obstacles", // todo: also must includes show power ups
   WS_HIDE_POWER_UP = "hide_power_up",
 
   // outgoing from client to server to send pressed/released keys
@@ -115,4 +116,14 @@ export interface MoveDx {
   number: number
   target_x: number
   turbo: boolean
+}
+
+export interface BombXY {
+  number: number
+  target_xy: string
+}
+
+export interface ExplodeBomb {
+  number: number
+  cells_xy: string[]
 }

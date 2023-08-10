@@ -18,7 +18,7 @@ func prepare_players() {
 			X:               6,
 			Target_x:        6,
 			bombs_max:       1,
-			bombs_left:      1,
+			bombs_used:      0,
 			explosion_range: 1,
 			Dead:            true,
 			direction:       STAND,
@@ -88,7 +88,8 @@ func prepare_weak_obstacles_and_power_ups() {
 }
 
 // fill the locked for moving cells xy, it is strong obstacles and weak obstacles(not destroyed yet)
-func prepare_free_cells() {
+func prepare_free_cells_and_bomb_cells() {
+	game.bomb_cells = sync.Map{} // Initialize bomb_cells as a sync.Map, empty at the beginning
 	game.free_cells = sync.Map{} // Initialize free_cells as a sync.Map
 	locked_cells := sync.Map{}   // Initialize locked_cells as a sync.Map
 
