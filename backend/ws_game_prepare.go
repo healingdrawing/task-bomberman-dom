@@ -18,9 +18,9 @@ func prepare_players() {
 			X:               6,
 			Target_x:        6,
 			bombs_max:       1,
-			bombs_left:      1,
+			bombs_used:      0,
 			explosion_range: 1,
-			Dead:            true,
+			Lifes:           0,
 			direction:       STAND,
 		}
 		game.Players.Store(number, player)
@@ -38,7 +38,8 @@ func prepare_players() {
 		number_str := string_number[number]
 		if player, ok := game.Players.Load(number_str); ok {
 			player_data := player.(PLAYER)
-			player_data.Dead = false
+			player_data.uuid = client.UUID
+			player_data.Lifes = 3 // x3 lifes for each player, task requirement
 			player_data.X = px[number-1]
 			player_data.Y = py[number-1]
 			player_data.Target_x = px[number-1]
@@ -71,8 +72,9 @@ func prepare_weak_obstacles_and_power_ups() {
 	}
 
 	// Fill the power-ups
+	// "bombs_max++", "explosion_range++", "turbo boolean/move faster" is "1" "2" "3" respectively
+	pups := []string{"1", "2", "3", "3"} // to set animation use client css
 	// Shuffle the power-ups
-	pups := []string{"bombs_max", "explosion_range", "turbo", "turbo"}
 	for i := len(pups) - 1; i > 0; i-- {
 		j := randomNum(0, i)
 		pups[i], pups[j] = pups[j], pups[i]
@@ -88,7 +90,8 @@ func prepare_weak_obstacles_and_power_ups() {
 }
 
 // fill the locked for moving cells xy, it is strong obstacles and weak obstacles(not destroyed yet)
-func prepare_free_cells() {
+func prepare_free_cells_and_bomb_cells() {
+	game.bomb_cells = sync.Map{} // Initialize bomb_cells as a sync.Map, empty at the beginning
 	game.free_cells = sync.Map{} // Initialize free_cells as a sync.Map
 	locked_cells := sync.Map{}   // Initialize locked_cells as a sync.Map
 
@@ -138,12 +141,13 @@ func convert_game_state_to_json(gameState GAME_STATE) map[string]interface{} {
 	jsonGameState["weak_obstacles"] = weakObstaclesMap
 
 	// Convert Power_ups sync.Map to a map of POWER_UPs
-	powerUpsMap := make(map[string]POWER_UP)
-	gameState.Power_ups.Range(func(key, value interface{}) bool {
-		powerUpsMap[key.(string)] = value.(POWER_UP)
-		return true
-	})
-	jsonGameState["power_ups"] = powerUpsMap
+	// todo: hide power-ups from the client, to prevent cheating
+	// powerUpsMap := make(map[string]POWER_UP)
+	// gameState.Power_ups.Range(func(key, value interface{}) bool {
+	// 	powerUpsMap[key.(string)] = value.(POWER_UP)
+	// 	return true
+	// })
+	// jsonGameState["power_ups"] = powerUpsMap
 
 	// Convert free_cells sync.Map to a map of interface{}
 	freeCellsMap := make(map[string]interface{})

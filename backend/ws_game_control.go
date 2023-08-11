@@ -25,9 +25,9 @@ func ws_character_control_handler(client *Client, control string) {
 	case string(WS_RIGHT_OFF):
 		ws_right_off_handler(string_number[client.NUMBER], control)
 	case string(WS_BOMB_ON):
-		log.Println("WS_BOMB_ON", client.NUMBER)
+		go ws_bomb_handler(string_number[client.NUMBER]) // goroutine because plan to use time.Sleep, before bomb will be exploded
 	case string(WS_BOMB_OFF):
-		log.Println("WS_BOMB_OFF", client.NUMBER)
+		ws_bomb_off_handler(string_number[client.NUMBER])
 	default:
 		log.Println("Unknown control: ", control)
 	}
@@ -97,7 +97,7 @@ func ws_arrows_loop_listener() {
 		game.Players.Range(func(key, value interface{}) bool {
 			number := key.(string)
 			player := value.(PLAYER)
-			if !player.Dead {
+			if player.Lifes > 0 {
 				ws_up_handler(number, string(WS_UP_ON), false)
 				ws_down_handler(number, string(WS_DOWN_ON), false)
 				ws_left_handler(number, string(WS_LEFT_ON), false)

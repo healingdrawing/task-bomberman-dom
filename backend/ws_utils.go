@@ -25,14 +25,15 @@ const (
 	WS_END_GAME                   WSMT = "end_game"
 	WS_PLAYER_GAME_OVER           WSMT = "player_game_over"
 
-	WS_UP            WSMT = "up" // for send to control items on screen
-	WS_DOWN          WSMT = "down"
-	WS_LEFT          WSMT = "left"
-	WS_RIGHT         WSMT = "right"
-	WS_STAND         WSMT = "stand"
-	WS_BOMB          WSMT = "bomb"
-	WS_EXPLODE       WSMT = "explode"
-	WS_HIDE_POWER_UP WSMT = "hide_power_up"
+	WS_UP                  WSMT = "up" // for send to control items on screen
+	WS_DOWN                WSMT = "down"
+	WS_LEFT                WSMT = "left"
+	WS_RIGHT               WSMT = "right"
+	WS_STAND               WSMT = "stand"
+	WS_BOMB                WSMT = "bomb"
+	WS_EXPLODE             WSMT = "explode"
+	WS_HIDE_WEAK_OBSTACLES WSMT = "hide_weak_obstacles" // to group obstacles
+	WS_HIDE_POWER_UP       WSMT = "hide_power_up"
 
 	WS_UP_ON     WSMT = "up_on" // for receive from client key press/release events
 	WS_UP_OFF    WSMT = "up_off"

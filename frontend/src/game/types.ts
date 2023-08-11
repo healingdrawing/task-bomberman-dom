@@ -21,6 +21,7 @@ export enum WSMT {
   WS_STAND = "stand",
   WS_BOMB = "bomb",
   WS_EXPLODE = "explode",
+  WS_HIDE_WEAK_OBSTACLES = "hide_weak_obstacles", // todo: also must includes show power ups
   WS_HIDE_POWER_UP = "hide_power_up",
 
   // outgoing from client to server to send pressed/released keys
@@ -65,6 +66,7 @@ export interface ConnectedPlayers {
   connected_players: string
 }
 
+/** server sends number:number field also, which is player number(not used at the moment) */
 export interface PlayerLifes {
   lifes: number
 }
@@ -78,7 +80,7 @@ export interface Player {
   target_x: number
   target_y: number
   turbo: boolean
-  dead: boolean
+  lifes: number
 }
 
 export interface Bomb {
@@ -115,4 +117,21 @@ export interface MoveDx {
   number: number
   target_x: number
   turbo: boolean
+}
+
+export interface BombXY {
+  number: number
+  target_xy: string
+}
+
+export interface ExplodeBomb {
+  number: number
+  cells_xy: string[]
+  destroy_xy: string[] // destroy xy used for power_up too and effect is "1" ... "3" for animations
+  power_up_effect: string[]
+}
+
+export interface HidePowerUp {
+  cell_xy: string
+  effect: string
 }
