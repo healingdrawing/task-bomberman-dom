@@ -1,7 +1,7 @@
 import { handlers } from "./handlers"
 import { OffsetAnimationParameters, get_from_x, get_from_y, offset_div_animation } from "./screen_offset_animation"
 import { screen_prepare } from "./screen_prepare"
-import { BombXY, ExplodeBomb, GameState, MoveDx, MoveDy, PlayerLifes, WSMT } from "./types"
+import { BombXY, ExplodeBomb, GameState, HidePowerUp, MoveDx, MoveDy, PlayerLifes, WSMT } from "./types"
 
 /** server controllable */
 export enum GameStateValue {
@@ -158,6 +158,14 @@ export class GameScreen {
         explosion.classList.add(`explosion`)
       }
     })
+  }
+
+  hide_power_up(hide_data: HidePowerUp) {
+    const power_up = this.power_ups.get(hide_data.cell_xy)
+    if (power_up) {
+      power_up.classList.remove(`power_up${hide_data.effect}`)
+      power_up.classList.add("none")
+    }
   }
 
 }

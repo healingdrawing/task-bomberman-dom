@@ -130,3 +130,8 @@ export interface ExplodeBomb {
   destroy_xy: string[] // destroy xy used for power_up too and effect is "1" ... "3" for animations
   power_up_effect: string[]
 }
+
+export interface HidePowerUp {
+  cell_xy: string
+  effect: string
+}

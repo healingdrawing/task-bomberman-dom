@@ -100,6 +100,7 @@ func ws_down_handler(number string, control string, press bool) {
 		player.can_change_target_cell = false
 		player.moving = false
 		player.direction = STAND
+		check_power_up(&player)
 		game.Players.Store(number, player)
 	}
 }

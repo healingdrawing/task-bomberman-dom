@@ -1,4 +1,4 @@
-import { BombXY, BroadcastMessage, ChatMessage, ConnectedPlayers, ExplodeBomb, GameState, MoveDx, MoveDy, PlayerLifes, WSMT } from "./types";
+import { BombXY, BroadcastMessage, ChatMessage, ConnectedPlayers, ExplodeBomb, GameState, HidePowerUp, MoveDx, MoveDy, PlayerLifes, WSMT } from "./types";
 import { SendNickname } from "./types";
 import { handlers } from "./handlers";
 import { screen } from "./screen";
@@ -65,6 +65,10 @@ class WebSocketClient {
       case WSMT.WS_EXPLODE:
         // Handle explosion logic here
         screen.explode_bomb(message.data as ExplodeBomb);
+        break;
+      case WSMT.WS_HIDE_POWER_UP:
+        // Handle hide power up logic here
+        screen.hide_power_up(message.data as HidePowerUp);
         break;
       case WSMT.WS_PLAYER_LIFES:
         // Handle player lifes logic here
