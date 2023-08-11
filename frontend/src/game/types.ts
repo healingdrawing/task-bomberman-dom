@@ -66,6 +66,7 @@ export interface ConnectedPlayers {
   connected_players: string
 }
 
+/** server sends number:number field also, which is player number(not used at the moment) */
 export interface PlayerLifes {
   lifes: number
 }

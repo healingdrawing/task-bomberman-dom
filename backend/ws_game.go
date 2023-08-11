@@ -27,6 +27,7 @@ var (
 )
 
 type PLAYER struct {
+	uuid                    string    // is the Client.UUID
 	Number                  int       `json:"number"` // the Client.NUMBER
 	X                       int       `json:"x"`      // the number of the game field cell, where the player is
 	Y                       int       `json:"y"`

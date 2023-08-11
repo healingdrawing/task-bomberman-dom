@@ -127,9 +127,49 @@ func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int
 
 	}
 
+	//todo: implement affecting players and weak obstacles
+	// 1- check the players cells, if player is on explosion or aimed to explosion, then if player has lifes, decrease the lifes of the player else kill the player
+
+	game.Players.Range(func(key, value interface{}) bool {
+		player := value.(PLAYER)
+		player_xy := fmt.Sprintf("%d%d", player.X, player.Y)
+		target_xy := fmt.Sprintf("%d%d", player.Target_x, player.Target_y)
+		for _, explosion_cell_xy := range explosion_cells_xy {
+			if player_xy == explosion_cell_xy || target_xy == explosion_cell_xy {
+				player.Lifes--
+				if player.Lifes > 0 {
+					game.Players.Store(key, player)
+				} else {
+					game.Players.Delete(key) // remove from range loop etc, let is say, player is dead
+				}
+				ws_send_player_lifes(player.Number, player.Lifes, player.uuid)
+
+			}
+		}
+		return true
+	})
+
+	// 2- check the weak obstacles cells, if weak obstacle is on explosion, then remove the weak obstacle, and show the powerup on the cell(because every of four obstacles has a powerup)
+	// 3- extend response object for explosion, and send to all clients
+
 	// send explosion to all players, must manage also all affected items: players, weak obstacles. First remove all affected items, then execute explosion on client side
 	ws_send_explosion_command(player_number, bomb_xy, explosion_cells_xy)
 
+}
+
+func ws_send_player_lifes(player_number int, player_lifes int, player_uuid string) {
+	log.Println("ws_send_player_lifes. player", player_number, "lifes", player_lifes)
+	message := WS_PLAYER_LIFES_DTO{
+		Number: player_number,
+		Lifes:  player_lifes,
+	}
+
+	wsSend(WS_PLAYER_LIFES, message, []string{player_uuid})
+}
+
+type WS_PLAYER_LIFES_DTO struct {
+	Number int `json:"number"` // to remove bomb animation for player who placed the bomb
+	Lifes  int `json:"lifes"`  // the first one is bomb_xy, to remove bomb
 }
 
 // todo: extend this and function above and send also affected items commands

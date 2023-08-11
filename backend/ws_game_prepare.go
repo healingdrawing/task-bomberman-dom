@@ -38,6 +38,7 @@ func prepare_players() {
 		number_str := string_number[number]
 		if player, ok := game.Players.Load(number_str); ok {
 			player_data := player.(PLAYER)
+			player_data.uuid = client.UUID
 			player_data.Lifes = 3 // x3 lifes for each player, task requirement
 			player_data.X = px[number-1]
 			player_data.Y = py[number-1]

@@ -1,7 +1,7 @@
 import { handlers } from "./handlers"
 import { OffsetAnimationParameters, get_from_x, get_from_y, offset_div_animation } from "./screen_offset_animation"
 import { screen_prepare } from "./screen_prepare"
-import { BombXY, ExplodeBomb, GameState, MoveDx, MoveDy, WSMT } from "./types"
+import { BombXY, ExplodeBomb, GameState, MoveDx, MoveDy, PlayerLifes, WSMT } from "./types"
 
 /** server controllable */
 export enum GameStateValue {
@@ -10,7 +10,7 @@ export enum GameStateValue {
   END_GAME,
 }
 
-class GameScreen {
+export class GameScreen {
 
   game_state_value = GameStateValue.PLAYER_GAME_OVER
 
@@ -53,7 +53,13 @@ class GameScreen {
     this.game_state_value = GameStateValue.PLAYER_GAME_OVER
   }
 
-
+  /** at the moment only checks player game over */
+  check_game_state_value(data: PlayerLifes) {
+    if (data.lifes < 1) {
+      console.log("=========== game_state_player_game_over fired")
+      this.game_state_player_game_over()
+    }
+  }
 
   /* player animation/offset section */
   /** move player along vertical screen direction */
