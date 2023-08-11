@@ -123,6 +123,20 @@ export class GameScreen {
       bomb.classList.add(`none`)
     }
 
+    // remove weak obstacles and show power ups
+    explode_data.destroy_xy.forEach((xy, index) => {
+      const weak_obstacle = this.weak_obstacles.get(xy)
+      if (weak_obstacle) {
+        weak_obstacle.classList.remove(`weak_obstacle`)
+        weak_obstacle.classList.add(`none`)
+      }
+      const power_up = this.power_ups.get(xy)
+      if (power_up) {
+        power_up.classList.remove(`none`)
+        power_up.classList.add(`power_up${explode_data.power_up_effect[index]}`)
+      }
+    })
+
     // execute explosion
     const last = explode_data.cells_xy.length - 1
     explode_data.cells_xy.forEach((cell, index) => {
@@ -132,7 +146,14 @@ export class GameScreen {
         explosion.classList.remove(`explosion`)
 
         //todo: very hungry for performance
-        void explosion.offsetWidth; // must be on every item to overwrite animation. Affect performance
+        void explosion.offsetWidth; // must be on every item(checked) to overwrite animation. Affect performance, but after some time, stops affect performance
+        /*
+        but otherwise overcrossed animations, must be managed by removing
+        of the classes with delay, which can damage new animation raised
+        before first one completed, and only garbaging of the screen
+        by z-index stacking of the divs can be the solution,
+        with again removing with delay. And task requires as possible less layers, do not know what is worse, pile of shit on screen, or some decreasing of fps but with simple code. Let is hope it will pass audits.
+        */
 
         explosion.classList.add(`explosion`)
       }

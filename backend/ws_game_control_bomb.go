@@ -149,11 +149,39 @@ func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int
 		return true
 	})
 
-	// 2- check the weak obstacles cells, if weak obstacle is on explosion, then remove the weak obstacle, and show the powerup on the cell(because every of four obstacles has a powerup)
+	// 2- check the weak obstacles cells, if weak obstacle is on explosion, then remove the weak obstacle, add free cell, and show the powerup on the cell(because each of the four obstacles have a powerup)
+
+	destroyed_weak_obstacles := []string{}
+	appeared_power_up_effect := []string{}
+
+	game.Weak_obstacles.Range(func(key, value interface{}) bool {
+		weak_obstacle_xy := key.(string)
+		for _, explosion_cell_xy := range explosion_cells_xy {
+			if weak_obstacle_xy == explosion_cell_xy {
+				destroyed_weak_obstacles = append(destroyed_weak_obstacles, weak_obstacle_xy)
+				game.Weak_obstacles.Delete(key)
+				// add free cell
+				game.free_cells.Store(weak_obstacle_xy, true)
+				// show the powerup on the cell
+				power_up_data, ok := game.Power_ups.Load(weak_obstacle_xy)
+				if ok {
+					power_up := power_up_data.(POWER_UP)
+					power_up.Show = true
+					appeared_power_up_effect = append(appeared_power_up_effect, power_up.Effect)
+					game.Power_ups.Store(weak_obstacle_xy, power_up)
+				} else {
+					dprint("ws_explosion_handler. power_up not found for weak_obstacle_xy", weak_obstacle_xy)
+				}
+				break
+			}
+		}
+		return true
+	})
+
 	// 3- extend response object for explosion, and send to all clients
 
 	// send explosion to all players, must manage also all affected items: players, weak obstacles. First remove all affected items, then execute explosion on client side
-	ws_send_explosion_command(player_number, bomb_xy, explosion_cells_xy)
+	ws_send_explosion_command(player_number, bomb_xy, explosion_cells_xy, destroyed_weak_obstacles, appeared_power_up_effect)
 
 }
 
@@ -173,17 +201,21 @@ type WS_PLAYER_LIFES_DTO struct {
 }
 
 // todo: extend this and function above and send also affected items commands
-func ws_send_explosion_command(player_number int, bomb_xy string, explosion_cells_xy []string) {
+func ws_send_explosion_command(player_number int, bomb_xy string, explosion_cells_xy []string, destroyed_weak_obstacles []string, appeared_power_up_effect []string) {
 	log.Println("ws_send_explosion_command. bomb_xy", bomb_xy, "explosion_cells_xy", explosion_cells_xy)
 	message := WS_EXPLODE_DTO{
-		Number:   player_number,
-		Cells_xy: explosion_cells_xy,
+		Number:          player_number,
+		Cells_xy:        explosion_cells_xy,
+		Destroy_xy:      destroyed_weak_obstacles,
+		Power_up_effect: appeared_power_up_effect,
 	}
 	uuids := get_all_clients_uuids(clients)
 	wsSend(WS_EXPLODE, message, uuids)
 }
 
 type WS_EXPLODE_DTO struct {
-	Number   int      `json:"number"`   // to remove bomb animation for player who placed the bomb
-	Cells_xy []string `json:"cells_xy"` // the first one is bomb_xy, to remove bomb
+	Number          int      `json:"number"`          // to remove bomb animation for player who placed the bomb
+	Cells_xy        []string `json:"cells_xy"`        // the first one is bomb_xy, to remove bomb
+	Destroy_xy      []string `json:"destroy_xy"`      // xy to destroy weak obstacles
+	Power_up_effect []string `json:"power_up_effect"` // power up effect to replace weak obstacle
 }

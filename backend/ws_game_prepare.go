@@ -72,8 +72,9 @@ func prepare_weak_obstacles_and_power_ups() {
 	}
 
 	// Fill the power-ups
+	// "bombs_max++", "explosion_range++", "turbo boolean/move faster" is "1" "2" "3" respectively
+	pups := []string{"1", "2", "3", "3"} // to set animation use client css
 	// Shuffle the power-ups
-	pups := []string{"bombs_max", "explosion_range", "turbo", "turbo"}
 	for i := len(pups) - 1; i > 0; i-- {
 		j := randomNum(0, i)
 		pups[i], pups[j] = pups[j], pups[i]
@@ -140,12 +141,13 @@ func convert_game_state_to_json(gameState GAME_STATE) map[string]interface{} {
 	jsonGameState["weak_obstacles"] = weakObstaclesMap
 
 	// Convert Power_ups sync.Map to a map of POWER_UPs
-	powerUpsMap := make(map[string]POWER_UP)
-	gameState.Power_ups.Range(func(key, value interface{}) bool {
-		powerUpsMap[key.(string)] = value.(POWER_UP)
-		return true
-	})
-	jsonGameState["power_ups"] = powerUpsMap
+	// todo: hide power-ups from the client, to prevent cheating
+	// powerUpsMap := make(map[string]POWER_UP)
+	// gameState.Power_ups.Range(func(key, value interface{}) bool {
+	// 	powerUpsMap[key.(string)] = value.(POWER_UP)
+	// 	return true
+	// })
+	// jsonGameState["power_ups"] = powerUpsMap
 
 	// Convert free_cells sync.Map to a map of interface{}
 	freeCellsMap := make(map[string]interface{})
