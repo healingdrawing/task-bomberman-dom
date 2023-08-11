@@ -485,6 +485,7 @@ h2 {
 
 #game_background{
   background-image: url("back.png");
+  background-repeat: no-repeat;
 }
 
 /*game cells*/
