@@ -80,12 +80,17 @@ func prepare_weak_obstacles_and_power_ups() {
 		pups[i], pups[j] = pups[j], pups[i]
 	}
 
+	// soft skip one index to make one weak_obstacle empty(as diogo requested, to satisfy the task requirements more clearly), even if it can make the gameplay less balanced(but this is not his fault)
+	skip_me := randomNum(0, 3)
+
 	game.Power_ups = sync.Map{} // Initialize Power_ups as a sync.Map
 	for i := 0; i < 4; i++ {
-		game.Power_ups.Store(strconv.Itoa(x[i])+strconv.Itoa(y[i]), POWER_UP{
-			Effect: pups[i],
-			Show:   false,
-		})
+		if i != skip_me {
+			game.Power_ups.Store(strconv.Itoa(x[i])+strconv.Itoa(y[i]), POWER_UP{
+				Effect: pups[i],
+				Show:   false,
+			})
+		}
 	}
 }
 
