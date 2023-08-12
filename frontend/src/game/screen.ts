@@ -38,7 +38,7 @@ export class GameScreen {
   }
 
   game_state_start_game(state: GameState) {
-    console.log("=========== game_state_start_game")
+    // console.log("=========== game_state_start_game")
     screen_prepare.clear_game_field()
     screen_prepare.build_game_field(state)
     handlers.player_lifes({ lifes: 3 }) //todo: hardcoded, to improve performance
@@ -63,7 +63,7 @@ export class GameScreen {
   /** at the moment only checks player game over */
   check_game_state_value(data: PlayerLifes) {
     if (data.lifes < 1) {
-      console.log("=========== game_state_player_game_over fired")
+      // console.log("=========== game_state_player_game_over fired")
       this.game_state_player_game_over()
     }
   }
@@ -71,7 +71,7 @@ export class GameScreen {
   /* player animation/offset section */
   /** move player along vertical screen direction */
   player_move_dy(move_type: WSMT, move_data: MoveDy) {
-    console.log("inside player_move", move_type)
+    // console.log("inside player_move", move_type)
     const player = this.players.get(move_data.number.toString())
     if (player) {
       const from_x = get_from_x(player, screen.cspx)
@@ -91,7 +91,7 @@ export class GameScreen {
   }
 
   player_move_dx(move_type: WSMT, move_data: MoveDx) {
-    console.log("inside player_move", move_type)
+    // console.log("inside player_move", move_type)
     const player = this.players.get(move_data.number.toString())
     if (player) {
       const from_x = get_from_x(player, screen.cspx)
@@ -111,7 +111,7 @@ export class GameScreen {
   }
 
   player_bomb_xy(bomb_data: BombXY) {
-    console.log("inside player bomb xy")
+    // console.log("inside player bomb xy")
     const bomb = this.bombs.get(bomb_data.target_xy)
     if (bomb) {
       bomb.classList.remove(`none`)
@@ -120,7 +120,7 @@ export class GameScreen {
   }
 
   explode_bomb(explode_data: ExplodeBomb) {
-    console.log("inside explode bomb")
+    // console.log("inside explode bomb")
 
     // remove bomb
 

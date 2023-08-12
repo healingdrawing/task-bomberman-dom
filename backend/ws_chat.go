@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -23,19 +22,19 @@ func wsChatMessageHandler(conn *websocket.Conn, messageData map[string]interface
 
 	uuid, ok := messageData["client_uuid"].(string)
 	if !ok {
-		log.Println("failed to get client_uuid from messageData")
+		// log.Println("failed to get client_uuid from messageData")
 		return
 	}
 
 	content, ok := messageData["content"].(string)
 	if !ok {
-		log.Println("failed to get content from messageData")
+		// log.Println("failed to get content from messageData")
 		wsSend(WS_ERROR_RESPONSE, WS_ERROR_RESPONSE_DTO{fmt.Sprint(http.StatusUnprocessableEntity, " failed to get content from messageData")}, []string{uuid})
 		return
 	}
 
 	if strings.TrimSpace(content) == "" {
-		log.Println("=== content is empty ===")
+		// log.Println("=== content is empty ===")
 		wsSend(WS_ERROR_RESPONSE, WS_ERROR_RESPONSE_DTO{fmt.Sprint(http.StatusUnprocessableEntity, " content is empty")}, []string{uuid})
 		return
 	}

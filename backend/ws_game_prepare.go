@@ -34,7 +34,7 @@ func prepare_players() {
 	clients.Range(func(key, value interface{}) bool {
 		client := value.(*Client)
 		number := client.NUMBER
-		log.Println("number", number)
+		// log.Println("number", number)
 		number_str := string_number[number]
 		if player, ok := game.Players.Load(number_str); ok {
 			player_data := player.(PLAYER)

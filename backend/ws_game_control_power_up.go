@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 )
 
 // "bombs_max++", "explosion_range++", "turbo boolean/move faster" is "1" "2" "3" respectively
@@ -41,7 +40,7 @@ func check_power_up(player *PLAYER) {
 }
 
 func ws_send_hide_power_up_command(xy string, effect string) {
-	log.Println("ws_send_hide_power_up_command")
+	// log.Println("ws_send_hide_power_up_command")
 	message := WS_HIDE_POWER_UP_DTO{
 		Cell_xy: xy,
 		Effect:  effect,

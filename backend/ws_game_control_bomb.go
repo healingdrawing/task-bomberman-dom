@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"time"
 )
 
 func ws_bomb_off_handler(number string) {
-	dprint("ws_bomb_off_handler. player", number)
+	// dprint("ws_bomb_off_handler. player", number)
 
 	player_value, ok := game.Players.Load(number)
 	if !ok {
@@ -20,7 +19,7 @@ func ws_bomb_off_handler(number string) {
 
 // player press Enter, bomb will be placed
 func ws_bomb_handler(number string) {
-	dprint("ws_bomb_handler. player", number)
+	// dprint("ws_bomb_handler. player", number)
 	player_value, ok := game.Players.Load(number)
 	if !ok {
 		return
@@ -63,7 +62,7 @@ func ws_bomb_handler(number string) {
 }
 
 func ws_send_bomb_command(player_number int, cell_xy string) {
-	log.Println("ws_send_bomb_command. player", player_number)
+	// log.Println("ws_send_bomb_command. player", player_number)
 	message := WS_BOMB_DTO{
 		Number:    player_number,
 		Target_xy: cell_xy,
@@ -79,7 +78,7 @@ type WS_BOMB_DTO struct {
 
 // bomb handler calls this as goroutine
 func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int) {
-	dprint("ws_explosion_handler. player", player_number, "bomb_xy", bomb_xy, "explosion_range", explosion_range)
+	// dprint("ws_explosion_handler. player", player_number, "bomb_xy", bomb_xy, "explosion_range", explosion_range)
 	// remove bomb from bomb_cells
 	game.bomb_cells.Delete(bomb_xy)
 
@@ -195,7 +194,7 @@ func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int
 }
 
 func ws_send_player_lifes(player_number int, player_lifes int, player_uuid string) {
-	log.Println("ws_send_player_lifes. player", player_number, "lifes", player_lifes)
+	// log.Println("ws_send_player_lifes. player", player_number, "lifes", player_lifes)
 	message := WS_PLAYER_LIFES_DTO{
 		Number: player_number,
 		Lifes:  player_lifes,
@@ -210,7 +209,7 @@ type WS_PLAYER_LIFES_DTO struct {
 }
 
 func ws_send_explosion_command(player_number int, bomb_xy string, explosion_cells_xy []string, destroyed_weak_obstacles []string, appeared_power_up_effect []string) {
-	log.Println("ws_send_explosion_command. bomb_xy", bomb_xy, "explosion_cells_xy", explosion_cells_xy)
+	// log.Println("ws_send_explosion_command. bomb_xy", bomb_xy, "explosion_cells_xy", explosion_cells_xy)
 	message := WS_EXPLODE_DTO{
 		Number:          player_number,
 		Cells_xy:        explosion_cells_xy,
@@ -249,7 +248,7 @@ func check_end_game() {
 }
 
 func send_end_game_command_then_disconnect_clients(winner_uuid, winner_number string) {
-	log.Println("send_end_game_command")
+	// log.Println("send_end_game_command")
 	winner_nickname := get_client_nickname_by_uuid(clients, winner_uuid)
 	html_content := fmt.Sprintf(`
 		<div class="color0">

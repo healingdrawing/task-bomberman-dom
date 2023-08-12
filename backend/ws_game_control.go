@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"time"
 )
 
@@ -31,7 +30,7 @@ func ws_character_control_handler(client *Client, control string) {
 	case string(WS_BOMB_OFF):
 		ws_bomb_off_handler(string_number[client.NUMBER])
 	default:
-		log.Println("Unknown control: ", control)
+		// log.Println("Unknown control: ", control)
 	}
 }
 
@@ -52,7 +51,7 @@ func unpress_arrow(player *PLAYER, control string) {
 	case string(WS_RIGHT_OFF):
 		player.right_pressed = false
 	default:
-		log.Println("Unknown control to unpress: ", control)
+		// log.Println("Unknown control to unpress: ", control)
 	}
 }
 
@@ -86,7 +85,7 @@ func press_arrow_unpress_other_arrows(player *PLAYER, control string) {
 		player.left_pressed = false
 		player.right_pressed = true
 	default:
-		log.Println("Unknown control to unpress arrows: ", control)
+		// log.Println("Unknown control to unpress arrows: ", control)
 	}
 }
 

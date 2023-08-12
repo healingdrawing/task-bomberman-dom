@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"runtime/debug"
 	"strings"
 )
@@ -70,18 +69,18 @@ type WS_BROADCAST_MESSAGE_DTO struct {
 }
 
 func ws_connect_to_server_handler(client *Client, messageData map[string]interface{}) {
-	log.Println("=== ws_connect_to_server_handler ===")
+	// log.Println("=== ws_connect_to_server_handler ===")
 	defer wsRecover(messageData)
 
 	uuid, ok := messageData["client_uuid"].(string)
 	if !ok {
-		log.Println("failed to get client_uuid from messageData")
+		// log.Println("failed to get client_uuid from messageData")
 		return
 	}
 
 	nickname, ok := messageData["nickname"].(string)
 	if !ok {
-		log.Println("failed to get nickname from messageData")
+		// log.Println("failed to get nickname from messageData")
 		wsSend(WS_ERROR_RESPONSE, WS_ERROR_RESPONSE_DTO{"failed to get nickname from messageData"}, []string{uuid})
 		return
 	}
@@ -106,7 +105,7 @@ func ws_connect_to_server_handler(client *Client, messageData map[string]interfa
 }
 
 func ws_leave_server_handler(client *Client, err error) {
-	log.Println("=== ws_leave_server_handler ===")
+	// log.Println("=== ws_leave_server_handler ===")
 	defer wsRecover(nil)
 
 	html_content := fmt.Sprintf(`
@@ -128,7 +127,7 @@ func ws_leave_server_handler(client *Client, err error) {
 }
 
 func ws_server_broadcast_handler(text string) {
-	log.Println("=== ws_server_broadcast_handler ===")
+	// log.Println("=== ws_server_broadcast_handler ===")
 
 	html_content := fmt.Sprintf(`<div class="color0"> %s </div>`, text)
 	message := WS_BROADCAST_MESSAGE_DTO{
@@ -147,7 +146,7 @@ type WS_CONNECTED_PLAYERS_DTO struct {
 
 // send to all clients the number of connected clients/players
 func ws_send_connected_players_number(n int, uuids []string) {
-	log.Println("=== ws_send_connected_players_number ===")
+	// log.Println("=== ws_send_connected_players_number ===")
 
 	message := WS_CONNECTED_PLAYERS_DTO{
 		Connected_players: fmt.Sprint(n),
@@ -165,9 +164,9 @@ func wsCreateResponseMessage(messageType WSMT, data interface{}) ([]byte, error)
 		Data: data,
 	}
 
-	log.Println("= wsCreateResponseMessage messageType: ", messageType)
-	log.Println("= wsCreateResponseMessage data: ", data)
-	log.Println("= wsCreateResponseMessage response: ", response)
+	// log.Println("= wsCreateResponseMessage messageType: ", messageType)
+	// log.Println("= wsCreateResponseMessage data: ", data)
+	// log.Println("= wsCreateResponseMessage response: ", response)
 
 	jsonData, err := json.Marshal(response)
 	if err != nil {
@@ -178,7 +177,7 @@ func wsCreateResponseMessage(messageType WSMT, data interface{}) ([]byte, error)
 	}
 
 	// todo: debug giant print in time of picture sending, so commented
-	log.Println("CREATED ================ \nwsCreateResponseMessage: ", string(jsonData))
+	// log.Println("CREATED ================ \nwsCreateResponseMessage: ", string(jsonData))
 
 	return jsonData, nil
 }
@@ -187,7 +186,7 @@ func wsCreateResponseMessage(messageType WSMT, data interface{}) ([]byte, error)
 func wsRecover(messageData map[string]interface{}) {
 
 	if r := recover(); r != nil {
-		log.Println("=====================================")
+		// log.Println("=====================================")
 		stackTrace := debug.Stack()
 		lines := strings.Split(string(stackTrace), "\n")
 		relevantPanicLines := []string{}
@@ -204,21 +203,21 @@ func wsRecover(messageData map[string]interface{}) {
 			}
 		}
 		relevantPanicLine := strings.Join(relevantPanicLines, "\n")
-		log.Println(relevantPanicLines)
+		// log.Println(relevantPanicLines)
 
-		log.Println("=====================================")
+		// log.Println("=====================================")
 		// to print the full stack trace
-		log.Println(string(stackTrace))
+		// log.Println(string(stackTrace))
 
 		if messageData == nil {
-			log.Println("=== wsRecover:\n=== messageData is nil")
-			log.Println("=== emergency close connection")
+			// log.Println("=== wsRecover:\n=== messageData is nil")
+			// log.Println("=== emergency close connection")
 			return
 		}
 
 		uuid, ok := messageData["client_uuid"].(string)
 		if !ok {
-			log.Println("=== wsRecover: === \n=== failed to get client_uuid from message data")
+			// log.Println("=== wsRecover: === \n=== failed to get client_uuid from message data")
 			return
 		}
 

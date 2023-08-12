@@ -25,7 +25,7 @@ export class Router {
       handler();
       this.updateURL(path); // Update the browser URL after navigating to the new route
     } else {
-      console.log('Route not found');
+      // console.log('Route not found');
     }
   }
 
@@ -39,7 +39,7 @@ export class Router {
     if (handler) {
       handler();
     } else {
-      console.log('Route not found');
+      // console.log('Route not found');
     }
   }
 }

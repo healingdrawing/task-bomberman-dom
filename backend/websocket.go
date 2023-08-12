@@ -21,27 +21,27 @@ type wsInput struct {
 }
 
 func wsConnection(w http.ResponseWriter, r *http.Request) {
-	log.Println("=== inside wsConnection ===")
+	// log.Println("=== inside wsConnection ===")
 
 	if connected_clients_number(clients) > 3 {
-		log.Println("=== too many clients ===")
+		// log.Println("=== too many clients ===")
 		jsonResponse(w, http.StatusOK, "Too many clients")
 		return
 	}
 
 	number := choose_first_free_number(clients)
 	if number == 0 {
-		log.Println("=== no free numbers ===")
+		// log.Println("=== no free numbers ===")
 		jsonResponse(w, http.StatusOK, "No free slots")
 		return
 	}
 
 	uuid, err := generate_UUID()
-	log.Println("wsConnection uuid: ", uuid) //todo: delete debug
+	// log.Println("wsConnection uuid: ", uuid) //todo: delete debug
 	if err != nil {
-		log.Println("====================================")
-		log.Println("uuid creation error: ", err)
-		log.Println("====================================")
+		// log.Println("====================================")
+		// log.Println("uuid creation error: ", err)
+		// log.Println("====================================")
 		jsonResponse(w, http.StatusOK, "uuid creation error. status 200 , because otherwise no message in browser console, facepalm")
 		return
 	}
@@ -50,7 +50,7 @@ func wsConnection(w http.ResponseWriter, r *http.Request) {
 
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println(err)
+		// log.Println(err)
 		return
 	}
 
@@ -65,7 +65,7 @@ type Client struct {
 }
 
 func reader(conn *websocket.Conn, client_number int, uuid string) {
-	log.Println("=== inside reader ===")
+	// log.Println("=== inside reader ===")
 
 	client := &Client{CONN: conn, NUMBER: client_number, UUID: uuid}
 	clients.Store(uuid, client)
@@ -77,37 +77,37 @@ func reader(conn *websocket.Conn, client_number int, uuid string) {
 
 	for {
 		messageType, incoming, err := conn.ReadMessage()
-		log.Println("=== inside reader ===")
+		// log.Println("=== inside reader ===")
 		if err != nil {
-			log.Println("=== error in reader ===")
-			log.Println("messageType, incoming, err := conn.ReadMessage()")
-			log.Println("messageType", messageType)
-			log.Println("incoming", incoming)
-			log.Println("err", err)
-			log.Println("=== error in reader , before delete and close ws ===")
+			// log.Println("=== error in reader ===")
+			// log.Println("messageType, incoming, err := conn.ReadMessage()")
+			// log.Println("messageType", messageType)
+			// log.Println("incoming", incoming)
+			// log.Println("err", err)
+			// log.Println("=== error in reader , before delete and close ws ===")
 			ws_leave_server_handler(client, err)
 			game_waiting_state_handle_client_disconnected()
 			return
 		}
 
 		// todo: debug print
-		log.Println("=================\nread message:", "\nincoming as string:", string(incoming), "\nmessageType: ", messageType) //todo: delete debug
+		// log.Println("=================\nread message:", "\nincoming as string:", string(incoming), "\nmessageType: ", messageType) //todo: delete debug
 
 		if messageType == websocket.TextMessage {
-			log.Println("Text message received")
+			// log.Println("Text message received")
 			var data wsInput
 			if err := json.Unmarshal(incoming, &data); err != nil {
-				log.Println(err)
+				// log.Println(err)
 				return
 			}
 
 			// todo: debug print
-			log.Println("data after unmarshalling: ", data) //todo: delete debug
+			// log.Println("data after unmarshalling: ", data) //todo: delete debug
 
 			switch data.Type {
 			case string(WS_CONNECT_TO_SERVER):
-				log.Println("==================WS_CONNECT_TO_SERVER FIRED==================")
-				log.Println("data.Data: ", data.Data)
+				// log.Println("==================WS_CONNECT_TO_SERVER FIRED==================")
+				// log.Println("data.Data: ", data.Data)
 				ws_connect_to_server_handler(client, data.Data)
 
 			case string(WS_CHAT_MESSAGE):
@@ -152,7 +152,7 @@ func wsSend(message_type WSMT, message interface{}, uuids []string) {
 				err = client.CONN.WriteMessage(websocket.TextMessage, outputMessage)
 				websocket_mutex.Unlock()
 
-				log.Println("wsSend: message sent to client: ", uuid)
+				// log.Println("wsSend: message sent to client: ", uuid)
 				if err != nil {
 					log.Println(err)
 				}
