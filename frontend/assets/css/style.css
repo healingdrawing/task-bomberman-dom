@@ -38,6 +38,7 @@
   font-size: 18px;
   text-align: center;
   border-radius: 5px;
+  display: none;
 }
 .color0{color:var(--color0)} /*for server message coloring*/
 .color1{color:var(--color1)} /*for player message coloring*/
@@ -132,7 +133,6 @@ body::-webkit-scrollbar {
 .particle::after {
   position: absolute;
   content: '';
-  top: 2560px;
 }
 
 .particle:nth-child(1) {
