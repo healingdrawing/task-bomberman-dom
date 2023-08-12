@@ -163,6 +163,9 @@ func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int
 				// add free cell
 				game.free_cells.Store(weak_obstacle_xy, true)
 				// show the powerup on the cell
+				if randomNum(0, 1) > 0 {
+					break
+				} // 50% chance to show powerup
 				power_up_data, ok := game.Power_ups.Load(weak_obstacle_xy)
 				if ok {
 					power_up := power_up_data.(POWER_UP)
