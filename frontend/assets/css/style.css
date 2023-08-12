@@ -246,6 +246,217 @@ h2 {
   font-family: 'SF Alien Encounters Solid', sans-serif;
 }
 
+.chat-footer {
+  display: contents;
+  align-items: center;
+  position: absolute;
+  margin-bottom: 112px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  bottom: 40px;
+  background-color: #252836;
+}
+
+.chatContainer{
+  width: 500px !important;
+}
+.chat-footer input {
+  border: 0 !important;
+  background-color: #2d303e;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #fff;
+  margin-left: -10px;
+  padding: 12px 10px !important;
+  font-weight: 500;
+  font-family: var(--body-font);
+  /*! background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' clip-rule='evenodd' d='M2 12C2 6.48 6.47 2 12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10C6.47 22 2 17.52 2 12zm5.52 1.2c-.66 0-1.2-.54-1.2-1.2 0-.66.54-1.2 1.2-1.2.66 0 1.19.54 1.19 1.2 0 .66-.53 1.2-1.19 1.2zM10.8 12c0 .66.54 1.2 1.2 1.2.66 0 1.19-.54 1.19-1.2a1.194 1.194 0 10-2.39 0zm4.48 0a1.195 1.195 0 102.39 0 1.194 1.194 0 10-2.39 0z' fill='%236c6e78'/%3e%3c/svg%3e"); */
+  background-repeat: no-repeat;
+  background-size: 24px;
+  background-position: 8px;
+}
+.chat-footer input::-moz-placeholder {
+  color: #6c6e78;
+}
+.chat-footer input:-ms-input-placeholder {
+  color: #6c6e78;
+}
+.chat-footer input::placeholder {
+  color: #6c6e78;
+}
+.chat-footer-btn {
+  content: "";
+  position: absolute;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg viewBox='0 0 24 24' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M21.435 2.582a1.933 1.933 0 00-1.93-.503L3.408 6.759a1.92 1.92 0 00-1.384 1.522c-.142.75.355 1.704 1.003 2.102l5.033 3.094a1.304 1.304 0 001.61-.194l5.763-5.799a.734.734 0 011.06 0c.29.292.29.765 0 1.067l-5.773 5.8c-.428.43-.508 1.1-.193 1.62l3.075 5.083c.36.604.98.946 1.66.946.08 0 .17 0 .251-.01.78-.1 1.4-.634 1.63-1.39l4.773-16.075c.21-.685.02-1.43-.48-1.943z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-size: 14px;
+  background-position: center;
+  width: 30px !important;
+  height: 30px !important;
+  background-color: #6c5ecf;
+  padding: 4px;
+  border-radius: 50%;
+  right: 16px;
+}
+
+.main-blog + .main-blog .author-img {
+  border-color: rgba(255, 255, 255, 0.75);
+  margin-top: 14px;
+}
+.main-blog + .main-blog .author-img__wrapper svg {
+  border-color: #ffe6b2;
+  color: #e7bb7d;
+}
+
+.author-img__wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+.author-img__wrapper svg {
+  width: 16px;
+  padding: 2px;
+  background-color: #fff;
+  color: #0daabc;
+  border-radius: 50%;
+  border: 2px solid #0daabc;
+  position: absolute;
+  bottom: 5px;
+  right: 0;
+}
+
+.video-p-wrapper .author-img {
+  border: 0;
+}
+
+.main-blog + .main-blog .author-img__wrapper svg {
+  border-color: #ffe6b2;
+  color: #e7bb7d;
+}
+
+.author-img {
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  padding: 4px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.author-img__wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+.author-img__wrapper svg {
+  width: 16px;
+  padding: 2px;
+  background-color: #fff;
+  color: #0daabc;
+  border-radius: 50%;
+  border: 2px solid #0daabc;
+  position: absolute;
+  bottom: 5px;
+  right: 0;
+}
+
+.message-container .author-img__wrapper svg {
+  width: 15px;
+}
+
+.video-p .author-img {
+  border: 0;
+}
+.video-p-wrapper {
+  display: flex;
+  align-items: center;
+}
+.video-p-wrapper .author-img {
+  border: 0;
+}
+.message-container .author-img__wrapper svg {
+  width: 15px;
+}
+
+.chat-stream {
+  flex-grow: 1;
+  padding-right: 44px;
+  position: relative;
+  width: 300px;
+  margin-top: 30px;
+}
+
+.chat {
+  background-color: #252836;
+  border-radius: 20px;
+  padding: 0 20px;
+  max-height: 500px;
+  overflow-x: hidden !important;
+  overflow: auto;
+}
+
+.chat2 {
+  background-color: #252836;
+  border-radius: 20px;
+  padding: 0 20px;
+  max-height: 800px;
+}
+
+#ChatData {
+  overflow-x: hidden !important;
+  overflow-y: scroll; 
+  height: 600px;
+}
+
+
+.message-container .author-img__wrapper svg {
+  width: 15px;
+}
+.video:hover .video-author {
+  bottom: -65px;
+  transform: scale(0.6);
+  right: -3px;
+  z-index: 10;
+}
+.message {
+  display: flex;
+  align-items: center;
+  margin-top: 18px;
+}
+.message:last-child {
+  margin-bottom: 18px;
+}
+.message-container .author-img__wrapper svg {
+  width: 15px;
+}
+.video-author {
+  /*! position: absolute; */
+  right: 10px;
+  transition: 0.4s;
+  bottom: -25px;
+}
+.chat-header2 {
+  display: flex;
+  align-items: center;
+  padding: 20px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+.chat-header3 {
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.message-container .author-img__wrapper svg {
+  width: 15px;
+}
+
 #connect_to_game , #rip {
   font-family: 'SF Alien Encounters Solid', sans-serif;
   padding: 10px 20px;
@@ -422,11 +633,9 @@ h2 {
     margin: 0;
     height: 100%;
     width: 20%;
-    display: flex;
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
-    border: 3px yellow solid;
 }
 
 #chat_view__input__message, #chat_view__input__send,
@@ -439,10 +648,10 @@ h2 {
 }
 
 #chat_view__messages{
-  background-color: black;
+  /* background-color: black; */
   color : gainsboro;
   width: 100%;
-  height: 552px; /* 672 - 24*x5 buttons */
+  height: 552px; 
   padding: 0px;
   margin: 0px;
   border: 0px;

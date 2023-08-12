@@ -179,9 +179,32 @@
       <div class="other-lives-container-2"></div>
     </div>
     <div id="chat_view">
-      <button id="chat_view__input__send" type="submit">Drop the bomb</button>
-      <input id="chat_view__input__message" type="text" minlength="1" maxlength="100" placeholder="message 1-100 symbols ..." required />
-      <div id="chat_view__messages"></div>
+
+      <div class="chat2">
+        <div>
+        <div class="message anim">
+        <div class="author-img__wrapper video-author video-p">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check">
+            <path d="M20 6L9 17l-5-5" />
+            </svg>
+            <img class="author-img" src="https://u.cubeupload.com/adsuri/7NQDHz.jpeg" />
+        </div>
+        <div class="msg-wrapper">
+            <div class="chat-header2" id="chatTitle"></div>
+        </div>
+        </div>
+        <div class="chat-header3 anim"></div>
+          <div class="message-container" id="chat_view__messages"></div>
+
+        <div class="chat-footer anim">
+        <input id="chat_view__input__message" type="text" placeholder="Write your message">
+        <button id="chat_view__input__send" class="chat-footer-btn"></button>
+        </div>
+    </div>
+      
+      <!-- <button id="chat_view__input__send" type="submit">Drop the bomb</button>
+      <input id="chat_view__input__message" type="text" minlength="1" maxlength="100" placeholder="message 1-100 symbols ..." required /> -->
+      <!-- <div id="chat_view__messages"></div> -->
       <div id="player_lifes">Lifes:</div>
       <div id="connected_players">Players:</div>
       <button id="rip" onclick="location.reload()">R.I.P</button>
