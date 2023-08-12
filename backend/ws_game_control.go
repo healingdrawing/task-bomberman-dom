@@ -63,7 +63,6 @@ func unpress_all_arrows(player *PLAYER) {
 	player.right_pressed = false
 }
 
-// todo: check this . pointers or without.
 func press_arrow_unpress_other_arrows(player *PLAYER, control string) {
 	switch control {
 	case string(WS_UP_ON):

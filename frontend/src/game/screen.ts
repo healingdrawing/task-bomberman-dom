@@ -136,11 +136,15 @@ export class GameScreen {
       if (weak_obstacle) {
         weak_obstacle.classList.remove(`weak_obstacle`)
         weak_obstacle.classList.add(`none`)
-      }
-      const power_up = this.power_ups.get(xy)
-      if (power_up) {
-        power_up.classList.remove(`none`)
-        power_up.classList.add(`power_up${explode_data.power_up_effect[index]}`)
+
+        if (explode_data.power_up_effect[index] !== "0") {
+          const power_up = this.power_ups.get(xy)
+          if (power_up) {
+            power_up.classList.remove(`none`)
+            power_up.classList.add(`power_up${explode_data.power_up_effect[index]}`)
+          }
+        }
+
       }
     })
 

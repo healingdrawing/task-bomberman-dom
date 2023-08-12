@@ -141,7 +141,7 @@ class ScreenPrepare {
     div.classList.add("none")
   }
 
-  /** hide all elements, before it will be shown according to server data */
+  /** hide all elements. Will be shown according to server data */
   clear_game_field() {
     console.log("========== clear_game_field")
     // hide all weak obstacles

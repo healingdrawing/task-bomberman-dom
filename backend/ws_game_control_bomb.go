@@ -77,7 +77,7 @@ type WS_BOMB_DTO struct {
 	Target_xy string `json:"target_xy"`
 }
 
-// bomb handler call this as goroutine
+// bomb handler calls this as goroutine
 func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int) {
 	dprint("ws_explosion_handler. player", player_number, "bomb_xy", bomb_xy, "explosion_range", explosion_range)
 	// remove bomb from bomb_cells
@@ -154,7 +154,7 @@ func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int
 		return true
 	})
 
-	// 2- check the weak obstacles cells, if weak obstacle is on explosion, then remove the weak obstacle, add free cell, and show the powerup on the cell(because each of the four obstacles have a powerup)
+	// 2- check the weak obstacles cells, if weak obstacle is on explosion, then remove the weak obstacle, add free cell, and show the powerup on the cell (50% chance)
 
 	destroyed_weak_obstacles := []string{}
 	appeared_power_up_effect := []string{}
@@ -168,17 +168,18 @@ func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int
 				// add free cell
 				game.free_cells.Store(weak_obstacle_xy, true)
 				// show the powerup on the cell
-				if randomNum(0, 1) > 0 {
-					break
-				} // 50% chance to show powerup
-				power_up_data, ok := game.Power_ups.Load(weak_obstacle_xy)
-				if ok {
-					power_up := power_up_data.(POWER_UP)
-					power_up.Show = true
-					appeared_power_up_effect = append(appeared_power_up_effect, power_up.Effect)
-					game.Power_ups.Store(weak_obstacle_xy, power_up)
+				if randomNum(0, 1) > 0 { // 50% chance to show powerup
+					power_up_data, ok := game.Power_ups.Load(weak_obstacle_xy)
+					if ok {
+						power_up := power_up_data.(POWER_UP)
+						power_up.Show = true
+						appeared_power_up_effect = append(appeared_power_up_effect, power_up.Effect)
+						game.Power_ups.Store(weak_obstacle_xy, power_up)
+					} else {
+						dprint("ws_explosion_handler. power_up not found for weak_obstacle_xy", weak_obstacle_xy)
+					}
 				} else {
-					dprint("ws_explosion_handler. power_up not found for weak_obstacle_xy", weak_obstacle_xy)
+					appeared_power_up_effect = append(appeared_power_up_effect, "0")
 				}
 				break
 			}
@@ -205,10 +206,9 @@ func ws_send_player_lifes(player_number int, player_lifes int, player_uuid strin
 
 type WS_PLAYER_LIFES_DTO struct {
 	Number int `json:"number"` // to remove bomb animation for player who placed the bomb
-	Lifes  int `json:"lifes"`  // the first one is bomb_xy, to remove bomb
+	Lifes  int `json:"lifes"`
 }
 
-// todo: extend this and function above and send also affected items commands
 func ws_send_explosion_command(player_number int, bomb_xy string, explosion_cells_xy []string, destroyed_weak_obstacles []string, appeared_power_up_effect []string) {
 	log.Println("ws_send_explosion_command. bomb_xy", bomb_xy, "explosion_cells_xy", explosion_cells_xy)
 	message := WS_EXPLODE_DTO{
@@ -228,7 +228,7 @@ type WS_EXPLODE_DTO struct {
 	Power_up_effect []string `json:"power_up_effect"` // power up effect to replace weak obstacle
 }
 
-// iterate through players, if number of players with player.lifes > 0 will be less than two, then game over
+// iterate through players, if number of players with player.lifes > 0 will be less than two, then end game
 func check_end_game() {
 	players_alive := 0
 	winner_uuid := "0"

@@ -11,7 +11,7 @@ export enum WSMT {
   WS_BROADCAST_MESSAGE = "broadcast_message",
   WS_START_GAME = "start_game",
   WS_END_GAME = "end_game",
-  WS_PLAYER_GAME_OVER = "player_game_over",
+  WS_PLAYER_GAME_OVER = "player_game_over", //todo: not used at the moment
 
   // incoming from server to control items on screen
   WS_UP = "up",
@@ -21,7 +21,7 @@ export enum WSMT {
   WS_STAND = "stand",
   WS_BOMB = "bomb",
   WS_EXPLODE = "explode",
-  WS_HIDE_WEAK_OBSTACLES = "hide_weak_obstacles", // todo: also must includes show power ups
+  WS_HIDE_WEAK_OBSTACLES = "hide_weak_obstacles", // todo: not used at the moment, implemented inside WS_EXPLODE
   WS_HIDE_POWER_UP = "hide_power_up",
 
   // outgoing from client to server to send pressed/released keys
@@ -96,7 +96,7 @@ export interface PowerUp {
 /**  do not convert to maps etc structures, because no short way to do this, only manuall convertion, which is awful. Also iteration through the object can be used*/
 export interface GameState {
   // players: object
-  players: { [key: string]: Player };
+  players: { [key: string]: Player }; // improvement to use short way to access object values
   bombs: object
   explosions: object
   power_ups: object

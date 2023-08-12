@@ -156,8 +156,6 @@ func ws_send_connected_players_number(n int, uuids []string) {
 	wsSend(WS_CONNECTED_PLAYERS, message, uuids)
 }
 
-// todo: add send player lifes later
-
 /*
 messageType must be from "ws_utils.go" constants of WSMT type. But go doesn't support enum.
 */
@@ -189,7 +187,7 @@ func wsCreateResponseMessage(messageType WSMT, data interface{}) ([]byte, error)
 func wsRecover(messageData map[string]interface{}) {
 
 	if r := recover(); r != nil {
-		fmt.Println("=====================================")
+		log.Println("=====================================")
 		stackTrace := debug.Stack()
 		lines := strings.Split(string(stackTrace), "\n")
 		relevantPanicLines := []string{}
@@ -208,7 +206,7 @@ func wsRecover(messageData map[string]interface{}) {
 		relevantPanicLine := strings.Join(relevantPanicLines, "\n")
 		log.Println(relevantPanicLines)
 
-		fmt.Println("=====================================")
+		log.Println("=====================================")
 		// to print the full stack trace
 		log.Println(string(stackTrace))
 
