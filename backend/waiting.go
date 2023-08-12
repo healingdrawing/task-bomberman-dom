@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"sync"
 	"time"
 )
@@ -21,6 +20,7 @@ const (
 	WAITING_FOR_PLAYERS WaitingState = iota
 	WAITING_FOR_COUNTDOWN
 	GAME_STARTED
+	GAME_ENDED
 )
 
 var (
@@ -45,7 +45,7 @@ func game_waiting_state_handle_client_connected() {
 				waitingTimerStarted = true
 				waitingTimerMutex.Unlock()
 
-				fmt.Println("Waiting for more players...")
+				// log.Println("Waiting for more players...")
 				ws_server_broadcast_handler("Waiting for more players...")
 				for players_countdown := waiting_time / time.Second; players_countdown > 0; players_countdown-- {
 					if connected_players_number >= max_players {
@@ -53,52 +53,47 @@ func game_waiting_state_handle_client_connected() {
 					}
 					if connected_players_number < min_players {
 						game_waiting_state = WAITING_FOR_PLAYERS
-						fmt.Println("Waiting countdown canceled, waiting for players.")
+						// log.Println("Waiting countdown canceled, waiting for players.")
 						ws_server_broadcast_handler("Waiting countdown canceled, waiting for players.")
 						break
 					}
 
-					fmt.Printf("%d seconds left\n", players_countdown)
-					// Here, you can add the logic to notify clients about the remaining seconds.
+					// log.Printf("%d seconds left\n", players_countdown)
 					ws_server_broadcast_handler(fmt.Sprintf("%d seconds left", players_countdown))
 					time.Sleep(time.Second)
 				}
 
 				if connected_players_number >= min_players && connected_players_number <= max_players {
 					game_waiting_state = WAITING_FOR_COUNTDOWN
-					fmt.Println("Countdown started!")
+					// log.Println("Countdown started!")
 					ws_server_broadcast_handler("Countdown started!")
 					for prepare_countdown := countdown_time / time.Second; prepare_countdown > 0; prepare_countdown-- {
 
 						if connected_players_number < min_players {
 							game_waiting_state = WAITING_FOR_PLAYERS
-							fmt.Println("Prepare countdown canceled, waiting for players.")
+							// log.Println("Prepare countdown canceled, waiting for players.")
 							ws_server_broadcast_handler("Prepare countdown canceled, waiting for players.")
 							break
 						}
 
-						fmt.Printf("%d seconds left\n", prepare_countdown)
-						// Here, you can add the logic to notify clients about the remaining seconds.
+						// log.Printf("%d seconds left\n", prepare_countdown)
 						ws_server_broadcast_handler(fmt.Sprintf("%d seconds left", prepare_countdown))
 						time.Sleep(time.Second)
 					}
 
 					if connected_players_number >= min_players && connected_players_number <= max_players {
 						game_waiting_state = GAME_STARTED
-						fmt.Println("Game started!")
-						// Here, you can add the logic to notify clients that the game has started.
+						// log.Println("Game started!")
 						ws_server_broadcast_handler("!!!GO GO GO!!!")
 						ws_send_start_game_handler()
 					} else if connected_players_number < min_players {
 						// todo: not sure it can fires , after injection/duplication above
 						game_waiting_state = WAITING_FOR_PLAYERS
-						fmt.Println("POTENTIAL ARTEFACT Waiting countdown canceled, waiting for players.")
-						// Here, you can add the logic to notify clients that the countdown has been canceled.
-						ws_server_broadcast_handler("POTENTIAL ARTEFACT Waiting countdown canceled, waiting for players.")
+						// log.Println("Waiting countdown canceled, waiting for players.")
+						ws_server_broadcast_handler("Waiting countdown canceled, waiting for players.")
 					} else {
 						game_waiting_state = WAITING_FOR_PLAYERS
-						fmt.Println("Waiting countdown canceled, too many players.")
-						// Here, you can add the logic to notify clients that the countdown has been canceled.
+						// log.Println("Waiting countdown canceled, too many players.")
 						ws_server_broadcast_handler("Waiting countdown canceled, too many players. Unexpected condition. Press \"R.I.P\" to reconnect.")
 					}
 				}
@@ -122,7 +117,7 @@ func game_waiting_state_handle_client_disconnected() {
 			waitingTimerStarted = false
 			waitingTimerMutex.Unlock()
 
-			fmt.Println("DISCONNECTED Waiting for more players...") // TODO: remove
+			// log.Println("DISCONNECTED Waiting for more players...") // TODO: remove
 		}
 	case WAITING_FOR_COUNTDOWN:
 		if connected_players_number < min_players {
@@ -131,11 +126,10 @@ func game_waiting_state_handle_client_disconnected() {
 			waitingTimerMutex.Unlock()
 
 			game_waiting_state = WAITING_FOR_PLAYERS
-			// Here, you can add the logic to notify clients that the countdown has been canceled.
-			fmt.Println("DISCONNECTED prepare for game...") // TODO: remove
+			// log.Println("DISCONNECTED prepare for game...") // TODO: remove
 		}
-	case GAME_STARTED:
-		log.Println("DOES NOT RESET TO WAITING FOR PLAYERS, BECAUSE GAME IS ALREADY STARTED")
+	case GAME_STARTED, GAME_ENDED:
+		// log.Println("DOES NOT RESET TO WAITING FOR PLAYERS, BECAUSE GAME IS ALREADY STARTED")
 		// Implement logic for handling a client disconnect during the game, if needed.
 		if connected_players_number < min_players {
 			waitingTimerMutex.Lock()
@@ -143,8 +137,7 @@ func game_waiting_state_handle_client_disconnected() {
 			waitingTimerMutex.Unlock()
 
 			game_waiting_state = WAITING_FOR_PLAYERS
-			// Here, you can add the logic to notify clients that the countdown has been canceled.
-			fmt.Println("DISCONNECTED prepare for game...") // TODO: remove
+			// log.Println("DISCONNECTED game stated...") // TODO: remove
 		}
 	}
 }

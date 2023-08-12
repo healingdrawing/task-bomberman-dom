@@ -26,7 +26,7 @@ class ScreenPrepare {
    * just change some css properties, generally styles of the divs
    */
   prebuild_game_field() {
-    console.log("prebuild_game_field")
+    // console.log("prebuild_game_field")
     // build strong obstacles, can not be destroyed
     const game_strong_obstacles = document.getElementById("game_strong_obstacles") as HTMLDivElement;
     const dx = [1, 3, 5, 1, 3, 5, 1, 3, 5]
@@ -141,15 +141,15 @@ class ScreenPrepare {
     div.classList.add("none")
   }
 
-  /** hide all elements, before it will be shown according to server data */
+  /** hide all elements. Will be shown according to server data */
   clear_game_field() {
-    console.log("========== clear_game_field")
+    // console.log("========== clear_game_field")
     // hide all weak obstacles
     for (const div of this.weak_obstacles.values()) {
       if (div) {
         div.classList.add("none")
       } else {
-        console.log("========== clear_game_field: weak obstacle div is null")
+        // console.log("========== clear_game_field: weak obstacle div is null")
       }
     }
 
@@ -158,7 +158,7 @@ class ScreenPrepare {
       if (div) {
         this.reset_game_field_div_classes(div)
       } else {
-        console.log("========== clear_game_field: power up div is null")
+        // console.log("========== clear_game_field: power up div is null")
       }
     }
 
@@ -167,7 +167,7 @@ class ScreenPrepare {
       if (div) {
         this.reset_game_field_div_classes(div)
       } else {
-        console.log("========== clear_game_field: bomb div is null")
+        // console.log("========== clear_game_field: bomb div is null")
       }
     }
 
@@ -176,7 +176,7 @@ class ScreenPrepare {
       if (div) {
         this.reset_game_field_div_classes(div)
       } else {
-        console.log("========== clear_game_field: explosion div is null")
+        // console.log("========== clear_game_field: explosion div is null")
       }
     }
 
@@ -185,14 +185,14 @@ class ScreenPrepare {
       if (div) {
         this.reset_game_field_div_classes(div)
       } else {
-        console.log("========== clear_game_field: player div is null")
+        // console.log("========== clear_game_field: player div is null")
       }
     }
   }
 
   /** configure game field, according to server data */
   build_game_field(state: GameState) {
-    console.log("========== build_game_field")
+    // console.log("========== build_game_field")
     // show weak obstacles
     for (const key in state.weak_obstacles) {
       this.weak_obstacles.get(key)?.classList.remove("none")

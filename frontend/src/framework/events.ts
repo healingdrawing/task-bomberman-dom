@@ -29,9 +29,9 @@ export class Events {
 
   off(eventName: string, listenTo: EventTarget, callback: Function, info = '') {
     if (info) {
-      console.log(`Removing ${eventName} event listener on ${listenTo} for ${info}`);
+      // console.log(`Removing ${eventName} event listener on ${listenTo} for ${info}`);
     } else {
-      console.log(`Removing ${eventName} event listener on ${listenTo}`);
+      // console.log(`Removing ${eventName} event listener on ${listenTo}`);
     }
 
     const callbacksMap = this.eventMap.get(listenTo);
@@ -53,7 +53,7 @@ export class Events {
 
     // If there are no more callbacks for the given eventName and listenTo, remove the event listener
     if (callbacks.length === 0) {
-      console.log(`Removing event listener for ${eventName} on ${listenTo}`);
+      // console.log(`Removing event listener for ${eventName} on ${listenTo}`);
       listenTo.removeEventListener(eventName, (event) => {
         const callbacks = callbacksMap?.get(eventName);
         if (callbacks) {
@@ -65,7 +65,7 @@ export class Events {
 
     // If there are no more event listeners for the given listenTo, remove it from the eventMap
     if (callbacksMap.size === 0) {
-      console.log(`Removing ${listenTo} from eventMap`);
+      // console.log(`Removing ${listenTo} from eventMap`);
       this.eventMap.delete(listenTo);
     }
   }

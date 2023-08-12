@@ -22,7 +22,7 @@ func main() {
 
 			// if i remember correct, firefox lags happens without this
 			if r.Method == "OPTIONS" {
-				log.Println("pre-fetch request") // todo: remove debug
+				// log.Println("pre-fetch request") // todo: remove debug
 				w.WriteHeader(http.StatusOK)
 				return
 			}

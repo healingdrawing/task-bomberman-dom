@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"time"
 )
 
 func ws_bomb_off_handler(number string) {
-	dprint("ws_bomb_off_handler. player", number)
+	// dprint("ws_bomb_off_handler. player", number)
 
 	player_value, ok := game.Players.Load(number)
 	if !ok {
@@ -20,13 +19,17 @@ func ws_bomb_off_handler(number string) {
 
 // player press Enter, bomb will be placed
 func ws_bomb_handler(number string) {
-	dprint("ws_bomb_handler. player", number)
+	// dprint("ws_bomb_handler. player", number)
 	player_value, ok := game.Players.Load(number)
 	if !ok {
 		return
 	}
 
 	player := player_value.(PLAYER)
+
+	if player.Lifes < 1 {
+		return
+	} // player is dead, and looks like some client's side code "improved"
 
 	// Unix timestamp in nanoseconds
 	unix_ts := time.Now().UnixNano()
@@ -59,7 +62,7 @@ func ws_bomb_handler(number string) {
 }
 
 func ws_send_bomb_command(player_number int, cell_xy string) {
-	log.Println("ws_send_bomb_command. player", player_number)
+	// log.Println("ws_send_bomb_command. player", player_number)
 	message := WS_BOMB_DTO{
 		Number:    player_number,
 		Target_xy: cell_xy,
@@ -73,9 +76,9 @@ type WS_BOMB_DTO struct {
 	Target_xy string `json:"target_xy"`
 }
 
-// bomb handler call this as goroutine
+// bomb handler calls this as goroutine
 func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int) {
-	dprint("ws_explosion_handler. player", player_number, "bomb_xy", bomb_xy, "explosion_range", explosion_range)
+	// dprint("ws_explosion_handler. player", player_number, "bomb_xy", bomb_xy, "explosion_range", explosion_range)
 	// remove bomb from bomb_cells
 	game.bomb_cells.Delete(bomb_xy)
 
@@ -141,6 +144,7 @@ func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int
 					game.Players.Store(key, player)
 				} else {
 					game.Players.Delete(key) // remove from range loop etc, let is say, player is dead
+					check_end_game()
 				}
 				ws_send_player_lifes(player.Number, player.Lifes, player.uuid)
 
@@ -149,7 +153,7 @@ func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int
 		return true
 	})
 
-	// 2- check the weak obstacles cells, if weak obstacle is on explosion, then remove the weak obstacle, add free cell, and show the powerup on the cell(because each of the four obstacles have a powerup)
+	// 2- check the weak obstacles cells, if weak obstacle is on explosion, then remove the weak obstacle, add free cell, and show the powerup on the cell (50% chance)
 
 	destroyed_weak_obstacles := []string{}
 	appeared_power_up_effect := []string{}
@@ -163,17 +167,18 @@ func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int
 				// add free cell
 				game.free_cells.Store(weak_obstacle_xy, true)
 				// show the powerup on the cell
-				if randomNum(0, 1) > 0 {
-					break
-				} // 50% chance to show powerup
-				power_up_data, ok := game.Power_ups.Load(weak_obstacle_xy)
-				if ok {
-					power_up := power_up_data.(POWER_UP)
-					power_up.Show = true
-					appeared_power_up_effect = append(appeared_power_up_effect, power_up.Effect)
-					game.Power_ups.Store(weak_obstacle_xy, power_up)
+				if randomNum(0, 1) > 0 { // 50% chance to show powerup
+					power_up_data, ok := game.Power_ups.Load(weak_obstacle_xy)
+					if ok {
+						power_up := power_up_data.(POWER_UP)
+						power_up.Show = true
+						appeared_power_up_effect = append(appeared_power_up_effect, power_up.Effect)
+						game.Power_ups.Store(weak_obstacle_xy, power_up)
+					} else {
+						dprint("ws_explosion_handler. power_up not found for weak_obstacle_xy", weak_obstacle_xy)
+					}
 				} else {
-					dprint("ws_explosion_handler. power_up not found for weak_obstacle_xy", weak_obstacle_xy)
+					appeared_power_up_effect = append(appeared_power_up_effect, "0")
 				}
 				break
 			}
@@ -189,7 +194,7 @@ func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int
 }
 
 func ws_send_player_lifes(player_number int, player_lifes int, player_uuid string) {
-	log.Println("ws_send_player_lifes. player", player_number, "lifes", player_lifes)
+	// log.Println("ws_send_player_lifes. player", player_number, "lifes", player_lifes)
 	message := WS_PLAYER_LIFES_DTO{
 		Number: player_number,
 		Lifes:  player_lifes,
@@ -200,12 +205,11 @@ func ws_send_player_lifes(player_number int, player_lifes int, player_uuid strin
 
 type WS_PLAYER_LIFES_DTO struct {
 	Number int `json:"number"` // to remove bomb animation for player who placed the bomb
-	Lifes  int `json:"lifes"`  // the first one is bomb_xy, to remove bomb
+	Lifes  int `json:"lifes"`
 }
 
-// todo: extend this and function above and send also affected items commands
 func ws_send_explosion_command(player_number int, bomb_xy string, explosion_cells_xy []string, destroyed_weak_obstacles []string, appeared_power_up_effect []string) {
-	log.Println("ws_send_explosion_command. bomb_xy", bomb_xy, "explosion_cells_xy", explosion_cells_xy)
+	// log.Println("ws_send_explosion_command. bomb_xy", bomb_xy, "explosion_cells_xy", explosion_cells_xy)
 	message := WS_EXPLODE_DTO{
 		Number:          player_number,
 		Cells_xy:        explosion_cells_xy,
@@ -221,4 +225,61 @@ type WS_EXPLODE_DTO struct {
 	Cells_xy        []string `json:"cells_xy"`        // the first one is bomb_xy, to remove bomb
 	Destroy_xy      []string `json:"destroy_xy"`      // xy to destroy weak obstacles
 	Power_up_effect []string `json:"power_up_effect"` // power up effect to replace weak obstacle
+}
+
+// iterate through players, if number of players with player.lifes > 0 will be less than two, then end game
+func check_end_game() {
+	players_alive := 0
+	winner_uuid := "0"
+	winner_number := "0"
+	game.Players.Range(func(key, value interface{}) bool {
+		player := value.(PLAYER)
+		if player.Lifes > 0 {
+			players_alive++
+			winner_uuid = player.uuid
+			winner_number = string_number[player.Number]
+		}
+		return true
+	})
+	if players_alive < 2 {
+		game_waiting_state = GAME_ENDED
+		go send_end_game_command_then_disconnect_clients(winner_uuid, winner_number)
+	}
+}
+
+func send_end_game_command_then_disconnect_clients(winner_uuid, winner_number string) {
+	// log.Println("send_end_game_command")
+	winner_nickname := get_client_nickname_by_uuid(clients, winner_uuid)
+	html_content := fmt.Sprintf(`
+		<div class="color0">
+			!!!VICTORY!!!<div class="color%s">[ %s ]</div> won
+		</div>
+	`, winner_number, winner_nickname)
+	ws_server_broadcast_handler(html_content)
+	time.Sleep(4 * time.Second)
+
+	message := WS_END_GAME_DTO{
+		Winner_uuid: winner_uuid,
+	}
+	uuids := get_all_clients_uuids(clients)
+	wsSend(WS_END_GAME, message, uuids)
+
+	time.Sleep(1 * time.Second)
+	// disconnect all clients and delete from sync.map
+	keys_to_delete := make([]interface{}, 0)
+
+	clients.Range(func(key, value interface{}) bool {
+		client := value.(*Client)
+		client.CONN.Close()
+		keys_to_delete = append(keys_to_delete, key)
+		return true
+	})
+
+	for _, key := range keys_to_delete {
+		clients.Delete(key)
+	}
+}
+
+type WS_END_GAME_DTO struct {
+	Winner_uuid string `json:"winner_uuid"`
 }

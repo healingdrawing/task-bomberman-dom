@@ -24,7 +24,7 @@ export class Controller {
       ws.sendMessage(this.listenedKeys.get(key)![1], {})
       // Add the key to the Set
       this.pressedKeys.add(key);
-      console.log("key down", key) // todo: remove
+      // console.log("key down", key) // todo: remove
     }
   }
 
@@ -37,7 +37,7 @@ export class Controller {
       ws.sendMessage(this.listenedKeys.get(key)![0], {})
       // Remove the key from the Set
       this.pressedKeys.delete(key);
-      console.log("key up", key) // todo: remove
+      // console.log("key up", key) // todo: remove
     }
   }
 }

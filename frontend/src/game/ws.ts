@@ -1,4 +1,4 @@
-import { BombXY, BroadcastMessage, ChatMessage, ConnectedPlayers, ExplodeBomb, GameState, HidePowerUp, MoveDx, MoveDy, PlayerLifes, WSMT } from "./types";
+import { BombXY, BroadcastMessage, ChatMessage, ConnectedPlayers, EndGame, ExplodeBomb, GameState, HidePowerUp, MoveDx, MoveDy, PlayerLifes, WSMT } from "./types";
 import { SendNickname } from "./types";
 import { handlers } from "./handlers";
 import { screen } from "./screen";
@@ -17,7 +17,7 @@ class WebSocketClient {
     return new Promise((resolve, reject) => {
 
       this.ws!.onopen = () => {
-        console.log('WebSocket connection established.');
+        // console.log('WebSocket connection established.');
         resolve();
       };
 
@@ -78,23 +78,28 @@ class WebSocketClient {
         break;
       case WSMT.WS_BROADCAST_MESSAGE:
         // Handle broadcast message logic here
-        console.log('Broadcast message received:', message.data);
+        // console.log('Broadcast message received:', message.data);
         handlers.broadcast_message(message.data as BroadcastMessage);
         break;
       case WSMT.WS_CHAT_MESSAGE:
         // Handle chat message logic here
-        console.log('Chat message received:', message.data);
+        // console.log('Chat message received:', message.data);
         handlers.chat_message(message.data as ChatMessage);
         break;
       case WSMT.WS_CONNECTED_PLAYERS:
         // Handle connected players logic here
-        console.log('Connected players received:', message.data);
+        // console.log('Connected players received:', message.data);
         handlers.connected_players(message.data as ConnectedPlayers);
         break;
       case WSMT.WS_START_GAME:
         // Handle start game logic here
-        console.log('Start game received:', message.data);
+        // console.log('Start game received:', message.data);
         screen.game_state_start_game(message.data as GameState);
+        break;
+      case WSMT.WS_END_GAME:
+        // Handle end game logic here
+        // console.log('End game received:', message.data);
+        screen.game_state_end_game(message.data as EndGame, this.uuid as string);
         break;
       default:
         console.warn('Unknown message type:', message.type);
@@ -107,12 +112,12 @@ class WebSocketClient {
 
       const nickname = document.getElementById("nickname") as HTMLInputElement;
 
-      console.log('1 before this.ws!.onmessage');
+      // console.log('1 before this.ws!.onmessage');
       // Server will return uuid after connection is established
       let uuidReceived = false; // Flag to check if UUID has been received
       this.ws!.onmessage = (event) => {
         const message: Message = JSON.parse(event.data);
-        console.log('5 before this.uuid message:', message);
+        // console.log('5 before this.uuid message:', message);
         if (!uuidReceived) {
           if (message.type === WSMT.WS_CLIENT_CONNECTED_TO_SERVER) {
             if (
@@ -142,10 +147,10 @@ class WebSocketClient {
         }
       };
 
-      console.log('2 Initializing WebSocket client...');
-      console.log('3 before this.connect()');
+      // console.log('2 Initializing WebSocket client...');
+      // console.log('3 before this.connect()');
       await this.connect();
-      console.log('4 before this.waitForConnection()');
+      // console.log('4 before this.waitForConnection()');
       await this.waitForConnection();
     } catch (error) {
       console.error('Error initializing WebSocket client:', error);
@@ -161,7 +166,7 @@ class WebSocketClient {
       type: type,
       data: extended_data,
     };
-    console.log('Sending message:', message);
+    // console.log('Sending message:', message);
     this.ws!.send(JSON.stringify(message));
   }
 }

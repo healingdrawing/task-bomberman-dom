@@ -55,7 +55,7 @@ function chat_message() {
 
 /**initialization */
 (() => {
-  console.log("prepare environment")
+  // console.log("prepare environment")
   screen.prepare()
   const connect_to_game_button = document.getElementById("connect_to_game") as HTMLButtonElement;
   events.on("click", connect_to_game_button, connect_to_game); // usage of mini-framework 🙂 mission complete

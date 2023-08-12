@@ -34,7 +34,7 @@ func prepare_players() {
 	clients.Range(func(key, value interface{}) bool {
 		client := value.(*Client)
 		number := client.NUMBER
-		log.Println("number", number)
+		// log.Println("number", number)
 		number_str := string_number[number]
 		if player, ok := game.Players.Load(number_str); ok {
 			player_data := player.(PLAYER)
@@ -89,7 +89,7 @@ func prepare_weak_obstacles_and_power_ups() {
 	}
 }
 
-// fill the locked for moving cells xy, it is strong obstacles and weak obstacles(not destroyed yet)
+// fill the locked (for moving) cells xy, it is strong obstacles and weak obstacles(not destroyed yet)
 func prepare_free_cells_and_bomb_cells() {
 	game.bomb_cells = sync.Map{} // Initialize bomb_cells as a sync.Map, empty at the beginning
 	game.free_cells = sync.Map{} // Initialize free_cells as a sync.Map
@@ -121,41 +121,32 @@ func prepare_free_cells_and_bomb_cells() {
 }
 
 // Convert GAME_STATE to a JSON-friendly struct
-func convert_game_state_to_json(gameState GAME_STATE) map[string]interface{} {
-	jsonGameState := make(map[string]interface{})
+func convert_game_state_to_json(game_state GAME_STATE) map[string]interface{} {
+	json_game_state := make(map[string]interface{})
 
 	// Convert Players sync.Map to a map of PLAYERs
-	playersMap := make(map[string]PLAYER)
-	gameState.Players.Range(func(key, value interface{}) bool {
-		playersMap[key.(string)] = value.(PLAYER)
+	players_map := make(map[string]PLAYER)
+	game_state.Players.Range(func(key, value interface{}) bool {
+		players_map[key.(string)] = value.(PLAYER)
 		return true
 	})
-	jsonGameState["players"] = playersMap
+	json_game_state["players"] = players_map
 
 	// Convert Weak_obstacles sync.Map to a map of bool
-	weakObstaclesMap := make(map[string]bool)
-	gameState.Weak_obstacles.Range(func(key, value interface{}) bool {
-		weakObstaclesMap[key.(string)] = value.(bool)
+	weak_obstacles_map := make(map[string]bool)
+	game_state.Weak_obstacles.Range(func(key, value interface{}) bool {
+		weak_obstacles_map[key.(string)] = value.(bool)
 		return true
 	})
-	jsonGameState["weak_obstacles"] = weakObstaclesMap
-
-	// Convert Power_ups sync.Map to a map of POWER_UPs
-	// todo: hide power-ups from the client, to prevent cheating
-	// powerUpsMap := make(map[string]POWER_UP)
-	// gameState.Power_ups.Range(func(key, value interface{}) bool {
-	// 	powerUpsMap[key.(string)] = value.(POWER_UP)
-	// 	return true
-	// })
-	// jsonGameState["power_ups"] = powerUpsMap
+	json_game_state["weak_obstacles"] = weak_obstacles_map
 
 	// Convert free_cells sync.Map to a map of interface{}
-	freeCellsMap := make(map[string]interface{})
-	gameState.free_cells.Range(func(key, value interface{}) bool {
-		freeCellsMap[key.(string)] = value
+	free_cells_map := make(map[string]interface{})
+	game_state.free_cells.Range(func(key, value interface{}) bool {
+		free_cells_map[key.(string)] = value
 		return true
 	})
-	jsonGameState["free_cells"] = freeCellsMap
+	json_game_state["free_cells"] = free_cells_map
 
-	return jsonGameState
+	return json_game_state
 }
