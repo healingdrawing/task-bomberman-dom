@@ -27,6 +27,10 @@ func ws_down_handler(number string, control string, press bool) {
 
 	player := player_value.(PLAYER)
 
+	if player.Lifes < 1 {
+		return
+	}
+
 	if player.direction != DOWN && player.direction != STAND {
 		return
 	}

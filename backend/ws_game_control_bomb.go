@@ -28,6 +28,10 @@ func ws_bomb_handler(number string) {
 
 	player := player_value.(PLAYER)
 
+	if player.Lifes < 1 {
+		return
+	} // player is dead, and looks like some client's side code "improved"
+
 	// Unix timestamp in nanoseconds
 	unix_ts := time.Now().UnixNano()
 
@@ -141,6 +145,7 @@ func ws_explosion_handler(player_number int, bomb_xy string, explosion_range int
 					game.Players.Store(key, player)
 				} else {
 					game.Players.Delete(key) // remove from range loop etc, let is say, player is dead
+					check_end_game()
 				}
 				ws_send_player_lifes(player.Number, player.Lifes, player.uuid)
 
@@ -221,4 +226,61 @@ type WS_EXPLODE_DTO struct {
 	Cells_xy        []string `json:"cells_xy"`        // the first one is bomb_xy, to remove bomb
 	Destroy_xy      []string `json:"destroy_xy"`      // xy to destroy weak obstacles
 	Power_up_effect []string `json:"power_up_effect"` // power up effect to replace weak obstacle
+}
+
+// iterate through players, if number of players with player.lifes > 0 will be less than two, then game over
+func check_end_game() {
+	players_alive := 0
+	winner_uuid := "0"
+	winner_number := "0"
+	game.Players.Range(func(key, value interface{}) bool {
+		player := value.(PLAYER)
+		if player.Lifes > 0 {
+			players_alive++
+			winner_uuid = player.uuid
+			winner_number = string_number[player.Number]
+		}
+		return true
+	})
+	if players_alive < 2 {
+		game_waiting_state = GAME_ENDED
+		go send_end_game_command_then_disconnect_clients(winner_uuid, winner_number)
+	}
+}
+
+func send_end_game_command_then_disconnect_clients(winner_uuid, winner_number string) {
+	log.Println("send_end_game_command")
+	winner_nickname := get_client_nickname_by_uuid(clients, winner_uuid)
+	html_content := fmt.Sprintf(`
+		<div class="color0">
+			!!!VICTORY!!!<div class="color%s">[ %s ]</div> won
+		</div>
+	`, winner_number, winner_nickname)
+	ws_server_broadcast_handler(html_content)
+	time.Sleep(4 * time.Second)
+
+	message := WS_END_GAME_DTO{
+		Winner_uuid: winner_uuid,
+	}
+	uuids := get_all_clients_uuids(clients)
+	wsSend(WS_END_GAME, message, uuids)
+
+	time.Sleep(1 * time.Second)
+	// disconnect all clients and delete from sync.map
+	keys_to_delete := make([]interface{}, 0)
+
+	clients.Range(func(key, value interface{}) bool {
+		client := value.(*Client)
+		client.CONN.Close()
+		keys_to_delete = append(keys_to_delete, key)
+		return true
+	})
+
+	for _, key := range keys_to_delete {
+		clients.Delete(key)
+	}
+}
+
+type WS_END_GAME_DTO struct {
+	Winner_uuid string `json:"winner_uuid"`
 }

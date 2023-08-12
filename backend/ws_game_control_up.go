@@ -27,6 +27,10 @@ func ws_up_handler(number string, control string, press bool) {
 
 	player := player_value.(PLAYER)
 
+	if player.Lifes < 1 {
+		return
+	}
+
 	// If player is not moving up, and not standing, then wait for him to stand, to prevent conflict between horizontal and vertical movement. same for other directions
 	if player.direction != UP && player.direction != STAND {
 		return

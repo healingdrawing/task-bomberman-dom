@@ -6,7 +6,9 @@ import (
 )
 
 func ws_character_control_handler(client *Client, control string) {
-
+	if game_waiting_state != GAME_STARTED {
+		return
+	}
 	switch control {
 	case string(WS_UP_ON):
 		ws_up_handler(string_number[client.NUMBER], control, true)

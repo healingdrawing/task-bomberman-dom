@@ -16,7 +16,7 @@ const (
 )
 
 var (
-	game_debug = false
+	game_debug = true
 	game       = GAME_STATE{}
 	// player numbers as string short hand
 	string_number = []string{"0", "1", "2", "3", "4"}

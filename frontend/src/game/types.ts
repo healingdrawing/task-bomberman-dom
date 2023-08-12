@@ -135,3 +135,7 @@ export interface HidePowerUp {
   cell_xy: string
   effect: string
 }
+
+export interface EndGame {
+  winner_uuid: string
+}

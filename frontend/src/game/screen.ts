@@ -1,7 +1,7 @@
 import { handlers } from "./handlers"
 import { OffsetAnimationParameters, get_from_x, get_from_y, offset_div_animation } from "./screen_offset_animation"
 import { screen_prepare } from "./screen_prepare"
-import { BombXY, ExplodeBomb, GameState, HidePowerUp, MoveDx, MoveDy, PlayerLifes, WSMT } from "./types"
+import { BombXY, EndGame, ExplodeBomb, GameState, HidePowerUp, MoveDx, MoveDy, PlayerLifes, WSMT } from "./types"
 
 /** server controllable */
 export enum GameStateValue {
@@ -45,8 +45,15 @@ export class GameScreen {
     this.game_state_value = GameStateValue.START_GAME
   }
 
-  game_state_end_game() {
+  game_state_end_game(data: EndGame, uuid: string) {
     this.game_state_value = GameStateValue.END_GAME
+    if (data.winner_uuid === uuid) {
+      alert("!!!Victory!!!")
+    }
+    else {
+      alert("Congratulations, you failed again. Amazing stability!")
+    }
+    location.reload()
   }
 
   game_state_player_game_over() {

@@ -1,4 +1,4 @@
-import { BombXY, BroadcastMessage, ChatMessage, ConnectedPlayers, ExplodeBomb, GameState, HidePowerUp, MoveDx, MoveDy, PlayerLifes, WSMT } from "./types";
+import { BombXY, BroadcastMessage, ChatMessage, ConnectedPlayers, EndGame, ExplodeBomb, GameState, HidePowerUp, MoveDx, MoveDy, PlayerLifes, WSMT } from "./types";
 import { SendNickname } from "./types";
 import { handlers } from "./handlers";
 import { screen } from "./screen";
@@ -95,6 +95,11 @@ class WebSocketClient {
         // Handle start game logic here
         console.log('Start game received:', message.data);
         screen.game_state_start_game(message.data as GameState);
+        break;
+      case WSMT.WS_END_GAME:
+        // Handle end game logic here
+        console.log('End game received:', message.data);
+        screen.game_state_end_game(message.data as EndGame, this.uuid as string);
         break;
       default:
         console.warn('Unknown message type:', message.type);
