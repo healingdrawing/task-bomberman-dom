@@ -1,0 +1,28 @@
+.power_up1 {
+  width: 96px;
+  height: 96px;
+  background-image: url('power_up1.png');
+  background-size: 400% 100%; /* Total width x height of the sprite (4 frames x 100%) */
+  animation: powerUpAnimation 0.2s steps(4) infinite;
+}
+
+.power_up2 {
+  width: 96px;
+  height: 96px;
+  background-image: url('power_up2.png');
+  background-size: 400% 100%; /* Total width x height of the sprite (4 frames x 100%) */
+  animation: powerUpAnimation 0.2s steps(4) infinite;
+}
+
+.power_up3 {
+  width: 96px;
+  height: 96px;
+  background-image: url('power_up3.png');
+  background-size: 400% 100%; /* Total width x height of the sprite (4 frames x 100%) */
+  animation: powerUpAnimation 0.2s steps(4) infinite;
+}
+
+@keyframes powerUpAnimation {
+  0% { background-position-x: 0%; } /* Display first frame (leftmost) */
+  100% { background-position-x: -400%; } /* Display fourth frame (rightmost) */
+}

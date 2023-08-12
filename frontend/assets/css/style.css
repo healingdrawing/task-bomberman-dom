@@ -1,0 +1,144 @@
+:root{
+  --game_size: 672px;
+  --chat_size: 200px;
+  --full_size: 880px;/* 672(96*7) game + 200 chat + 8 extra */
+  --color0: firebrick; /* server messages color */
+  --color1: rgb(255, 255, 0); /* player1 color */
+  --color2: rgb(0, 255, 0); /* player2 color */
+  --color3: rgb(0, 255, 255); /* player3 color */
+  --color4: rgb(255, 0, 255); /* player4 color */
+}
+
+.message_div{
+  border-top : 1px solid var(--color0); /* to separate*/
+  outline: 0px;
+  padding: 0px;
+  margin: 0px;
+  word-wrap: break-word;
+}
+.color0{color:var(--color0)} /*for server message coloring*/
+.color1{color:var(--color1)} /*for player message coloring*/
+.color2{color:var(--color2)}
+.color3{color:var(--color3)}
+.color4{color:var(--color4)}
+
+.layer{
+  position: absolute;
+  width:100%;
+  height:100%;
+}
+
+html{
+  min-width: var(--full_size); 
+}
+
+body{
+  background-color: black;
+}
+
+#first_screen{
+  background-color: darkgreen;
+  display: block;
+}
+
+#second_screen{
+  background-color: darkolivegreen;
+  display: none;
+}
+
+#game_view{
+  position: relative;
+  background-color: darkslategrey;
+  width: var(--game_size);
+  height: var(--game_size);
+  float: left;
+}
+
+#chat_view{
+  background-color: green;
+  width: var(--chat_size);
+  height: var(--game_size);
+  float: left;
+}
+
+#chat_view__input__message, #chat_view__input__send,
+#chat_view__lifes, #chat_view__players,
+#rip{
+  width: 100%;
+  height: 24px;
+  padding: 0px;
+  border: 0px;
+}
+
+#chat_view__messages{
+  background-color: black;
+  color : gainsboro;
+  width: 100%;
+  height: 552px; /* 672 - 24*x5 buttons */
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+  outline : 0px;
+  overflow-y: scroll;
+}
+
+/*description*/
+
+#game_objects{
+  background-image: url("back.png");
+  width: var(--game_size);
+  color: gainsboro;
+  border: 2px solid black;
+  border-radius: 8px;
+}
+
+.game_object{
+  border: 1px solid black;
+  border-radius: 8px;
+  text-align: center;
+  padding: 2px;
+}
+
+.cell_demo{width: 96px; height: 96px;}
+
+.description{
+  border: 1px black solid;
+  border-bottom: none;
+  border-radius: 0px 0px 8px 8px ;
+  background-color: black;
+  margin: 4px -2px -2px -2px;
+  padding: 2px;
+  
+}
+
+/*game layers*/
+
+#game_background{
+  background-image: url("back.png");
+}
+
+/*game cells*/
+.absolute{
+  position: absolute;
+}
+
+.cell {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+}
+
+/* works, need !important to force ignore other classes, later remove it to show*/
+.none{
+  background-image: none !important;
+  background: none !important;
+  animation: none !important;
+}
+
+.strong_obstacle{
+  background-image: url("strong_obstacle.png");
+}
+
+.weak_obstacle{
+  background-image: url("weak_obstacle.png");
+}

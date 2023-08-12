@@ -1,1 +1,1 @@
-# Backend/server implementation should be placed here
+# task-bomberman-dom-backend
