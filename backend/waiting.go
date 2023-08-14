@@ -9,8 +9,8 @@ import (
 const (
 	min_players    = 2
 	max_players    = 4
-	waiting_time   = 1 * time.Second // todo: for production must be 20
-	countdown_time = 1 * time.Second // todo: for production must be 10
+	waiting_time   = 20 * time.Second // todo: for production must be 20
+	countdown_time = 10 * time.Second // todo: for production must be 10
 )
 
 // WaitingState represents the state of the waiting period and countdown.
