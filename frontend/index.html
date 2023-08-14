@@ -15,15 +15,19 @@
 <body>
   <!-- appears when application starts, before connection to websocket -->
   <div id="first_screen">
-    <h1>STAR WARS CONFLICT</h1>
-    <form>
-      <input id="nickname" type="text" minlength="1" maxlength="15" placeholder="nickname 1-15 symbols ..." required />
-      <button id="connect_to_game" type="submit">Connect to game</button>
-    </form>
+    <h1 class="game-title">STAR WARS CONFLICT</h1>
+    <div class="game-updates-container"> 
     <h2>How to play:</h2>
-    <p>Use arrows to move, space to drop the bomb</p>
+    <p>Use arrows to move, ENTER to drop the bomb</p>
     <p>Collect power ups to increase your lifes, speed and bomb range</p>
     <p>Destroy weak obstacles to get power ups</p>
+    </div>
+    <form class="form-input">
+      <h2>Join Here</h2>
+      <input id="nickname" type="text" minlength="1" maxlength="15" placeholder="Enter Your Username" required />
+     <br><button id="connect_to_game" type="submit">Connect to game</button>
+    </form>
+    <div class="game-updates-container"> 
     <h2>Game Objects:</h2>
     <div id="game_objects">
       <table>
@@ -140,13 +144,15 @@
               <div class="player4_move"></div>
               <div class="description">Player4 Move</div>
             </div>
+          </div>
           </td>
         </tr>
       </tbody>
       </table>
-      
-    </div>
+      </div>
   </div>
+  </div>
+  
   <!-- appears when player connected to websocket. Includes game view and chat view -->
   <div id="second_screen">
     <div id="game_view">
@@ -160,7 +166,7 @@
     </div>
     <div id="chat_view">
       <button id="chat_view__input__send" type="submit">Drop the bomb</button>
-      <input id="chat_view__input__message" type="text" minlength="1" maxlength="100" placeholder="message 1-100 symbols ..." required />
+      <input id="chat_view__input__message" type="text" minlength="1" maxlength="100" placeholder="Type Here" required />
       <div id="chat_view__messages"></div>
       <div id="player_lifes">Lifes:</div>
       <div id="connected_players">Players:</div>
