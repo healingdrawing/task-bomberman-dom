@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <link rel="stylesheet" href="assets/css/animation_player_stand.css">
+  <link rel="stylesheet" href="assets/css/animation_player_move.css">
+  <link rel="stylesheet" href="assets/css/animation_player_bomb.css">
+  <link rel="stylesheet" href="assets/css/animation_explosion.css">
+  <link rel="stylesheet" href="assets/css/animation_power_up.css">
+  <title>STAR WARS CONFLICT</title>
+</head>
+<body>
+  <!-- appears when application starts, before connection to websocket -->
+  <div id="first_screen">
+    <h1 class="game-title">STAR WARS CONFLICT</h1>
+    <div class="game-updates-container"> 
+    <h2>How to play:</h2>
+    <p>Use arrows to move, ENTER to drop the bomb</p>
+    <p>Collect power ups to increase your lifes, speed and bomb range</p>
+    <p>Destroy weak obstacles to get power ups</p>
+    </div>
+    <form class="form-input">
+      <h2>Join Here</h2>
+      <input id="nickname" type="text" minlength="1" maxlength="15" placeholder="Enter Your Username" required />
+     <br><button id="connect_to_game" type="submit">Connect to game</button>
+    </form>
+    <div class="game-updates-container"> 
+    <h2>Game Objects:</h2>
+    <div id="game_objects">
+      <table>
+      <tbody>
+        <tr>
+          <td>
+            <div class="game_object">
+              <div class="strong_obstacle cell_demo"></div>
+              <div class="description">Strong Obstacle</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="weak_obstacle cell_demo"></div>
+              <div class="description">Weak Obstacle</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="power_up1"></div>
+              <div class="description">Power Up1</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="power_up2"></div>
+              <div class="description">Power Up2</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="power_up3"></div>
+              <div class="description">Power Up3</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="explosion_demo"></div>
+              <div class="description">Annihilation</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="game_object">
+              <div class="player1_stand"></div>
+              <div class="description">Player1 Stand</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="player1_bomb"></div>
+              <div class="description">Player1 Annihilator</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="player1_move"></div>
+              <div class="description">Player1 Move</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="player2_stand"></div>
+              <div class="description">Player2 Stand</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="player2_bomb"></div>
+              <div class="description">Player2 Annihilator</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="player2_move"></div>
+              <div class="description">Player2 Move</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="game_object">
+              <div class="player3_stand"></div>
+              <div class="description">Player3 Stand</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="player3_bomb"></div>
+              <div class="description">Player3 Annihilator</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="player3_move"></div>
+              <div class="description">Player3 Move</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="player4_stand"></div>
+              <div class="description">Player4 Stand</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="player4_bomb"></div>
+              <div class="description">Player4 Annihilator</div>
+            </div>
+          </td>
+          <td>
+            <div class="game_object">
+              <div class="player4_move"></div>
+              <div class="description">Player4 Move</div>
+            </div>
+          </div>
+          </td>
+        </tr>
+      </tbody>
+      </table>
+      </div>
+  </div>
+  </div>
+  
+  <!-- appears when player connected to websocket. Includes game view and chat view -->
+  <div id="second_screen">
+    <div id="game_view">
+      <div id="game_background" class="layer"></div>
+      <div id="game_strong_obstacles" class="layer"></div>
+      <div id="game_power_ups" class="layer"></div>
+      <div id="game_weak_obstacles" class="layer"></div>
+      <div id="game_bombs" class="layer"></div>
+      <div id="game_players" class="layer"></div>
+      <div id="game_explosions" class="layer"></div>
+    </div>
+    <div id="chat_view">
+      <button id="chat_view__input__send" type="submit">Drop the bomb</button>
+      <input id="chat_view__input__message" type="text" minlength="1" maxlength="100" placeholder="Type Here" required />
+      <div id="chat_view__messages"></div>
+      <div id="player_lifes">Lifes:</div>
+      <div id="connected_players">Players:</div>
+      <button id="rip" onclick="location.reload()">R.I.P</button>
+    </div>
+  </div>
+
+  <script src="./dist/bundle.js"></script>
+</body>
+</html>

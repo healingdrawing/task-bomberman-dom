@@ -1,0 +1,40 @@
+:root{
+  --player_bomb_animation_duration: 0.2s;
+}
+
+.player1_bomb {
+  width: 96px;
+  height: 96px;
+  background-image: url('player1_bomb.png');
+  background-size: 300% 100%; /* Total width x height of the sprite (3 frames x 100%) */
+  animation: player_bomb_animation var(--player_bomb_animation_duration) steps(3) infinite;
+}
+
+.player2_bomb {
+  width: 96px;
+  height: 96px;
+  background-image: url('player2_bomb.png');
+  background-size: 300% 100%; /* Total width x height of the sprite (3 frames x 100%) */
+  animation: player_bomb_animation var(--player_bomb_animation_duration) steps(3) infinite;
+}
+
+.player3_bomb {
+  width: 96px;
+  height: 96px;
+  background-image: url('player3_bomb.png');
+  background-size: 300% 100%; /* Total width x height of the sprite (3 frames x 100%) */
+  animation: player_bomb_animation var(--player_bomb_animation_duration) steps(3) infinite;
+}
+
+.player4_bomb {
+  width: 96px;
+  height: 96px;
+  background-image: url('player4_bomb.png');
+  background-size: 300% 100%; /* Total width x height of the sprite (3 frames x 100%) */
+  animation: player_bomb_animation var(--player_bomb_animation_duration) steps(3) infinite;
+}
+
+@keyframes player_bomb_animation {
+  0% { background-position-x: 0%; } /* Display first frame (leftmost) */
+  100% { background-position-x: -300%; } /* Display third frame (rightmost) */
+}
