@@ -5,21 +5,21 @@ After run project, open the browser on `http://localhost:3000/`
 
 ## docker run  
 
-To show two docker containers inside docker desktop or terminal, one for backend, and one for frontend (docker desktop must be started before), inside root folder of repository where `run.sh` placed, using terminal execute command:
+To show two docker containers inside docker desktop (docker desktop must be started in advance) or terminal, one for server, and one for client, inside root folder of repository where `run.sh` placed, using terminal execute command:
 - `./run.sh`  
 to show containers in terminal:  
 - `docker ps -a`  
 
 ## dev run  
 
-### backend  
+### server  
 
-- `cd backend`
+- `cd server`
 - `go run .`
 
-### frontend  
+### client  
 
-- `cd frontend`
+- `cd client`
 - `npm i`
 - `npm run start`
 
@@ -37,4 +37,4 @@ https://github.com/01-edu/public/tree/master/subjects/bomberman-dom
 - create pull requests to `dev` branch, to merge your results into project  
 - `dev` will be merged into `zero` branch, close to release  
 ---
-- if you use more than one machine, press vscode `Synchronize Changes` button, every time you start new coding session, to decrease difficulties to push changes later. Extra conflict resolving can be extra headache, and always a potential way to make more mistakes. Even if it is your branch you can forget something accedentally.
+- if you use more than one machine, press vscode `Synchronize Changes` button, every time you start new coding session, to decrease difficulties to push changes later. Extra conflict resolving can be extra headache, and always a potential way to make more mistakes. Even if it is your branch you can forget something accidentally.

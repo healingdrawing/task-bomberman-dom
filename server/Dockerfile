@@ -1,4 +1,4 @@
-FROM golang:1.20.3 as backend-build
+FROM golang:1.20.3 as server-build
 
 WORKDIR /app
 
