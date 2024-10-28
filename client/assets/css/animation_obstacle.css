@@ -1,0 +1,14 @@
+:root{
+  --strong_obstacle_animation_duration: 0.2s;
+}
+
+.strong_obstacle{
+  background-image: url("strong_obstacle.png");
+  background-size: 400% 100%; /* Total width x height of the sprite (4 frames x 100%) */
+  animation: strong_obstacle_animation var(--strong_obstacle_animation_duration) steps(4) infinite;
+}
+
+@keyframes strong_obstacle_animation {
+  0% { background-position-x: 0%; } /* Display first frame (leftmost) */
+  100% { background-position-x: -400%; } /* Display third frame (rightmost) */
+}

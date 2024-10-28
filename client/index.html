@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="assets/css/style.css">
 
+  <link rel="stylesheet" href="assets/css/animation_background.css">
+  <link rel="stylesheet" href="assets/css/animation_obstacle.css">
   <link rel="stylesheet" href="assets/css/animation_player_stand.css">
   <link rel="stylesheet" href="assets/css/animation_player_move.css">
   <link rel="stylesheet" href="assets/css/animation_player_bomb.css">
@@ -156,7 +158,12 @@
   <!-- appears when player connected to websocket. Includes game view and chat view -->
   <div id="second_screen">
     <div id="game_view">
-      <div id="game_background" class="layer"></div>
+      <div id="game_background" class="layer">
+        <div id="background-image-1" class="background-image"></div>
+        <div id="background-image-2" class="background-image"></div>
+        <div id="background-image-3" class="background-image"></div>
+        <div id="background-image-4" class="background-image-4"></div>
+      </div>
       <div id="game_strong_obstacles" class="layer"></div>
       <div id="game_power_ups" class="layer"></div>
       <div id="game_weak_obstacles" class="layer"></div>
