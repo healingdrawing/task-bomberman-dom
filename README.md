@@ -1,6 +1,9 @@
 # task-bomberman-dom
 grit:lab Åland Islands 2023
 
+Tiny bit cleaned and restyled in 2024, in comparing with audited condition.  
+![demo](bmdemo.webp)
+
 After run project, open the browser on `http://localhost:3000/`  
 
 ## docker run  
